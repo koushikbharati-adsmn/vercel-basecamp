@@ -1,0 +1,492 @@
+// Coach protocol and tab-scoped history. Each visitor/workshop/idea holds separate
+// coach sessions; a shared revision rejects replies produced before idea edits.
+import apiClient from "@/lib/api-client"
+
+export type ParticipantChatMessage = {
+  id: string
+  author: "coach" | "participant" | "system"
+  text: string
+  status?: "pending" | "sent" | "failed"
+  createdAt?: number
+}
+
+export type ParticipantChatSessionStatus = "active" | "ended" | "invalid"
+
+export type ParticipantChatSession = {
+  sessionId: string | null
+  messages: ParticipantChatMessage[]
+  status: ParticipantChatSessionStatus
+  statusMessage: string | null
+}
+
+/** Storage isolation boundary; coach keys select sessions within this identity. */
+export type ParticipantChatIdentity = {
+  visitorId: string
+  workshopCode: string
+  ideaId: number
+}
+
+export type NewParticipantChatRequest = {
+  session_id: null
+  ref_id: string
+  workshop_code: string
+  coach_personality: string
+  coach_file_key: string
+  pillar_title: string
+  user_idea: string
+  message: string
+}
+
+export type ContinueParticipantChatRequest = {
+  session_id: string
+  workshop_code: string
+  message: string
+}
+
+export type ParticipantChatRequest =
+  NewParticipantChatRequest | ContinueParticipantChatRequest
+
+export type ParticipantChatSuccessResponse = {
+  success: true
+  msg: string
+  result: {
+    session_id: string
+    ref_id?: string
+    workshop_code?: string
+    coach_personality?: string
+    coach_file_key?: string
+    text: string
+  }
+}
+
+export type ParticipantChatErrorResponse = {
+  success: false
+  msg: string
+  error_code?: string
+  result: null
+}
+
+export type ParticipantChatResponse =
+  ParticipantChatSuccessResponse | ParticipantChatErrorResponse
+
+/** Versioned tab storage plus a retry queue for server-side session deletions. */
+type StoredIdeaChats = {
+  version: 1
+  revision: number
+  sessions: Record<string, ParticipantChatSession>
+  pendingDeletionSessionIds: string[]
+}
+
+const CHAT_STORAGE_PREFIX = "participant-sharpen-chats:v1"
+const memoryIdeaChats = new Map<string, StoredIdeaChats>()
+const volatileStorageKeys = new Set<string>()
+
+/** Encodes identity segments so different participants/ideas cannot share history. */
+function getStorageKey(identity: ParticipantChatIdentity) {
+  return [
+    CHAT_STORAGE_PREFIX,
+    encodeURIComponent(identity.visitorId),
+    encodeURIComponent(identity.workshopCode),
+    identity.ideaId,
+  ].join(":")
+}
+
+/** Creates a fresh container without sharing mutable session/deletion collections. */
+function getEmptyIdeaChats(): StoredIdeaChats {
+  return {
+    version: 1,
+    revision: 0,
+    sessions: {},
+    pendingDeletionSessionIds: [],
+  }
+}
+
+/** Validates persisted message fields before allowing them into rendered history. */
+function isParticipantChatMessage(
+  value: unknown
+): value is ParticipantChatMessage {
+  if (!value || typeof value !== "object") return false
+
+  const message = value as Partial<ParticipantChatMessage>
+
+  return (
+    typeof message.id === "string" &&
+    typeof message.text === "string" &&
+    (message.author === "coach" ||
+      message.author === "participant" ||
+      message.author === "system") &&
+    (message.status === undefined ||
+      message.status === "pending" ||
+      message.status === "sent" ||
+      message.status === "failed") &&
+    (message.createdAt === undefined || typeof message.createdAt === "number")
+  )
+}
+
+/** Validates persisted sessions, including IDs later used in server file paths. */
+function isParticipantChatSession(
+  value: unknown
+): value is ParticipantChatSession {
+  if (!value || typeof value !== "object") return false
+
+  const session = value as Partial<ParticipantChatSession>
+
+  return (
+    (session.sessionId === null || isSafePathSegment(session.sessionId)) &&
+    Array.isArray(session.messages) &&
+    session.messages.every(isParticipantChatMessage) &&
+    (session.status === "active" ||
+      session.status === "ended" ||
+      session.status === "invalid") &&
+    (session.statusMessage === null ||
+      typeof session.statusMessage === "string")
+  )
+}
+
+/** Reads validated sessionStorage data, falling back to this page's memory copy. */
+function readIdeaChats(identity: ParticipantChatIdentity): StoredIdeaChats {
+  const storageKey = getStorageKey(identity)
+  const fallback = memoryIdeaChats.get(storageKey) ?? getEmptyIdeaChats()
+
+  if (typeof window === "undefined") return fallback
+  if (volatileStorageKeys.has(storageKey)) return fallback
+
+  try {
+    const value = sessionStorage.getItem(storageKey)
+
+    if (!value) return fallback
+
+    const parsed = JSON.parse(value) as Partial<StoredIdeaChats>
+
+    if (
+      parsed.version !== 1 ||
+      !parsed.sessions ||
+      typeof parsed.sessions !== "object" ||
+      !Array.isArray(parsed.pendingDeletionSessionIds)
+    ) {
+      return fallback
+    }
+
+    const sessions = Object.fromEntries(
+      Object.entries(parsed.sessions).filter((entry) =>
+        isParticipantChatSession(entry[1])
+      )
+    )
+
+    const result: StoredIdeaChats = {
+      version: 1,
+      revision:
+        typeof parsed.revision === "number" &&
+        Number.isInteger(parsed.revision) &&
+        parsed.revision >= 0
+          ? parsed.revision
+          : 0,
+      sessions,
+      pendingDeletionSessionIds:
+        parsed.pendingDeletionSessionIds.filter(isSafePathSegment),
+    }
+
+    memoryIdeaChats.set(storageKey, result)
+
+    return result
+  } catch {
+    volatileStorageKeys.add(storageKey)
+    return fallback
+  }
+}
+
+/** Always updates memory; returns whether the tab-storage write also succeeded. */
+function writeIdeaChats(
+  identity: ParticipantChatIdentity,
+  value: StoredIdeaChats
+) {
+  const storageKey = getStorageKey(identity)
+
+  memoryIdeaChats.set(storageKey, value)
+
+  if (typeof window === "undefined") return false
+
+  try {
+    if (
+      Object.keys(value.sessions).length === 0 &&
+      value.pendingDeletionSessionIds.length === 0 &&
+      value.revision === 0
+    ) {
+      sessionStorage.removeItem(storageKey)
+      memoryIdeaChats.delete(storageKey)
+      volatileStorageKeys.delete(storageKey)
+      return true
+    }
+
+    sessionStorage.setItem(storageKey, JSON.stringify(value))
+    volatileStorageKeys.delete(storageKey)
+    return true
+  } catch {
+    // Chat still works for the current page when browser storage is unavailable.
+    volatileStorageKeys.add(storageKey)
+    return false
+  }
+}
+
+/** Restores one coach's history for the current participant idea, or null. */
+export function loadParticipantChatSession(
+  identity: ParticipantChatIdentity,
+  coachKey: string
+) {
+  return readIdeaChats(identity).sessions[coachKey] ?? null
+}
+
+/** Reports whether any coach has a server session ID, regardless of terminal status. */
+export function hasParticipantChatSession(identity: ParticipantChatIdentity) {
+  return Object.values(readIdeaChats(identity).sessions).some(
+    (session) => session.sessionId !== null
+  )
+}
+
+/** Returns the idea revision to capture when sending a coach request. */
+export function getParticipantChatRevision(identity: ParticipantChatIdentity) {
+  return readIdeaChats(identity).revision
+}
+
+/** Reports whether this identity's history currently survives only in page memory. */
+export function isParticipantChatStorageVolatile(
+  identity: ParticipantChatIdentity
+) {
+  return volatileStorageKeys.has(getStorageKey(identity))
+}
+
+/** Rejects stale-revision writes; saved and persisted distinguish validity from durability. */
+export function saveParticipantChatSession(
+  identity: ParticipantChatIdentity,
+  coachKey: string,
+  session: ParticipantChatSession,
+  expectedRevision: number
+) {
+  const stored = readIdeaChats(identity)
+
+  if (stored.revision !== expectedRevision) {
+    return {
+      saved: false,
+      persisted: !isParticipantChatStorageVolatile(identity),
+    }
+  }
+
+  const persisted = writeIdeaChats(identity, {
+    ...stored,
+    sessions: {
+      ...stored.sessions,
+      [coachKey]: session,
+    },
+  })
+
+  return { saved: true, persisted }
+}
+
+/** Validates the configured native WebSocket endpoint before constructing a socket. */
+function getChatWebSocketUrl() {
+  const url = String(import.meta.env.VITE_CHAT_WEBSOCKET_URL ?? "").trim()
+
+  if (!/^wss?:\/\//i.test(url)) {
+    throw new Error("The chat WebSocket URL is not configured.")
+  }
+
+  return url
+}
+
+/** Opens a dedicated coach connection; its caller owns reconnecting and closing it. */
+export function createParticipantChatSocket() {
+  return new WebSocket(getChatWebSocketUrl())
+}
+
+/** Rejects values that could escape the expected prompt/session file path. */
+function assertSafePathSegment(value: string, label: string) {
+  if (!isSafePathSegment(value)) {
+    throw new Error(`${label} cannot be used to create the coach prompt path.`)
+  }
+}
+
+/** Allows only single filename-safe identifiers, with no separators or traversal. */
+function isSafePathSegment(value: unknown): value is string {
+  return typeof value === "string" && /^[a-zA-Z0-9_-]+$/.test(value)
+}
+
+/** Builds the workshop/coach/pillar prompt key after validating every path segment. */
+export function buildCoachFileKey({
+  workshopCode,
+  coachKey,
+  categoryId,
+}: {
+  workshopCode: string
+  coachKey: string
+  categoryId: number
+}) {
+  assertSafePathSegment(workshopCode, "Workshop code")
+  assertSafePathSegment(coachKey, "Coach key")
+
+  if (!Number.isInteger(categoryId) || categoryId < 0) {
+    throw new Error(
+      "Category ID cannot be used to create the coach prompt path."
+    )
+  }
+
+  return `workshop/${workshopCode}/prompt/coach/${coachKey}/system-prompt-${categoryId}.txt`
+}
+
+/** Parses a complete coach frame; malformed JSON or successful payloads throw. */
+export function parseParticipantChatResponse(
+  value: string
+): ParticipantChatResponse {
+  const parsed = JSON.parse(value) as Partial<ParticipantChatResponse>
+
+  if (parsed.success === true) {
+    const result = parsed.result
+
+    if (
+      !result ||
+      typeof result !== "object" ||
+      typeof result.session_id !== "string" ||
+      !isSafePathSegment(result.session_id) ||
+      typeof result.text !== "string"
+    ) {
+      throw new Error("The coach returned an invalid response.")
+    }
+
+    return {
+      ...parsed,
+      success: true,
+      msg: typeof parsed.msg === "string" ? parsed.msg : "",
+      result,
+    }
+  }
+
+  if (parsed.success === false) {
+    return {
+      success: false,
+      msg:
+        typeof parsed.msg === "string" && parsed.msg
+          ? parsed.msg
+          : "The coach could not respond.",
+      error_code:
+        typeof parsed.error_code === "string" ? parsed.error_code : undefined,
+      result: null,
+    }
+  }
+
+  throw new Error("The coach returned an invalid response.")
+}
+
+/** Requests removal of a server chat file; API-declared failure rejects the promise. */
+async function deleteParticipantChatSession(
+  workshopCode: string,
+  sessionId: string
+) {
+  assertSafePathSegment(workshopCode, "Workshop code")
+  assertSafePathSegment(sessionId, "Session ID")
+
+  const response = await apiClient.post<{
+    success: boolean
+    message?: string
+    data?: unknown
+  }>("/ai/end-chat", {
+    file_key: `chat_sessions/${workshopCode}/${sessionId}.txt`,
+  })
+
+  if (!response.data.success) {
+    throw new Error(response.data.message || "Unable to delete chat session.")
+  }
+}
+
+/** Deletes queued sessions concurrently, retaining failed/newly queued IDs for retry. */
+async function deletePendingSessions(identity: ParticipantChatIdentity) {
+  const stored = readIdeaChats(identity)
+  const sessionIds = [...new Set(stored.pendingDeletionSessionIds)]
+
+  if (sessionIds.length === 0) {
+    return {
+      deletedCount: 0,
+      failedCount: 0,
+      storageFailed: isParticipantChatStorageVolatile(identity),
+    }
+  }
+
+  const results = await Promise.allSettled(
+    sessionIds.map((sessionId) =>
+      deleteParticipantChatSession(identity.workshopCode, sessionId)
+    )
+  )
+  const successfulSessionIds = new Set(
+    sessionIds.filter(
+      (_sessionId, index) => results[index].status === "fulfilled"
+    )
+  )
+  // Re-read after network work to preserve deletions queued while requests ran.
+  const latest = readIdeaChats(identity)
+
+  const persisted = writeIdeaChats(identity, {
+    ...latest,
+    pendingDeletionSessionIds: latest.pendingDeletionSessionIds.filter(
+      (sessionId) => !successfulSessionIds.has(sessionId)
+    ),
+  })
+
+  return {
+    deletedCount: successfulSessionIds.size,
+    failedCount: sessionIds.length - successfulSessionIds.size,
+    storageFailed: !persisted,
+  }
+}
+
+/** Clears all coach histories and increments revision before attempting remote cleanup. */
+export async function invalidateParticipantChatSessions(
+  identity: ParticipantChatIdentity
+) {
+  const stored = readIdeaChats(identity)
+  const activeSessionIds = Object.values(stored.sessions)
+    .map((session) => session.sessionId)
+    .filter((sessionId): sessionId is string => Boolean(sessionId))
+
+  const persisted = writeIdeaChats(identity, {
+    version: 1,
+    revision: stored.revision + 1,
+    sessions: {},
+    pendingDeletionSessionIds: [
+      ...new Set([...stored.pendingDeletionSessionIds, ...activeSessionIds]),
+    ],
+  })
+
+  const result = await deletePendingSessions(identity)
+
+  return {
+    ...result,
+    storageFailed: !persisted || result.storageFailed,
+  }
+}
+
+/** Queues cleanup of a session returned by a reply whose idea revision is obsolete. */
+export async function discardInvalidatedParticipantChatSession(
+  identity: ParticipantChatIdentity,
+  sessionId: string
+) {
+  assertSafePathSegment(sessionId, "Session ID")
+
+  const stored = readIdeaChats(identity)
+  const persisted = writeIdeaChats(identity, {
+    ...stored,
+    pendingDeletionSessionIds: [
+      ...new Set([...stored.pendingDeletionSessionIds, sessionId]),
+    ],
+  })
+  const result = await deletePendingSessions(identity)
+
+  return {
+    ...result,
+    storageFailed: !persisted || result.storageFailed,
+  }
+}
+
+/** Retries retained remote deletions without clearing current coach conversations. */
+export function retryPendingParticipantChatDeletions(
+  identity: ParticipantChatIdentity
+) {
+  return deletePendingSessions(identity)
+}

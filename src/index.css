@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Ogilvy Sans";
+  src: url("/fonts/OgilvySansWeb-Light.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ogilvy Sans";
+  src: url("/fonts/OgilvySansWeb-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ogilvy Sans";
+  src: url("/fonts/OgilvySansWeb-RegularItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ogilvy Sans";
+  src: url("/fonts/OgilvySansWeb-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ogilvy Serif";
+  src: url("/fonts/OgilvySerifWeb-RegularItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ogilvy Serif";
+  src: url("/fonts/OgilvySerifWeb-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ogilvy Serif";
+  src: url("/fonts/OgilvySerifWeb-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    font-family: "Ogilvy Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #ffffff;
+    background: #0d0c0d;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    @apply m-0 min-w-80 bg-[#0d0c0d] text-white antialiased;
+    min-height: 100%;
+  }
+
+  button,
+  a {
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e74246];
+  }
+}
+
+.font-display,
+.orbital-display {
+  font-family: "Ogilvy Serif", Georgia, "Times New Roman", serif;
+}
+
+.font-sans {
+  font-family: "Ogilvy Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@keyframes orbital-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.orbital-rotate {
+  animation: orbital-rotate 52s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.live-pulse {
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbital-rotate,
+  .live-pulse {
+    animation-play-state: paused;
+  }
+}
