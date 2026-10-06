@@ -228,7 +228,33 @@ export function TeamMedallion({
           ...backfaceHidden,
         }}
       >
-        <GenerativeField color={color} inkText={inkText} animate={false} />
+        {hasImage ? (
+          <>
+            <img
+              src={image ?? undefined}
+              alt=""
+              onError={() => setImageFailed(true)}
+              className="absolute inset-0 size-full object-cover grayscale contrast-125 opacity-60"
+            />
+            <div
+              className="pointer-events-none absolute inset-0 opacity-85 mix-blend-color"
+              style={{ background: color }}
+            />
+            <div
+              className="pointer-events-none absolute inset-0 opacity-30"
+              style={{ background: color }}
+            />
+          </>
+        ) : (
+          <GenerativeField color={color} inkText={inkText} animate={false} />
+        )}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle, ${inkText ? 'rgba(35,31,32,.05)' : 'rgba(255,255,255,.04)'} 1px, transparent 1px)`,
+            backgroundSize: '4px 4px',
+          }}
+        />
       </div>
     </>
   )
