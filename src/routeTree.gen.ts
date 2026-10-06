@@ -8,61 +8,61 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as WorkshopsCodeParticipantsRouteImport } from './routes/workshops.$code.participants'
-import { Route as WorkshopsCodeParticipantsTeamIdRouteImport } from './routes/workshops.$code.participants_.$teamId'
+import { Route as rootRouteImport } from "./routes/__root"
+import { Route as IndexRouteImport } from "./routes/index"
+import { Route as WorkshopsCodeParticipantsRouteImport } from "./routes/workshops.$code.participants"
+import { Route as WorkshopsCodeParticipantsTeamIdRouteImport } from "./routes/workshops.$code.participants_.$teamId"
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkshopsCodeParticipantsRoute =
   WorkshopsCodeParticipantsRouteImport.update({
-    id: '/workshops/$code/participants',
-    path: '/workshops/$code/participants',
+    id: "/workshops/$code/participants",
+    path: "/workshops/$code/participants",
     getParentRoute: () => rootRouteImport,
   } as any)
 const WorkshopsCodeParticipantsTeamIdRoute =
   WorkshopsCodeParticipantsTeamIdRouteImport.update({
-    id: '/workshops/$code/participants_/$teamId',
-    path: '/workshops/$code/participants/$teamId',
+    id: "/workshops/$code/participants_/$teamId",
+    path: "/workshops/$code/participants/$teamId",
     getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/workshops/$code/participants': typeof WorkshopsCodeParticipantsRoute
-  '/workshops/$code/participants/$teamId': typeof WorkshopsCodeParticipantsTeamIdRoute
+  "/": typeof IndexRoute
+  "/workshops/$code/participants": typeof WorkshopsCodeParticipantsRoute
+  "/workshops/$code/participants/$teamId": typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/workshops/$code/participants': typeof WorkshopsCodeParticipantsRoute
-  '/workshops/$code/participants/$teamId': typeof WorkshopsCodeParticipantsTeamIdRoute
+  "/": typeof IndexRoute
+  "/workshops/$code/participants": typeof WorkshopsCodeParticipantsRoute
+  "/workshops/$code/participants/$teamId": typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/workshops/$code/participants': typeof WorkshopsCodeParticipantsRoute
-  '/workshops/$code/participants_/$teamId': typeof WorkshopsCodeParticipantsTeamIdRoute
+  "/": typeof IndexRoute
+  "/workshops/$code/participants": typeof WorkshopsCodeParticipantsRoute
+  "/workshops/$code/participants_/$teamId": typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/workshops/$code/participants'
-    | '/workshops/$code/participants/$teamId'
+    | "/"
+    | "/workshops/$code/participants"
+    | "/workshops/$code/participants/$teamId"
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/workshops/$code/participants'
-    | '/workshops/$code/participants/$teamId'
+    | "/"
+    | "/workshops/$code/participants"
+    | "/workshops/$code/participants/$teamId"
   id:
-    | '__root__'
-    | '/'
-    | '/workshops/$code/participants'
-    | '/workshops/$code/participants_/$teamId'
+    | "__root__"
+    | "/"
+    | "/workshops/$code/participants"
+    | "/workshops/$code/participants_/$teamId"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -71,26 +71,26 @@ export interface RootRouteChildren {
   WorkshopsCodeParticipantsTeamIdRoute: typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
+    "/": {
+      id: "/"
+      path: "/"
+      fullPath: "/"
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/workshops/$code/participants': {
-      id: '/workshops/$code/participants'
-      path: '/workshops/$code/participants'
-      fullPath: '/workshops/$code/participants'
+    "/workshops/$code/participants": {
+      id: "/workshops/$code/participants"
+      path: "/workshops/$code/participants"
+      fullPath: "/workshops/$code/participants"
       preLoaderRoute: typeof WorkshopsCodeParticipantsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/workshops/$code/participants_/$teamId': {
-      id: '/workshops/$code/participants_/$teamId'
-      path: '/workshops/$code/participants/$teamId'
-      fullPath: '/workshops/$code/participants/$teamId'
+    "/workshops/$code/participants_/$teamId": {
+      id: "/workshops/$code/participants_/$teamId"
+      path: "/workshops/$code/participants/$teamId"
+      fullPath: "/workshops/$code/participants/$teamId"
       preLoaderRoute: typeof WorkshopsCodeParticipantsTeamIdRouteImport
       parentRoute: typeof rootRouteImport
     }

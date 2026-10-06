@@ -1,13 +1,13 @@
-import { DUR, EASE } from "@/lib/motion";
-import { motion, useReducedMotion } from "framer-motion";
+import { DUR, EASE } from "@/lib/motion"
+import { motion, useReducedMotion } from "framer-motion"
 
 /** Indeterminate visual feedback, not simulated backend progress. */
 export function IdeaImageGenerating({
   regenerating,
 }: {
-  regenerating: boolean;
+  regenerating: boolean
 }) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useReducedMotion()
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -46,5 +46,5 @@ export function IdeaImageGenerating({
         </div>
       </div>
     </motion.div>
-  );
+  )
 }

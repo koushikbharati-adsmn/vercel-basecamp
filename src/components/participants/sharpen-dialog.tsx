@@ -1,20 +1,20 @@
-import { AnimatedDialog } from "@/components/experience/animated-dialog";
-import { DUR, EASE, STAGGER } from "@/lib/motion";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatedDialog } from "@/components/experience/animated-dialog"
+import { DUR, EASE, STAGGER } from "@/lib/motion"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import {
   PARTICIPANT_CHAT_MESSAGE_MAX_LENGTH,
   useParticipantChat,
-} from "@/hooks/use-participant-chat";
-import { cn, getInitials } from "@/lib/utils";
+} from "@/hooks/use-participant-chat"
+import { cn, getInitials } from "@/lib/utils"
 import {
   retryPendingParticipantChatDeletions,
   type ParticipantChatMessage,
-} from "@/services/participant-chat";
+} from "@/services/participant-chat"
 import type {
   ParticipantIdea,
   ParticipantWorkshop,
   ParticipantWorkshopCoach,
-} from "@/services/participants";
+} from "@/services/participants"
 import {
   ArrowDown,
   ChevronRight,
@@ -25,13 +25,19 @@ import {
   Send,
   Users,
   X,
-} from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+} from "lucide-react"
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 const ACTION =
-  "inline-flex min-h-10 items-center justify-center gap-2 border border-[#231f20]/20 px-3 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex min-h-10 items-center justify-center gap-2 border border-[#231f20]/20 px-3 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-40"
 
 export function SharpenDialog({
   idea,
@@ -43,20 +49,20 @@ export function SharpenDialog({
   onEdit,
   children,
 }: {
-  idea: ParticipantIdea;
-  workshop: ParticipantWorkshop;
-  workshopCode: string;
-  visitorId: string;
-  canEdit: boolean;
-  onClose: () => void;
-  onEdit: () => void;
-  children?: ReactNode;
+  idea: ParticipantIdea
+  workshop: ParticipantWorkshop
+  workshopCode: string
+  visitorId: string
+  canEdit: boolean
+  onClose: () => void
+  onEdit: () => void
+  children?: ReactNode
 }) {
-  const reducedMotion = useReducedMotion();
-  const [coachId, setCoachId] = useState<number | null>(null);
-  const [draft, setDraft] = useState("");
-  const [cleanupError, setCleanupError] = useState<string | null>(null);
-  const coach = workshop.coaches.find((item) => item.ID === coachId) ?? null;
+  const reducedMotion = useReducedMotion()
+  const [coachId, setCoachId] = useState<number | null>(null)
+  const [draft, setDraft] = useState("")
+  const [cleanupError, setCleanupError] = useState<string | null>(null)
+  const coach = workshop.coaches.find((item) => item.ID === coachId) ?? null
   const chat = useParticipantChat({
     open: canEdit,
     idea,
@@ -65,28 +71,28 @@ export function SharpenDialog({
     coach,
     initialMessage:
       "How can I make this idea stronger while keeping it true to the brand?",
-  });
+  })
 
   useEffect(() => {
-    let active = true;
+    let active = true
     void retryPendingParticipantChatDeletions({
       visitorId,
       workshopCode,
       ideaId: idea.ID,
     }).then(({ storageFailed }) => {
       if (active && storageFailed)
-        setCleanupError("Chat cleanup could not be saved in this browser.");
-    });
+        setCleanupError("Chat cleanup could not be saved in this browser.")
+    })
     return () => {
-      active = false;
-    };
-  }, [idea.ID, visitorId, workshopCode]);
+      active = false
+    }
+  }, [idea.ID, visitorId, workshopCode])
 
   const selectCoach = (id: number | null) => {
-    if (chat.isBusy || !canEdit) return;
-    setCoachId(id);
-    setDraft("");
-  };
+    if (chat.isBusy || !canEdit) return
+    setCoachId(id)
+    setDraft("")
+  }
 
   return (
     <AnimatedDialog
@@ -145,7 +151,7 @@ export function SharpenDialog({
             <div className="min-w-0">
               <h2
                 id="sharpen-dialog-title"
-                className="font-display font-bold text-2xl"
+                className="font-display text-2xl font-bold"
               >
                 Choose a coach
               </h2>
@@ -162,7 +168,12 @@ export function SharpenDialog({
         </header>
 
         {!coach ? (
-          <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }} className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <motion.main
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }}
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+          >
             <div className="mx-auto max-w-5xl px-4 py-6 sm:px-8 sm:py-10">
               {!canEdit && (
                 <p role="status" className="mb-5 text-sm text-[#8a8689]">
@@ -172,7 +183,17 @@ export function SharpenDialog({
               {workshop.coaches.length > 0 ? (
                 <ul className="grid gap-3 md:grid-cols-2">
                   {workshop.coaches.map((item, index) => (
-                    <motion.li key={item.ID} initial={{ opacity: 0, y: reducedMotion ? 0 : 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, delay: reducedMotion ? 0 : Math.min(index, 5) * STAGGER, ease: EASE }} className="min-w-0">
+                    <motion.li
+                      key={item.ID}
+                      initial={{ opacity: 0, y: reducedMotion ? 0 : 14 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: reducedMotion ? 0 : DUR.beat,
+                        delay: reducedMotion ? 0 : Math.min(index, 5) * STAGGER,
+                        ease: EASE,
+                      }}
+                      className="min-w-0"
+                    >
                       <button
                         type="button"
                         disabled={!canEdit}
@@ -232,7 +253,13 @@ export function SharpenDialog({
             </div>
           </motion.main>
         ) : (
-          <motion.div key={coach.ID} initial={{ opacity: 0, x: reducedMotion ? 0 : 16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }} className="grid min-h-0 flex-1 lg:grid-cols-[16rem_minmax(0,1fr)]">
+          <motion.div
+            key={coach.ID}
+            initial={{ opacity: 0, x: reducedMotion ? 0 : 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }}
+            className="grid min-h-0 flex-1 lg:grid-cols-[16rem_minmax(0,1fr)]"
+          >
             <aside
               className="hidden min-h-0 flex-col overflow-y-auto border-r border-[#231f20]/15 p-3 lg:flex"
               aria-label="Coaches"
@@ -253,7 +280,7 @@ export function SharpenDialog({
                         item.ID === coach.ID
                           ? "border-[#231f20]/20 bg-[#f6f5f3]"
                           : "border-transparent hover:bg-[#231f20]/3",
-                        chat.isBusy && "opacity-50",
+                        chat.isBusy && "opacity-50"
                       )}
                     >
                       <CoachAvatar coach={item} className="size-9" />
@@ -283,7 +310,7 @@ export function SharpenDialog({
         )}
       </div>
     </AnimatedDialog>
-  );
+  )
 }
 
 function ChatWorkspace({
@@ -294,70 +321,70 @@ function ChatWorkspace({
   canEdit,
   cleanupError,
 }: {
-  coach: ParticipantWorkshopCoach;
-  chat: ReturnType<typeof useParticipantChat>;
-  draft: string;
-  setDraft: (value: string) => void;
-  canEdit: boolean;
-  cleanupError: string | null;
+  coach: ParticipantWorkshopCoach
+  chat: ReturnType<typeof useParticipantChat>
+  draft: string
+  setDraft: (value: string) => void
+  canEdit: boolean
+  cleanupError: string | null
 }) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const composerRef = useRef<HTMLFormElement>(null);
-  const historyRef = useRef<HTMLDivElement>(null);
-  const nearBottomRef = useRef(true);
-  const previousCountRef = useRef(chat.session.messages.length);
-  const [hasNewMessages, setHasNewMessages] = useState(false);
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const composerRef = useRef<HTMLFormElement>(null)
+  const historyRef = useRef<HTMLDivElement>(null)
+  const nearBottomRef = useRef(true)
+  const previousCountRef = useRef(chat.session.messages.length)
+  const [hasNewMessages, setHasNewMessages] = useState(false)
   const canSend =
     canEdit &&
     chat.connectionStatus === "connected" &&
     !chat.isBusy &&
-    chat.session.status === "active";
+    chat.session.status === "active"
 
   useLayoutEffect(() => {
-    const composer = composerRef.current;
-    const history = historyRef.current;
-    if (!composer || !history) return;
+    const composer = composerRef.current
+    const history = historyRef.current
+    if (!composer || !history) return
     const reserveSpace = () => {
-      history.style.paddingBottom = `${Math.ceil(composer.getBoundingClientRect().height) + 24}px`;
-      const viewport = viewportRef.current;
+      history.style.paddingBottom = `${Math.ceil(composer.getBoundingClientRect().height) + 24}px`
+      const viewport = viewportRef.current
       if (nearBottomRef.current && viewport)
-        viewport.scrollTop = viewport.scrollHeight;
-    };
-    reserveSpace();
-    const observer = new ResizeObserver(reserveSpace);
-    observer.observe(composer);
-    return () => observer.disconnect();
-  }, []);
+        viewport.scrollTop = viewport.scrollHeight
+    }
+    reserveSpace()
+    const observer = new ResizeObserver(reserveSpace)
+    observer.observe(composer)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
-    const added = chat.session.messages.length > previousCountRef.current;
-    previousCountRef.current = chat.session.messages.length;
-    const viewport = viewportRef.current;
+    const added = chat.session.messages.length > previousCountRef.current
+    previousCountRef.current = chat.session.messages.length
+    const viewport = viewportRef.current
     if (nearBottomRef.current && viewport) {
-      viewport.scrollTop = viewport.scrollHeight;
-      setHasNewMessages(false);
-    } else if (added) setHasNewMessages(true);
+      viewport.scrollTop = viewport.scrollHeight
+      setHasNewMessages(false)
+    } else if (added) setHasNewMessages(true)
   }, [
     chat.session.messages,
     chat.isWaiting,
     chat.connectionStatus,
     chat.requestError,
-  ]);
+  ])
 
   useLayoutEffect(() => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-    textarea.style.height = "auto";
-    textarea.style.height = `${Math.min(160, Math.max(40, textarea.scrollHeight))}px`;
-  }, [draft]);
+    const textarea = textareaRef.current
+    if (!textarea) return
+    textarea.style.height = "auto"
+    textarea.style.height = `${Math.min(160, Math.max(40, textarea.scrollHeight))}px`
+  }, [draft])
 
   const jumpToBottom = () => {
-    nearBottomRef.current = true;
-    setHasNewMessages(false);
-    const viewport = viewportRef.current;
-    if (viewport) viewport.scrollTop = viewport.scrollHeight;
-  };
+    nearBottomRef.current = true
+    setHasNewMessages(false)
+    const viewport = viewportRef.current
+    if (viewport) viewport.scrollTop = viewport.scrollHeight
+  }
   const placeholder = !canEdit
     ? "Ideation has closed."
     : chat.session.status !== "active"
@@ -366,7 +393,7 @@ function ChatWorkspace({
         : "This session cannot continue."
       : chat.connectionStatus === "connected"
         ? `Message ${coach.CoachName}`
-        : "Connecting to your coach…";
+        : "Connecting to your coach…"
 
   return (
     <section className="relative flex min-h-0 min-w-0 flex-col">
@@ -374,11 +401,11 @@ function ChatWorkspace({
         ref={viewportRef}
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
         onScroll={(event) => {
-          const viewport = event.currentTarget;
+          const viewport = event.currentTarget
           nearBottomRef.current =
             viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight <
-            96;
-          if (nearBottomRef.current) setHasNewMessages(false);
+            96
+          if (nearBottomRef.current) setHasNewMessages(false)
         }}
       >
         <div
@@ -447,10 +474,10 @@ function ChatWorkspace({
           background: "linear-gradient(to top, #ffffff 55%, transparent)",
         }}
         onSubmit={(event) => {
-          event.preventDefault();
+          event.preventDefault()
           if (canSend && chat.sendMessage(draft)) {
-            nearBottomRef.current = true;
-            setDraft("");
+            nearBottomRef.current = true
+            setDraft("")
           }
         }}
       >
@@ -485,8 +512,8 @@ function ChatWorkspace({
                   !event.shiftKey &&
                   !event.nativeEvent.isComposing
                 ) {
-                  event.preventDefault();
-                  event.currentTarget.form?.requestSubmit();
+                  event.preventDefault()
+                  event.currentTarget.form?.requestSubmit()
                 }
               }}
             />
@@ -519,7 +546,7 @@ function ChatWorkspace({
         </div>
       </form>
     </section>
-  );
+  )
 }
 
 function ChatMessage({
@@ -528,23 +555,23 @@ function ChatMessage({
   canRetry,
   onRetry,
 }: {
-  message: ParticipantChatMessage;
-  coach: ParticipantWorkshopCoach;
-  canRetry: boolean;
-  onRetry: () => void;
+  message: ParticipantChatMessage
+  coach: ParticipantWorkshopCoach
+  canRetry: boolean
+  onRetry: () => void
 }) {
   if (message.author === "system")
     return (
       <p className="max-w-xl justify-self-center border border-[#231f20]/15 px-3 py-2 text-center text-xs wrap-break-word text-[#8a8689]">
         {message.text}
       </p>
-    );
-  const isCoach = message.author === "coach";
+    )
+  const isCoach = message.author === "coach"
   return (
     <div
       className={cn(
         "flex max-w-[90%] items-end gap-2 sm:max-w-[80%]",
-        isCoach ? "justify-self-start" : "justify-self-end",
+        isCoach ? "justify-self-start" : "justify-self-end"
       )}
     >
       {isCoach && <CoachAvatar coach={coach} className="size-8" />}
@@ -557,7 +584,7 @@ function ChatMessage({
             "px-4 py-2.5 text-sm leading-6 wrap-break-word",
             isCoach
               ? "border border-[#231f20]/15 bg-[#f6f5f3]"
-              : "bg-[#231f20] whitespace-pre-wrap text-white",
+              : "bg-[#231f20] whitespace-pre-wrap text-white"
           )}
         >
           {isCoach ? (
@@ -569,7 +596,7 @@ function ChatMessage({
         <div
           className={cn(
             "mt-1 flex items-center gap-2 text-[11px] text-[#8a8689]",
-            !isCoach && "justify-end",
+            !isCoach && "justify-end"
           )}
         >
           {message.createdAt && (
@@ -597,7 +624,7 @@ function ChatMessage({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function CoachMarkdown({ children }: { children: string }) {
@@ -627,7 +654,7 @@ function CoachMarkdown({ children }: { children: string }) {
         {children}
       </ReactMarkdown>
     </div>
-  );
+  )
 }
 
 function StatusNotice({
@@ -635,9 +662,9 @@ function StatusNotice({
   loading = false,
   onRetry,
 }: {
-  message: string;
-  loading?: boolean;
-  onRetry?: () => void;
+  message: string
+  loading?: boolean
+  onRetry?: () => void
 }) {
   return (
     <div
@@ -657,23 +684,23 @@ function StatusNotice({
         </button>
       )}
     </div>
-  );
+  )
 }
 
 function CoachAvatar({
   coach,
   className,
 }: {
-  coach: ParticipantWorkshopCoach;
-  className: string;
+  coach: ParticipantWorkshopCoach
+  className: string
 }) {
-  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
   return (
     <span
       aria-hidden="true"
       className={cn(
         "grid shrink-0 place-items-center overflow-hidden bg-[#eeedeb] text-xs font-bold text-[#4a4749]",
-        className,
+        className
       )}
     >
       {coach.AvatarFileName?.trim() && failedSrc !== coach.AvatarFileName ? (
@@ -687,5 +714,5 @@ function CoachAvatar({
         getInitials(coach.CoachName, "C")
       )}
     </span>
-  );
+  )
 }

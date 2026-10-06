@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { AnimatePresence, motion } from "framer-motion"
+import { useState } from "react"
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -31,8 +31,11 @@ export function IntroVideoScreen({
             key="intro-video"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.12, ease: 'easeOut' } }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.12, ease: "easeOut" },
+            }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-black pb-12"
           >
             <motion.button
@@ -48,13 +51,13 @@ export function IntroVideoScreen({
 
             <figure className="relative z-10 flex w-full max-w-3xl flex-col items-center gap-3 px-6 text-center">
               <motion.div
-                initial={{ opacity: 0, scale: 0.5, filter: 'brightness(0.15)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'brightness(1)' }}
+                initial={{ opacity: 0, scale: 0.5, filter: "brightness(0.15)" }}
+                animate={{ opacity: 1, scale: 1, filter: "brightness(1)" }}
                 exit={{
                   opacity: 0,
                   scale: 0.96,
-                  filter: 'brightness(0.4)',
-                  transition: { duration: 0.12, ease: 'easeOut' },
+                  filter: "brightness(0.4)",
+                  transition: { duration: 0.12, ease: "easeOut" },
                 }}
                 transition={{ duration: 1.6, ease: EASE }}
                 className="relative aspect-video w-full overflow-hidden bg-zinc-900 ring-1 ring-white/10"
@@ -72,7 +75,9 @@ export function IntroVideoScreen({
                   onTimeUpdate={(event) => {
                     const video = event.currentTarget
                     if (video.duration) {
-                      setProgress(Math.min(video.currentTime / video.duration, 1))
+                      setProgress(
+                        Math.min(video.currentTime / video.duration, 1)
+                      )
                     }
                   }}
                   onEnded={finish}
@@ -106,11 +111,15 @@ export function IntroVideoScreen({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
               className="absolute bottom-16 h-px w-40 overflow-hidden bg-white/10"
-              aria-label={duration > 0 ? `${Math.round(progress * 100)}% played` : 'Loading video'}
+              aria-label={
+                duration > 0
+                  ? `${Math.round(progress * 100)}% played`
+                  : "Loading video"
+              }
             >
               <motion.div
                 animate={{ scaleX: progress }}
-                transition={{ duration: 0.08, ease: 'linear' }}
+                transition={{ duration: 0.08, ease: "linear" }}
                 className="h-full origin-left bg-[#eb3f43]"
               />
             </motion.div>

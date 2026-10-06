@@ -12,8 +12,8 @@ import {
   VoteIcon,
   WandSparklesIcon,
   type LucideIcon,
-} from 'lucide-react'
-import { createElement } from 'react'
+} from "lucide-react"
+import { createElement } from "react"
 
 const WALKTHROUGH_ICONS: Record<string, LucideIcon> = {
   home: HomeIcon,
@@ -43,6 +43,6 @@ export function WalkthroughIcon({
 }) {
   return createElement(getWalkthroughIcon(iconKey), {
     className,
-    'aria-hidden': true,
+    "aria-hidden": true,
   })
 }

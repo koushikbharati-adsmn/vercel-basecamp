@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { useBodyScrollLock } from '@/hooks/use-body-scroll-lock'
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 /** Maps controlled open state to native modal APIs; callers handle close events. */
 export function useNativeDialog(open: boolean) {

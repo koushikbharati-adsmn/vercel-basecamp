@@ -1,19 +1,19 @@
-import { AnimatedDialog } from "@/components/experience/animated-dialog";
-import { ExperienceSelect } from "@/components/experience/experience-select";
-import { socket } from "@/lib/socket";
+import { AnimatedDialog } from "@/components/experience/animated-dialog"
+import { ExperienceSelect } from "@/components/experience/experience-select"
+import { socket } from "@/lib/socket"
 import {
   hasParticipantChatSession,
   invalidateParticipantChatSessions,
-} from "@/services/participant-chat";
+} from "@/services/participant-chat"
 import {
   useSaveIdea,
   type IdeaCoachSocketPayload,
   type IdeaUpsertSocketPayload,
   type ParticipantIdea,
   type ParticipantWorkshop,
-} from "@/services/participants";
-import { X } from "lucide-react";
-import { useRef, useState, type FormEvent } from "react";
+} from "@/services/participants"
+import { X } from "lucide-react"
+import { useRef, useState, type FormEvent } from "react"
 
 export function IdeaEditor({
   workshop,
@@ -26,48 +26,48 @@ export function IdeaEditor({
   onClose,
   onSaved,
 }: {
-  workshop: ParticipantWorkshop;
-  workshopCode: string;
-  visitorId: string;
-  teamId: number;
-  idea?: ParticipantIdea;
-  description?: string;
-  canEdit: boolean;
-  onClose: () => void;
-  onSaved: () => void;
+  workshop: ParticipantWorkshop
+  workshopCode: string
+  visitorId: string
+  teamId: number
+  idea?: ParticipantIdea
+  description?: string
+  canEdit: boolean
+  onClose: () => void
+  onSaved: () => void
 }) {
-  const save = useSaveIdea();
-  const [title, setTitle] = useState(idea?.title ?? "");
-  const [desc, setDesc] = useState(idea?.Desc ?? description ?? "");
-  const [context, setContext] = useState(idea?.Context ?? "");
+  const save = useSaveIdea()
+  const [title, setTitle] = useState(idea?.title ?? "")
+  const [desc, setDesc] = useState(idea?.Desc ?? description ?? "")
+  const [context, setContext] = useState(idea?.Context ?? "")
   const [category, setCategory] = useState<number | null>(
-    idea?.CategoryID ?? null,
-  );
-  const [error, setError] = useState("");
-  const [pillarError, setPillarError] = useState("");
-  const pillarRef = useRef<HTMLButtonElement>(null);
+    idea?.CategoryID ?? null
+  )
+  const [error, setError] = useState("")
+  const [pillarError, setPillarError] = useState("")
+  const pillarRef = useRef<HTMLButtonElement>(null)
   const submit = (event: FormEvent) => {
-    event.preventDefault();
-    if (!canEdit || save.isPending) return;
+    event.preventDefault()
+    if (!canEdit || save.isPending) return
     if (
       category === null ||
       !workshop.category.some((pillar) => pillar.ID === category)
     ) {
-      setPillarError("Choose a pillar before submitting your idea.");
-      pillarRef.current?.focus();
-      return;
+      setPillarError("Choose a pillar before submitting your idea.")
+      pillarRef.current?.focus()
+      return
     }
     if (!desc.trim()) {
-      setError("Describe your idea before submitting.");
-      return;
+      setError("Describe your idea before submitting.")
+      return
     }
-    setPillarError("");
-    setError("");
+    setPillarError("")
+    setError("")
     const chatIdentity = idea
       ? { visitorId, workshopCode, ideaId: idea.ID }
-      : null;
+      : null
     const hasCoachSession =
-      chatIdentity !== null && hasParticipantChatSession(chatIdentity);
+      chatIdentity !== null && hasParticipantChatSession(chatIdentity)
     save.mutate(
       {
         ...(idea ? { idea_id: idea.ID } : {}),
@@ -83,8 +83,8 @@ export function IdeaEditor({
       {
         onSuccess: (response) => {
           if (!response.success) {
-            setError(response.message || "Your idea could not be saved.");
-            return;
+            setError(response.message || "Your idea could not be saved.")
+            return
           }
           socket.emit("upsert_idea", {
             roomId: workshopCode,
@@ -104,9 +104,9 @@ export function IdeaEditor({
               title: title.trim() || null,
               context: context.trim() || null,
             },
-          } satisfies IdeaUpsertSocketPayload);
+          } satisfies IdeaUpsertSocketPayload)
           if (hasCoachSession && chatIdentity && idea) {
-            void invalidateParticipantChatSessions(chatIdentity);
+            void invalidateParticipantChatSessions(chatIdentity)
             socket.emit("update_idea_coach", {
               roomId: workshopCode,
               flgCoach: true,
@@ -121,13 +121,13 @@ export function IdeaEditor({
                   workshop.category.find((item) => item.ID === category)
                     ?.Name ?? "",
               },
-            } satisfies IdeaCoachSocketPayload);
+            } satisfies IdeaCoachSocketPayload)
           }
-          onSaved();
+          onSaved()
         },
-      },
-    );
-  };
+      }
+    )
+  }
 
   return (
     <AnimatedDialog
@@ -165,8 +165,8 @@ export function IdeaEditor({
             }))}
             value={category}
             onValueChange={(value) => {
-              setCategory(value);
-              setPillarError("");
+              setCategory(value)
+              setPillarError("")
             }}
             required
             disabled={!canEdit || save.isPending}
@@ -235,5 +235,5 @@ export function IdeaEditor({
         </div>
       </form>
     </AnimatedDialog>
-  );
+  )
 }

@@ -1,22 +1,22 @@
-import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
-import { cn } from "@/lib/utils";
-import { DUR, EASE, EASE_EXIT } from "@/lib/motion";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
+import { cn } from "@/lib/utils"
+import { DUR, EASE, EASE_EXIT } from "@/lib/motion"
 import {
   motion,
   useIsPresent,
   useReducedMotion,
   type HTMLMotionProps,
-} from "framer-motion";
-import { useLayoutEffect, useRef } from "react";
+} from "framer-motion"
+import { useLayoutEffect, useRef } from "react"
 
 type AnimatedDialogProps = Omit<
   HTMLMotionProps<"dialog">,
   "open" | "onClose" | "onCancel"
 > & {
-  onClose: () => void;
-  dismissDisabled?: boolean;
-  variant?: "panel" | "fullscreen";
-};
+  onClose: () => void
+  dismissDisabled?: boolean
+  variant?: "panel" | "fullscreen"
+}
 
 /** Use inside AnimatePresence. Native focus/inertness and scroll locking remain
  * active throughout the exit; the element closes only once it is unmounted.
@@ -29,19 +29,19 @@ export function AnimatedDialog({
   variant = "panel",
   ...props
 }: AnimatedDialogProps) {
-  const ref = useRef<HTMLDialogElement>(null);
-  const present = useIsPresent();
-  const reducedMotion = useReducedMotion();
-  useBodyScrollLock(true);
+  const ref = useRef<HTMLDialogElement>(null)
+  const present = useIsPresent()
+  const reducedMotion = useReducedMotion()
+  useBodyScrollLock(true)
 
   useLayoutEffect(() => {
-    const dialog = ref.current;
-    if (!dialog) return;
-    if (!dialog.open) dialog.showModal();
+    const dialog = ref.current
+    if (!dialog) return
+    if (!dialog.open) dialog.showModal()
     return () => {
-      if (dialog.open) dialog.close();
-    };
-  }, []);
+      if (dialog.open) dialog.close()
+    }
+  }, [])
 
   return (
     <motion.dialog
@@ -62,17 +62,17 @@ export function AnimatedDialog({
       }}
       transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }}
       onCancel={(event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        if (present && !dismissDisabled) onClose();
+        event.preventDefault()
+        event.stopPropagation()
+        if (present && !dismissDisabled) onClose()
       }}
       onClose={(event) => {
-        event.stopPropagation();
+        event.stopPropagation()
         // StrictMode may queue a close event and then reopen the same element.
-        if (!ref.current?.open && present && !dismissDisabled) onClose();
+        if (!ref.current?.open && present && !dismissDisabled) onClose()
       }}
     >
       {children}
     </motion.dialog>
-  );
+  )
 }

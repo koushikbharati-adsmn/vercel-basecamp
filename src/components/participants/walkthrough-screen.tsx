@@ -1,7 +1,7 @@
-import { WalkthroughIcon } from '@/lib/walkthrough-icons'
-import type { ParticipantWorkshopWalkthrough } from '@/services/participants'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { WalkthroughIcon } from "@/lib/walkthrough-icons"
+import type { ParticipantWorkshopWalkthrough } from "@/services/participants"
+import { AnimatePresence, motion } from "framer-motion"
+import { useState } from "react"
 
 export function WalkthroughScreen({
   steps,
@@ -70,13 +70,23 @@ export function WalkthroughScreen({
                       <motion.span
                         layoutId="walkthrough-active-tab"
                         className="absolute inset-0 bg-white"
-                        transition={{ type: 'spring', stiffness: 350, damping: 32 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 350,
+                          damping: 32,
+                        }}
                       />
                     )}
                   </span>
-                  <span className={`mt-3 block truncate text-center text-xs font-semibold tracking-wide uppercase ${isActive ? 'text-white' : 'text-white/45'}`}>
-                    <span className="sm:hidden">{String(index + 1).padStart(2, '0')}</span>
-                    <span className="hidden sm:inline">{step.tabName ?? `Step ${index + 1}`}</span>
+                  <span
+                    className={`mt-3 block truncate text-center text-xs font-semibold tracking-wide uppercase ${isActive ? "text-white" : "text-white/45"}`}
+                  >
+                    <span className="sm:hidden">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="hidden sm:inline">
+                      {step.tabName ?? `Step ${index + 1}`}
+                    </span>
                   </span>
                 </button>
               )
@@ -84,18 +94,24 @@ export function WalkthroughScreen({
           </div>
         </div>
 
-        <div aria-live="polite" className="relative flex flex-1 flex-col justify-center overflow-hidden px-6 py-12 sm:px-14 sm:py-16 lg:px-20">
+        <div
+          aria-live="polite"
+          className="relative flex flex-1 flex-col justify-center overflow-hidden px-6 py-12 sm:px-14 sm:py-16 lg:px-20"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep.ID}
-              initial={{ opacity: 0, y: 18, filter: 'blur(4px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -12, filter: 'blur(3px)' }}
+              initial={{ opacity: 0, y: 18, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -12, filter: "blur(3px)" }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="grid gap-3"
             >
               <div className="flex items-center gap-3 text-white/55">
-                <WalkthroughIcon iconKey={currentStep.fileName} className="size-5" />
+                <WalkthroughIcon
+                  iconKey={currentStep.fileName}
+                  className="size-5"
+                />
                 <span className="text-[13px] font-bold tracking-[0.28em] uppercase">
                   {currentStep.tabName ?? `Step ${currentStepIndex + 1}`}
                 </span>
@@ -125,7 +141,7 @@ export function WalkthroughScreen({
             onClick={goNext}
             className="cursor-pointer bg-[#eb3f43] px-7 py-3 text-xs font-bold tracking-[0.14em] uppercase hover:bg-[#f26b6e]"
           >
-            {isLastStep ? 'Begin' : 'Next'}
+            {isLastStep ? "Begin" : "Next"}
           </button>
         </footer>
       </motion.section>

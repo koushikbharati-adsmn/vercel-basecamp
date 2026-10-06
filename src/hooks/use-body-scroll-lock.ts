@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect } from "react"
 
 let lockCount = 0
 let restoreStyles: (() => void) | null = null
@@ -12,20 +12,26 @@ export function useBodyScrollLock(locked: boolean) {
       const root = document.documentElement
       const body = document.body
       const properties = [
-        [root, 'overflow'],
-        [body, 'padding-right'],
+        [root, "overflow"],
+        [body, "padding-right"],
       ] as const
       const previous = properties.map(([element, property]) => ({
-        element, property,
+        element,
+        property,
         value: element.style.getPropertyValue(property),
         priority: element.style.getPropertyPriority(property),
       }))
       const scrollbarWidth = window.innerWidth - root.clientWidth
-      const paddingRight = parseFloat(window.getComputedStyle(body).paddingRight) || 0
-      root.style.setProperty('overflow', 'hidden')
+      const paddingRight =
+        parseFloat(window.getComputedStyle(body).paddingRight) || 0
+      root.style.setProperty("overflow", "hidden")
       // Do not set body overflow: it creates a new scrolling ancestor and makes
       // sticky headers jump offscreen when the page is already scrolled.
-      if (scrollbarWidth > 0) body.style.setProperty('padding-right', `${paddingRight + scrollbarWidth}px`)
+      if (scrollbarWidth > 0)
+        body.style.setProperty(
+          "padding-right",
+          `${paddingRight + scrollbarWidth}px`
+        )
 
       restoreStyles = () => {
         previous.forEach(({ element, property, value, priority }) => {

@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import * as THREE from 'three'
+import { useEffect, useRef } from "react"
+import * as THREE from "three"
 
 const VERTEX_SHADER = `
   varying vec2 vUv;
@@ -102,19 +102,25 @@ export function AmbientField() {
     const container = containerRef.current
     if (!container) return
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
     let renderer: THREE.WebGLRenderer
 
     try {
-      renderer = new THREE.WebGLRenderer({ alpha: false, antialias: false, powerPreference: 'high-performance' })
+      renderer = new THREE.WebGLRenderer({
+        alpha: false,
+        antialias: false,
+        powerPreference: "high-performance",
+      })
     } catch {
       return
     }
 
     renderer.outputColorSpace = THREE.SRGBColorSpace
-    renderer.setClearColor('#17090A', 1)
+    renderer.setClearColor("#17090A", 1)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.35))
-    renderer.domElement.className = 'absolute inset-0 h-full w-full'
+    renderer.domElement.className = "absolute inset-0 h-full w-full"
     container.appendChild(renderer.domElement)
 
     const scene = new THREE.Scene()
@@ -124,10 +130,10 @@ export function AmbientField() {
       uTime: { value: reducedMotion ? 8 : 0 },
       uResolution: { value: new THREE.Vector2(1, 1) },
       uPointer: { value: new THREE.Vector2(0.5, 0.5) },
-      uInk: { value: new THREE.Color('#17090A') },
-      uDeep: { value: new THREE.Color('#8C2226') },
-      uRed: { value: new THREE.Color('#EB3F43') },
-      uPink: { value: new THREE.Color('#F5BAC5') },
+      uInk: { value: new THREE.Color("#17090A") },
+      uDeep: { value: new THREE.Color("#8C2226") },
+      uRed: { value: new THREE.Color("#EB3F43") },
+      uPink: { value: new THREE.Color("#F5BAC5") },
     }
     const material = new THREE.ShaderMaterial({
       vertexShader: VERTEX_SHADER,
@@ -142,7 +148,7 @@ export function AmbientField() {
     const pointerTarget = new THREE.Vector2(0.5, 0.5)
     const pointerCurrent = new THREE.Vector2(0.5, 0.5)
     let animationFrame = 0
-    let pageVisible = document.visibilityState === 'visible'
+    let pageVisible = document.visibilityState === "visible"
     let visible = true
 
     const resize = () => {
@@ -156,8 +162,16 @@ export function AmbientField() {
     const onPointerMove = (event: PointerEvent) => {
       const bounds = container.getBoundingClientRect()
       pointerTarget.set(
-        THREE.MathUtils.clamp((event.clientX - bounds.left) / bounds.width, 0, 1),
-        THREE.MathUtils.clamp(1 - (event.clientY - bounds.top) / bounds.height, 0, 1),
+        THREE.MathUtils.clamp(
+          (event.clientX - bounds.left) / bounds.width,
+          0,
+          1
+        ),
+        THREE.MathUtils.clamp(
+          1 - (event.clientY - bounds.top) / bounds.height,
+          0,
+          1
+        )
       )
     }
     const renderFrame = (time: number) => {
@@ -167,10 +181,11 @@ export function AmbientField() {
         uniforms.uPointer.value.copy(pointerCurrent)
         renderer.render(scene, camera)
       }
-      if (!reducedMotion) animationFrame = window.requestAnimationFrame(renderFrame)
+      if (!reducedMotion)
+        animationFrame = window.requestAnimationFrame(renderFrame)
     }
     const onVisibilityChange = () => {
-      pageVisible = document.visibilityState === 'visible'
+      pageVisible = document.visibilityState === "visible"
     }
     const resizeObserver = new ResizeObserver(resize)
     const intersectionObserver = new IntersectionObserver(([entry]) => {
@@ -179,8 +194,8 @@ export function AmbientField() {
 
     resizeObserver.observe(container)
     intersectionObserver.observe(container)
-    window.addEventListener('pointermove', onPointerMove, { passive: true })
-    document.addEventListener('visibilitychange', onVisibilityChange)
+    window.addEventListener("pointermove", onPointerMove, { passive: true })
+    document.addEventListener("visibilitychange", onVisibilityChange)
     resize()
     renderFrame(0)
 
@@ -188,8 +203,8 @@ export function AmbientField() {
       window.cancelAnimationFrame(animationFrame)
       resizeObserver.disconnect()
       intersectionObserver.disconnect()
-      window.removeEventListener('pointermove', onPointerMove)
-      document.removeEventListener('visibilitychange', onVisibilityChange)
+      window.removeEventListener("pointermove", onPointerMove)
+      document.removeEventListener("visibilitychange", onVisibilityChange)
       geometry.dispose()
       material.dispose()
       renderer.dispose()
@@ -198,7 +213,11 @@ export function AmbientField() {
   }, [])
 
   return (
-    <div ref={containerRef} className="pointer-events-none absolute inset-0 overflow-hidden bg-[#0d0c0d]" aria-hidden="true">
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0 overflow-hidden bg-[#0d0c0d]"
+      aria-hidden="true"
+    >
       <div className="absolute inset-0 scale-105 bg-[radial-gradient(circle_at_16%_22%,#EB3F43_0%,transparent_35%),radial-gradient(circle_at_82%_68%,#7A2B2E_0%,transparent_42%),radial-gradient(circle_at_62%_12%,#F5BAC5_0%,transparent_31%),#0D0C0D] blur-[28px] saturate-[1.08]" />
     </div>
   )

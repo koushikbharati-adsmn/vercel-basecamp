@@ -1,11 +1,11 @@
-import { AmbientField } from '@/components/participants/ambient-field'
-import { motion } from 'framer-motion'
-import { useEffect, useId, useRef, useState } from 'react'
+import { AmbientField } from "@/components/participants/ambient-field"
+import { motion } from "framer-motion"
+import { useEffect, useId, useRef, useState } from "react"
 
 const EASE = [0.16, 1, 0.3, 1] as const
 const EASE_EXIT = [0.62, 0, 0.9, 0.4] as const
 const ORBIT_COPY =
-  'THE DIVINE DISCONTENT SESSION · OGILVY · WELCOME TO BASECAMP · 2026 · '
+  "THE DIVINE DISCONTENT SESSION · OGILVY · WELCOME TO BASECAMP · 2026 · "
 
 function OrbitType({ pathId }: { pathId: string }) {
   const radius = 336
@@ -48,7 +48,7 @@ export function OrbitalEntry({
   workshopName: string
   onComplete: () => void
 }) {
-  const outerPathId = `orbital-outer-${useId().replace(/:/g, '')}`
+  const outerPathId = `orbital-outer-${useId().replace(/:/g, "")}`
   const timerRef = useRef<number | null>(null)
   const [unlocking, setUnlocking] = useState(false)
 
@@ -56,7 +56,7 @@ export function OrbitalEntry({
     () => () => {
       if (timerRef.current !== null) window.clearTimeout(timerRef.current)
     },
-    [],
+    []
   )
 
   const handleEnter = () => {
@@ -77,10 +77,10 @@ export function OrbitalEntry({
         className="pointer-events-none absolute inset-0 z-[2] opacity-30"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
+            "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
           maskImage:
-            'radial-gradient(circle at 50% 47%, transparent 12%, black 78%)',
+            "radial-gradient(circle at 50% 47%, transparent 12%, black 78%)",
         }}
       />
 
@@ -98,7 +98,7 @@ export function OrbitalEntry({
             by Ogilvy
           </span>
         </div>
-        <div className="max-w-[52vw] text-right text-[11px] font-medium leading-[1.6] tracking-[0.03em] text-white/64 sm:text-[12px]">
+        <div className="max-w-[52vw] text-right text-[11px] leading-[1.6] font-medium tracking-[0.03em] text-white/64 sm:text-[12px]">
           <div className="truncate">{workshopName}</div>
           <div className="text-white/45">2026</div>
         </div>
@@ -107,9 +107,7 @@ export function OrbitalEntry({
       <motion.div
         initial={{ opacity: 0, scale: 0.92 }}
         animate={
-          unlocking
-            ? { opacity: 1, scale: 7.5 }
-            : { opacity: 1, scale: 1 }
+          unlocking ? { opacity: 1, scale: 7.5 } : { opacity: 1, scale: 1 }
         }
         transition={
           unlocking
@@ -118,9 +116,9 @@ export function OrbitalEntry({
         }
         className="absolute left-1/2 z-10 aspect-square -translate-x-1/2 -translate-y-1/2"
         style={{
-          top: '41.5%',
-          width: 'min(92vw, calc(100svh - 260px), 660px)',
-          containerType: 'inline-size',
+          top: "41.5%",
+          width: "min(92vw, calc(100svh - 260px), 660px)",
+          containerType: "inline-size",
         }}
       >
         <div className="absolute inset-[1%] rounded-full border border-white/20" />
@@ -131,11 +129,11 @@ export function OrbitalEntry({
           className="absolute inset-[9%] flex flex-col items-center justify-center overflow-hidden rounded-full border border-white/35 px-[10%] text-center shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
           style={{
             background: unlocking
-              ? 'radial-gradient(circle at 50% 42%, rgba(29,17,20,0.96), rgba(10,8,9,0.99) 72%)'
-              : 'radial-gradient(circle at 50% 42%, rgba(38,24,27,0.58), rgba(13,12,13,0.78) 72%)',
-            backdropFilter: unlocking ? 'none' : 'blur(22px)',
-            WebkitBackdropFilter: unlocking ? 'none' : 'blur(22px)',
-            transition: 'background 0.5s ease',
+              ? "radial-gradient(circle at 50% 42%, rgba(29,17,20,0.96), rgba(10,8,9,0.99) 72%)"
+              : "radial-gradient(circle at 50% 42%, rgba(38,24,27,0.58), rgba(13,12,13,0.78) 72%)",
+            backdropFilter: unlocking ? "none" : "blur(22px)",
+            WebkitBackdropFilter: unlocking ? "none" : "blur(22px)",
+            transition: "background 0.5s ease",
           }}
         >
           <motion.div
@@ -155,10 +153,10 @@ export function OrbitalEntry({
               Basecamp
             </h1>
             <div className="my-[3%] h-px w-[clamp(52px,7cqw,92px)] bg-[#eb3f43]" />
-            <p className="max-w-[440px] font-display text-[clamp(17px,4.1cqw,30px)] leading-[1.1] tracking-[-0.015em] text-white/96">
+            <p className="font-display max-w-[440px] text-[clamp(17px,4.1cqw,30px)] leading-[1.1] tracking-[-0.015em] text-white/96">
               {workshopName}
             </p>
-            <p className="mt-[3%] max-w-[380px] text-[clamp(12px,2.2cqw,15px)] font-medium leading-[1.5] text-white/72">
+            <p className="mt-[3%] max-w-[380px] text-[clamp(12px,2.2cqw,15px)] leading-[1.5] font-medium text-white/72">
               Where the room’s best ideas become inevitable.
             </p>
           </motion.div>
@@ -167,9 +165,7 @@ export function OrbitalEntry({
 
       <motion.div
         initial={{ opacity: 0, y: 12 }}
-        animate={
-          unlocking ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }
-        }
+        animate={unlocking ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         transition={
           unlocking
             ? { duration: 0.25 }
