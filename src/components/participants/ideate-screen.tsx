@@ -103,15 +103,6 @@ export function IdeateScreen({
   })
   const ideasQuery = useQuery(ideasQueryOptions)
   const ideas = ideasQuery.data?.data ?? []
-  // The API owns pillar filtering; only display order is applied locally.
-  const sortedIdeas = [...ideas].sort(
-    (a, b) => Number(b.flgTeam) - Number(a.flgTeam) || b.ID - a.ID
-  )
-  const numbers = new Map(
-    [...ideas]
-      .sort((a, b) => a.ID - b.ID)
-      .map((idea, index) => [idea.ID, index + 1])
-  )
   const canIdeate = workshop.status === "Ideate" && workshop.teamID === teamId
   const scoutDisabledReason = !canIdeate
     ? "Scout is only available during ideation."
@@ -612,11 +603,11 @@ export function IdeateScreen({
                 : "The board is empty. Add the first idea and choose its pillar."}
             </p>
           )}
-          {sortedIdeas.map((idea) => (
+          {ideas.map((idea, index) => (
             <IdeateIdeaCard
               key={idea.ID}
               idea={idea}
-              number={numbers.get(idea.ID)!}
+              number={index + 1}
               canEdit={canIdeate}
               canSharpen={workshop.coaches.length > 0}
               isGeneratingImage={pendingImages.includes(idea.ID)}
