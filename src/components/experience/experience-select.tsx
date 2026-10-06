@@ -20,7 +20,8 @@ type ExperienceSelectProps<Value extends string | number> = {
   options: SelectOption<Value>[]
   value: Value | null
   onValueChange: (value: Value) => void
-  label: string
+  label?: string
+  "aria-label"?: string
   placeholder?: string
   disabled?: boolean
   required?: boolean
@@ -38,6 +39,7 @@ export function ExperienceSelect<Value extends string | number>({
   value,
   onValueChange,
   label,
+  "aria-label": ariaLabel,
   placeholder = "Select an option",
   disabled = false,
   required = false,
@@ -169,14 +171,17 @@ export function ExperienceSelect<Value extends string | number>({
         if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false)
       }}
     >
-      <label htmlFor={`${id}-trigger`} className="block text-sm font-bold">
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={`${id}-trigger`} className="block text-sm font-bold">
+          {label}
+        </label>
+      )}
       <button
         ref={triggerRef}
         id={`${id}-trigger`}
         type="button"
         role="combobox"
+        aria-label={ariaLabel ?? (label ? undefined : placeholder)}
         aria-haspopup="listbox"
         aria-expanded={expanded}
         aria-controls={`${id}-listbox`}
@@ -190,7 +195,8 @@ export function ExperienceSelect<Value extends string | number>({
         }
         disabled={disabled}
         className={cn(
-          "mt-1.5 flex w-full items-center justify-between gap-3 border border-[#231f20]/25 bg-white px-2.5 py-[9px] text-left text-base font-normal text-[#231f20] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#231f20] disabled:cursor-not-allowed disabled:opacity-50",
+          "flex w-full items-center justify-between gap-3 border border-[#231f20]/25 bg-white px-2.5 py-[9px] text-left text-base font-normal text-[#231f20] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#231f20] disabled:cursor-not-allowed disabled:opacity-50",
+          label && "mt-1.5",
           triggerClassName
         )}
         data-slot="select-trigger"
@@ -207,7 +213,7 @@ export function ExperienceSelect<Value extends string | number>({
           ref={listboxRef}
           id={`${id}-listbox`}
           role="listbox"
-          aria-label={label}
+          aria-label={ariaLabel ?? label ?? placeholder}
           className={cn(
             "absolute top-full right-0 left-0 z-20 mt-1 max-h-48 overflow-y-auto border border-[#231f20]/25 bg-white py-1 shadow-lg",
             listboxClassName

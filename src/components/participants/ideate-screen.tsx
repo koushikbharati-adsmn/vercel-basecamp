@@ -423,6 +423,13 @@ export function IdeateScreen({
           </span>
         </div>
         <div className="flex items-center gap-5 text-xs font-bold tracking-[.12em] text-[#6e6a6c] uppercase">
+          <Link
+            to="/workshops/$code/participants/stage"
+            params={{ code: workshopCode }}
+            className="hover:text-[#231f20]"
+          >
+            Stage
+          </Link>
           {timer.durationSeconds > 0 && (
             <span className="tabular-nums" role="timer">
               {Math.floor(timer.remainingSeconds / 60)
