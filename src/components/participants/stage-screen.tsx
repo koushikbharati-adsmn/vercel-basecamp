@@ -257,6 +257,13 @@ export function StageScreen({
           <span aria-current="page" className="text-[#da291c]">
             Stage
           </span>
+          <Link
+            to="/workshops/$code/participants/newsroom"
+            params={{ code: workshopCode }}
+            className="text-[#6e6a6c] hover:text-[#231f20]"
+          >
+            Newsroom
+          </Link>
         </nav>
       </motion.header>
       <motion.main

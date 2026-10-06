@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from "./routes/__root"
 import { Route as IndexRouteImport } from "./routes/index"
 import { Route as WorkshopsCodeParticipantsRouteImport } from "./routes/workshops.$code.participants"
 import { Route as WorkshopsCodeParticipantsTeamIdRouteImport } from "./routes/workshops.$code.participants_.$teamId"
+import { Route as WorkshopsCodeParticipantsNewsroomRouteImport } from "./routes/workshops.$code.participants_.newsroom"
 import { Route as WorkshopsCodeParticipantsStageRouteImport } from "./routes/workshops.$code.participants_.stage"
 
 const IndexRoute = IndexRouteImport.update({
@@ -31,6 +32,12 @@ const WorkshopsCodeParticipantsTeamIdRoute =
     path: "/workshops/$code/participants/$teamId",
     getParentRoute: () => rootRouteImport,
   } as any)
+const WorkshopsCodeParticipantsNewsroomRoute =
+  WorkshopsCodeParticipantsNewsroomRouteImport.update({
+    id: "/workshops/$code/participants_/newsroom",
+    path: "/workshops/$code/participants/newsroom",
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const WorkshopsCodeParticipantsStageRoute =
   WorkshopsCodeParticipantsStageRouteImport.update({
     id: "/workshops/$code/participants_/stage",
@@ -42,12 +49,14 @@ export interface FileRoutesByFullPath {
   "/": typeof IndexRoute
   "/workshops/$code/participants": typeof WorkshopsCodeParticipantsRoute
   "/workshops/$code/participants/$teamId": typeof WorkshopsCodeParticipantsTeamIdRoute
+  "/workshops/$code/participants/newsroom": typeof WorkshopsCodeParticipantsNewsroomRoute
   "/workshops/$code/participants/stage": typeof WorkshopsCodeParticipantsStageRoute
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute
   "/workshops/$code/participants": typeof WorkshopsCodeParticipantsRoute
   "/workshops/$code/participants/$teamId": typeof WorkshopsCodeParticipantsTeamIdRoute
+  "/workshops/$code/participants/newsroom": typeof WorkshopsCodeParticipantsNewsroomRoute
   "/workshops/$code/participants/stage": typeof WorkshopsCodeParticipantsStageRoute
 }
 export interface FileRoutesById {
@@ -55,6 +64,7 @@ export interface FileRoutesById {
   "/": typeof IndexRoute
   "/workshops/$code/participants": typeof WorkshopsCodeParticipantsRoute
   "/workshops/$code/participants_/$teamId": typeof WorkshopsCodeParticipantsTeamIdRoute
+  "/workshops/$code/participants_/newsroom": typeof WorkshopsCodeParticipantsNewsroomRoute
   "/workshops/$code/participants_/stage": typeof WorkshopsCodeParticipantsStageRoute
 }
 export interface FileRouteTypes {
@@ -63,18 +73,21 @@ export interface FileRouteTypes {
     | "/"
     | "/workshops/$code/participants"
     | "/workshops/$code/participants/$teamId"
+    | "/workshops/$code/participants/newsroom"
     | "/workshops/$code/participants/stage"
   fileRoutesByTo: FileRoutesByTo
   to:
     | "/"
     | "/workshops/$code/participants"
     | "/workshops/$code/participants/$teamId"
+    | "/workshops/$code/participants/newsroom"
     | "/workshops/$code/participants/stage"
   id:
     | "__root__"
     | "/"
     | "/workshops/$code/participants"
     | "/workshops/$code/participants_/$teamId"
+    | "/workshops/$code/participants_/newsroom"
     | "/workshops/$code/participants_/stage"
   fileRoutesById: FileRoutesById
 }
@@ -82,6 +95,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WorkshopsCodeParticipantsRoute: typeof WorkshopsCodeParticipantsRoute
   WorkshopsCodeParticipantsTeamIdRoute: typeof WorkshopsCodeParticipantsTeamIdRoute
+  WorkshopsCodeParticipantsNewsroomRoute: typeof WorkshopsCodeParticipantsNewsroomRoute
   WorkshopsCodeParticipantsStageRoute: typeof WorkshopsCodeParticipantsStageRoute
 }
 
@@ -108,6 +122,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof WorkshopsCodeParticipantsTeamIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    "/workshops/$code/participants_/newsroom": {
+      id: "/workshops/$code/participants_/newsroom"
+      path: "/workshops/$code/participants/newsroom"
+      fullPath: "/workshops/$code/participants/newsroom"
+      preLoaderRoute: typeof WorkshopsCodeParticipantsNewsroomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     "/workshops/$code/participants_/stage": {
       id: "/workshops/$code/participants_/stage"
       path: "/workshops/$code/participants/stage"
@@ -122,6 +143,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WorkshopsCodeParticipantsRoute: WorkshopsCodeParticipantsRoute,
   WorkshopsCodeParticipantsTeamIdRoute: WorkshopsCodeParticipantsTeamIdRoute,
+  WorkshopsCodeParticipantsNewsroomRoute:
+    WorkshopsCodeParticipantsNewsroomRoute,
   WorkshopsCodeParticipantsStageRoute: WorkshopsCodeParticipantsStageRoute,
 }
 export const routeTree = rootRouteImport

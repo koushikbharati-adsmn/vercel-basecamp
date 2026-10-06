@@ -424,6 +424,13 @@ export function IdeateScreen({
         </div>
         <div className="flex items-center gap-5 text-xs font-bold tracking-[.12em] text-[#6e6a6c] uppercase">
           <Link
+            to="/workshops/$code/participants/newsroom"
+            params={{ code: workshopCode }}
+            className="hover:text-[#231f20]"
+          >
+            Newsroom
+          </Link>
+          <Link
             to="/workshops/$code/participants/stage"
             params={{ code: workshopCode }}
             className="hover:text-[#231f20]"
