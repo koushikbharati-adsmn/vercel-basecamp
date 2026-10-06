@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkshopsCodeParticipantsRouteImport } from './routes/workshops.$code.participants'
+import { Route as WorkshopsCodeParticipantsTeamIdRouteImport } from './routes/workshops.$code.participants_.$teamId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,31 +24,51 @@ const WorkshopsCodeParticipantsRoute =
     path: '/workshops/$code/participants',
     getParentRoute: () => rootRouteImport,
   } as any)
+const WorkshopsCodeParticipantsTeamIdRoute =
+  WorkshopsCodeParticipantsTeamIdRouteImport.update({
+    id: '/workshops/$code/participants_/$teamId',
+    path: '/workshops/$code/participants/$teamId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/workshops/$code/participants': typeof WorkshopsCodeParticipantsRoute
+  '/workshops/$code/participants/$teamId': typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/workshops/$code/participants': typeof WorkshopsCodeParticipantsRoute
+  '/workshops/$code/participants/$teamId': typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/workshops/$code/participants': typeof WorkshopsCodeParticipantsRoute
+  '/workshops/$code/participants_/$teamId': typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/workshops/$code/participants'
+  fullPaths:
+    | '/'
+    | '/workshops/$code/participants'
+    | '/workshops/$code/participants/$teamId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/workshops/$code/participants'
-  id: '__root__' | '/' | '/workshops/$code/participants'
+  to:
+    | '/'
+    | '/workshops/$code/participants'
+    | '/workshops/$code/participants/$teamId'
+  id:
+    | '__root__'
+    | '/'
+    | '/workshops/$code/participants'
+    | '/workshops/$code/participants_/$teamId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WorkshopsCodeParticipantsRoute: typeof WorkshopsCodeParticipantsRoute
+  WorkshopsCodeParticipantsTeamIdRoute: typeof WorkshopsCodeParticipantsTeamIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,12 +87,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkshopsCodeParticipantsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/workshops/$code/participants_/$teamId': {
+      id: '/workshops/$code/participants_/$teamId'
+      path: '/workshops/$code/participants/$teamId'
+      fullPath: '/workshops/$code/participants/$teamId'
+      preLoaderRoute: typeof WorkshopsCodeParticipantsTeamIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WorkshopsCodeParticipantsRoute: WorkshopsCodeParticipantsRoute,
+  WorkshopsCodeParticipantsTeamIdRoute: WorkshopsCodeParticipantsTeamIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

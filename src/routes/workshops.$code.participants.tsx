@@ -1,25 +1,21 @@
 import { IntroVideoScreen } from '@/components/participants/intro-video-screen'
 import { LiveActivityTicker } from '@/components/participants/live-activity-ticker'
 import { OrbitalEntry } from '@/components/participants/orbital-entry'
+import { ParticipantEntryError, ParticipantEntryLoading } from '@/components/participants/participant-route-feedback'
 import { TeamSelectionScreen } from '@/components/participants/team-selection-screen'
 import { WalkthroughScreen } from '@/components/participants/walkthrough-screen'
 import { useWorkshopActivities } from '@/hooks/use-workshop-activities'
-import { getVisitorId } from '@/lib/fingerprint'
+import { visitorIdOptions } from '@/lib/participant-identity'
 import { socket } from '@/lib/socket'
 import { getActivitiesOptions } from '@/services/big-screen'
 import { getParticipantWorkshopOptions } from '@/services/participants'
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 
-const visitorIdOptions = queryOptions({
-  queryKey: ['PARTICIPANT_VISITOR_ID'],
-  queryFn: getVisitorId,
-  staleTime: Number.POSITIVE_INFINITY,
-})
-
 export const Route = createFileRoute('/workshops/$code/participants')({
+  validateSearch: (search: Record<string, unknown>) => ({ selectTeam: search.selectTeam === true || search.selectTeam === 'true' }),
   head: () => ({
     meta: [{ title: 'Workshop Participants | Basecamp' }],
   }),
@@ -40,6 +36,8 @@ export const Route = createFileRoute('/workshops/$code/participants')({
 
 function ParticipantEntryRoute() {
   const { code } = Route.useParams()
+  const { selectTeam } = Route.useSearch()
+  const navigate = Route.useNavigate()
   const { data: visitorId } = useSuspenseQuery(visitorIdOptions)
   const { data: workshopResponse } = useSuspenseQuery(
     getParticipantWorkshopOptions({ code, visitor_id: visitorId }),
@@ -47,8 +45,7 @@ function ParticipantEntryRoute() {
   const { activities, isPending, isError } = useWorkshopActivities(code)
   const workshop = workshopResponse.data
   const introVideo = workshop.videoFileName?.trim() || null
-  const [screen, setScreen] = useState<'entry' | 'video' | 'walkthrough' | 'teams' | 'ready'>('entry')
-  const [selectedTeamName, setSelectedTeamName] = useState<string>()
+  const [screen, setScreen] = useState<'entry' | 'video' | 'walkthrough' | 'teams'>(selectTeam ? 'teams' : 'entry')
   const walkthroughSteps = useMemo(
     () => [...workshop.walkThrough].sort((first, second) => first.DisplayOrder - second.DisplayOrder),
     [workshop.walkThrough],
@@ -107,18 +104,10 @@ function ParticipantEntryRoute() {
               workshopCode={code}
               visitorId={visitorId}
               onComplete={(team) => {
-                setSelectedTeamName(team.TeamName)
-                setScreen('ready')
+                void navigate({ to: '/workshops/$code/participants/$teamId', params: { code, teamId: String(team.ID) } })
               }}
             />
           </motion.div>
-        )}
-        {screen === 'ready' && (
-          <ParticipantReadyScreen
-            key="ready"
-            workshopName={workshop.Name}
-            teamName={selectedTeamName}
-          />
         )}
       </AnimatePresence>
       <LiveActivityTicker activities={activities} isPending={isPending} isError={isError} />
@@ -126,46 +115,3 @@ function ParticipantEntryRoute() {
   )
 }
 
-function ParticipantReadyScreen({ workshopName, teamName }: { workshopName: string; teamName?: string }) {
-  return (
-    <motion.main
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="grid min-h-dvh place-items-center bg-[#0d0c0d] px-6 pb-12 text-center text-white"
-    >
-      <div>
-        <p className="text-xs font-bold tracking-[0.22em] text-[#eb3f43] uppercase">You’re in</p>
-        <h1 className="font-display mt-4 text-4xl sm:text-6xl">{workshopName}</h1>
-        <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-white/60">
-          {teamName ? `You joined ${teamName}.` : 'Your participant workspace is ready.'}
-        </p>
-      </div>
-    </motion.main>
-  )
-}
-
-function ParticipantEntryLoading() {
-  return (
-    <main className="grid min-h-dvh place-items-center bg-[#0d0c0d] text-white">
-      <div className="text-center">
-        <span className="live-pulse mx-auto block size-2 rounded-full bg-[#e74246]" />
-        <p className="mt-5 text-xs font-bold tracking-[0.2em] text-white/55 uppercase">Opening workshop</p>
-      </div>
-    </main>
-  )
-}
-
-function ParticipantEntryError({ reset }: { reset: () => void }) {
-  return (
-    <main className="grid min-h-dvh place-items-center bg-[#0d0c0d] px-6 text-white">
-      <div className="max-w-md text-center">
-        <p className="text-xs font-bold tracking-[0.2em] text-[#e74246] uppercase">Unable to enter</p>
-        <h1 className="orbital-display mt-4 text-4xl">We couldn’t open this workshop.</h1>
-        <p className="mt-4 text-sm leading-6 text-white/55">Check the workshop code or your connection, then try again.</p>
-        <button type="button" onClick={reset} className="mt-8 cursor-pointer border border-white/25 px-7 py-3 text-xs font-bold tracking-[0.16em] uppercase hover:bg-white/10">
-          Try again
-        </button>
-      </div>
-    </main>
-  )
-}

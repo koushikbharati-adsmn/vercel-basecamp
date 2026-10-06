@@ -1,4 +1,5 @@
 import { TeamMedallion } from '@/components/participants/team-medallion'
+import { useBodyScrollLock } from '@/hooks/use-body-scroll-lock'
 import type { ParticipantWorkshop, ParticipantWorkshopTeam } from '@/services/participants'
 import { useSelectTeam } from '@/services/participants'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -276,6 +277,7 @@ function TeamCodeDialog({
   onSubmit: (code: string) => void
 }) {
   const [code, setCode] = useState('')
+  useBodyScrollLock(true)
   const [validationError, setValidationError] = useState<string>()
   const message = validationError ?? error
 
