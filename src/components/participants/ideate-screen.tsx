@@ -5,7 +5,8 @@ import { IdeateIdeaCard } from "@/components/participants/ideate-idea-card";
 import { IdeaImageFullscreenDialog } from "@/components/participants/idea-image-fullscreen-dialog";
 import { IMAGE_GENERATION_LIMIT } from "@/components/participants/participant-idea-constants";
 import { SharpenDialog } from "@/components/participants/sharpen-dialog";
-import { useNativeDialog } from "@/hooks/use-native-dialog";
+import { AnimatedDialog } from "@/components/experience/animated-dialog";
+import { BEAT, DUR, EASE, STAGGER_DENSE } from "@/lib/motion";
 import { useWorkshopActivities } from "@/hooks/use-workshop-activities";
 import { useWorkshopTimer } from "@/hooks/use-workshop-timer";
 import { socket } from "@/lib/socket";
@@ -28,7 +29,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Binoculars, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -44,6 +45,7 @@ export function IdeateScreen({
   teamId: number;
 }) {
   const queryClient = useQueryClient();
+  const reducedMotion = useReducedMotion();
   const team = workshop.teams.find((item) => item.ID === teamId)!;
   const color = /^#[0-9a-f]{6}$/i.test(team.TeamColorCode)
     ? team.TeamColorCode
@@ -81,7 +83,6 @@ export function IdeateScreen({
     select: (mutation) =>
       (mutation.state.variables as ShortlistIdeaPayload).idea_id,
   });
-  const scoutDialog = useNativeDialog(scoutOpen);
   const {
     activities,
     isPending: activityPending,
@@ -225,9 +226,10 @@ export function IdeateScreen({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      transition={{ duration: reducedMotion ? 0 : DUR.cut }}
       className="ideate-board min-h-dvh bg-white pb-14 text-[#231f20]"
     >
-      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-[#231f20]/15 bg-white/95 px-5 py-4 backdrop-blur-lg sm:px-12">
+      <motion.header initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, delay: reducedMotion ? 0 : BEAT.structure, ease: EASE }} className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-[#231f20]/15 bg-white/95 px-5 py-4 backdrop-blur-lg sm:px-12">
         <div className="flex min-w-0 items-center gap-4">
           <Link to="/" aria-label="Basecamp home">
             <img
@@ -262,26 +264,26 @@ export function IdeateScreen({
           )}
           <span>{workshop.status || "Waiting to begin"}</span>
         </div>
-      </header>
+      </motion.header>
 
       <section
-        className="ideate-hero relative overflow-hidden px-5 py-6 sm:px-12"
+        className="relative overflow-hidden px-5 py-6 sm:px-12"
         style={{
-          backgroundColor: color,
           color: lightBand ? "#231f20" : "#fff",
         }}
       >
-        <div className="relative z-10">
+        <motion.div aria-hidden="true" className="ideate-hero absolute inset-0 origin-left" style={{ backgroundColor: color }} initial={{ scaleX: reducedMotion ? 1 : 0 }} animate={{ scaleX: 1 }} transition={{ duration: reducedMotion ? 0 : DUR.draw, delay: reducedMotion ? 0 : BEAT.hero, ease: EASE }} />
+        <motion.div initial={{ opacity: 0, x: reducedMotion ? 0 : -24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, delay: reducedMotion ? 0 : BEAT.content, ease: EASE }} className="relative z-10">
           <p className="mb-2 text-xs font-bold tracking-[.22em] uppercase">
             Team {team.TeamName}
           </p>
           <h1 className="font-display text-[clamp(38px,4.6vw,66px)] leading-[1.05]">
             {team.Description || workshop.Name}
           </h1>
-        </div>
+        </motion.div>
       </section>
 
-      <div className="overflow-x-auto border-b border-[#231f20]/15 px-5 sm:px-12">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, delay: reducedMotion ? 0 : BEAT.content, ease: EASE }} className="overflow-x-auto border-b border-[#231f20]/15 px-5 sm:px-12">
         <div
           className="flex w-max min-w-full"
           role="tablist"
@@ -303,15 +305,15 @@ export function IdeateScreen({
               >
                 {item.Name}
                 {categoryId === item.ID && (
-                  <span className="absolute right-4 bottom-0 left-4 h-[3px] bg-[#231f20]" />
+                  <motion.span initial={{ scaleX: reducedMotion ? 1 : 0 }} animate={{ scaleX: 1 }} transition={{ duration: reducedMotion ? 0 : DUR.cut, ease: EASE }} className="absolute right-4 bottom-0 left-4 h-[3px] origin-left bg-[#231f20]" />
                 )}
               </button>
             );
           })}
         </div>
-      </div>
+      </motion.div>
 
-      <main className="px-5 pt-6 pb-12 sm:px-12">
+      <motion.main initial={{ opacity: 0, y: reducedMotion ? 0 : 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, delay: reducedMotion ? 0 : BEAT.detail, ease: EASE }} className="px-5 pt-6 pb-12 sm:px-12">
         {!canIdeate && (
           <p className="mb-5 text-sm text-[#6e6a6c]" role="status">
             {workshop.status === null
@@ -324,7 +326,7 @@ export function IdeateScreen({
             No categories are available yet. Ask your facilitator to add one.
           </p>
         )}
-        <IdeaMasonry>
+        <IdeaMasonry key={categoryId ?? 'all'}>
           <div className="grid h-24 grid-cols-2 gap-2">
             <button
               type="button"
@@ -425,15 +427,19 @@ export function IdeateScreen({
             />
           ))}
         </IdeaMasonry>
-      </main>
+      </motion.main>
 
-      {!sharpenIdea && ideaDialog}
+      <AnimatePresence>{!sharpenIdea && ideaDialog}</AnimatePresence>
+      <AnimatePresence>
       {previewIdea?.imageFileName?.trim() && (
         <IdeaImageFullscreenDialog
+          key={previewIdea.ID}
           idea={previewIdea}
           onClose={() => setPreviewId(null)}
         />
       )}
+      </AnimatePresence>
+      <AnimatePresence>
       {sharpenIdea && (
         <SharpenDialog
           key={sharpenIdea.ID}
@@ -450,8 +456,10 @@ export function IdeateScreen({
           {ideaDialog}
         </SharpenDialog>
       )}
-      <dialog
-        ref={scoutDialog}
+      </AnimatePresence>
+      <AnimatePresence>
+      {scoutOpen && <AnimatedDialog
+        key="scout"
         onClose={() => setScoutOpen(false)}
         className="ideate-dialog"
         aria-labelledby="scout-title"
@@ -488,12 +496,13 @@ export function IdeateScreen({
             </p>
           )}
           {scout.data?.data.text.map((pitch, index) => (
-            <div key={index} className="border border-[#231f20]/20 p-5">
+            <motion.div key={index} initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, delay: reducedMotion ? 0 : Math.min(index, 6) * STAGGER_DENSE, ease: EASE }} className="border border-[#231f20]/20 p-5">
               <p className="text-lg leading-relaxed">{pitch}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </dialog>
+      </AnimatedDialog>}
+      </AnimatePresence>
       <LiveActivityTicker
         activities={activities}
         isPending={activityPending}

@@ -166,6 +166,29 @@
 .ideate-dialog::backdrop {
   background: rgb(20 19 22 / 65%);
 }
+
+@keyframes dialog-veil-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dialog-veil-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.animated-dialog::backdrop {
+  animation: dialog-veil-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animated-dialog[data-state="closing"]::backdrop {
+  animation: dialog-veil-out 0.25s cubic-bezier(0.62, 0, 0.9, 0.4) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-dialog::backdrop,
+  .animated-dialog[data-state="closing"]::backdrop { animation: none; }
+}
 .ideate-dialog button:not(:disabled) {
   cursor: pointer;
 }

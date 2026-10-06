@@ -13,7 +13,6 @@ export function useBodyScrollLock(locked: boolean) {
       const body = document.body
       const properties = [
         [root, 'overflow'],
-        [body, 'overflow'],
         [body, 'padding-right'],
       ] as const
       const previous = properties.map(([element, property]) => ({
@@ -24,7 +23,8 @@ export function useBodyScrollLock(locked: boolean) {
       const scrollbarWidth = window.innerWidth - root.clientWidth
       const paddingRight = parseFloat(window.getComputedStyle(body).paddingRight) || 0
       root.style.setProperty('overflow', 'hidden')
-      body.style.setProperty('overflow', 'hidden')
+      // Do not set body overflow: it creates a new scrolling ancestor and makes
+      // sticky headers jump offscreen when the page is already scrolled.
       if (scrollbarWidth > 0) body.style.setProperty('padding-right', `${paddingRight + scrollbarWidth}px`)
 
       restoreStyles = () => {

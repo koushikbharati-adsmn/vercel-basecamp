@@ -1,4 +1,6 @@
-import { useNativeDialog } from "@/hooks/use-native-dialog";
+import { AnimatedDialog } from "@/components/experience/animated-dialog";
+import { DUR, EASE, STAGGER } from "@/lib/motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   PARTICIPANT_CHAT_MESSAGE_MAX_LENGTH,
   useParticipantChat,
@@ -50,7 +52,7 @@ export function SharpenDialog({
   onEdit: () => void;
   children?: ReactNode;
 }) {
-  const dialog = useNativeDialog(true);
+  const reducedMotion = useReducedMotion();
   const [coachId, setCoachId] = useState<number | null>(null);
   const [draft, setDraft] = useState("");
   const [cleanupError, setCleanupError] = useState<string | null>(null);
@@ -87,13 +89,13 @@ export function SharpenDialog({
   };
 
   return (
-    <dialog
-      ref={dialog}
+    <AnimatedDialog
+      variant="fullscreen"
       onClose={onClose}
       className="sharpen-workspace fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-white p-0 text-[#231f20] backdrop:bg-black/70"
       aria-labelledby="sharpen-dialog-title"
     >
-      {children}
+      <AnimatePresence propagate>{children}</AnimatePresence>
       <div className="flex size-full min-h-0 flex-col">
         <header className="flex shrink-0 items-center justify-between gap-3 border-b border-[#231f20]/15 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
           {coach ? (
@@ -160,7 +162,7 @@ export function SharpenDialog({
         </header>
 
         {!coach ? (
-          <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }} className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
             <div className="mx-auto max-w-5xl px-4 py-6 sm:px-8 sm:py-10">
               {!canEdit && (
                 <p role="status" className="mb-5 text-sm text-[#8a8689]">
@@ -169,8 +171,8 @@ export function SharpenDialog({
               )}
               {workshop.coaches.length > 0 ? (
                 <ul className="grid gap-3 md:grid-cols-2">
-                  {workshop.coaches.map((item) => (
-                    <li key={item.ID} className="min-w-0">
+                  {workshop.coaches.map((item, index) => (
+                    <motion.li key={item.ID} initial={{ opacity: 0, y: reducedMotion ? 0 : 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, delay: reducedMotion ? 0 : Math.min(index, 5) * STAGGER, ease: EASE }} className="min-w-0">
                       <button
                         type="button"
                         disabled={!canEdit}
@@ -213,7 +215,7 @@ export function SharpenDialog({
                           style={{ color: item.PrimaryTxtColor || "#231f20" }}
                         />
                       </button>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               ) : (
@@ -228,9 +230,9 @@ export function SharpenDialog({
                 </div>
               )}
             </div>
-          </main>
+          </motion.main>
         ) : (
-          <div className="grid min-h-0 flex-1 lg:grid-cols-[16rem_minmax(0,1fr)]">
+          <motion.div key={coach.ID} initial={{ opacity: 0, x: reducedMotion ? 0 : 16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }} className="grid min-h-0 flex-1 lg:grid-cols-[16rem_minmax(0,1fr)]">
             <aside
               className="hidden min-h-0 flex-col overflow-y-auto border-r border-[#231f20]/15 p-3 lg:flex"
               aria-label="Coaches"
@@ -277,10 +279,10 @@ export function SharpenDialog({
               canEdit={canEdit}
               cleanupError={cleanupError}
             />
-          </div>
+          </motion.div>
         )}
       </div>
-    </dialog>
+    </AnimatedDialog>
   );
 }
 

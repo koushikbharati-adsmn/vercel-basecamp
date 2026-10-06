@@ -1,4 +1,4 @@
-import { useNativeDialog } from "@/hooks/use-native-dialog";
+import { AnimatedDialog } from "@/components/experience/animated-dialog";
 import { ExperienceSelect } from "@/components/experience/experience-select";
 import { socket } from "@/lib/socket";
 import {
@@ -36,7 +36,6 @@ export function IdeaEditor({
   onClose: () => void;
   onSaved: () => void;
 }) {
-  const dialog = useNativeDialog(true);
   const save = useSaveIdea();
   const [title, setTitle] = useState(idea?.title ?? "");
   const [desc, setDesc] = useState(idea?.Desc ?? description ?? "");
@@ -131,18 +130,11 @@ export function IdeaEditor({
   };
 
   return (
-    <dialog
-      ref={dialog}
+    <AnimatedDialog
       className="ideate-dialog idea-editor-dialog"
       aria-labelledby="idea-editor-title"
-      onCancel={(event) => {
-        event.stopPropagation();
-        if (save.isPending) event.preventDefault();
-      }}
-      onClose={(event) => {
-        event.stopPropagation();
-        onClose();
-      }}
+      dismissDisabled={save.isPending}
+      onClose={onClose}
     >
       <form onSubmit={submit}>
         <div className="flex items-center justify-between gap-4">
@@ -242,6 +234,6 @@ export function IdeaEditor({
           )}
         </div>
       </form>
-    </dialog>
+    </AnimatedDialog>
   );
 }
