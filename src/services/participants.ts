@@ -48,6 +48,8 @@ export interface ParticipantWorkshopWalkthrough {
   Title: string
   Description: string
   DisplayOrder: number
+  tabName: string | null
+  fileName: string | null
 }
 
 /** Workshop configuration plus visitor-specific userID/teamID membership. */
@@ -59,6 +61,9 @@ export interface ParticipantWorkshop {
   logoFileName: string
   page_bg_image: string | null
   GuidelineFileName: string
+  videoFileName: string | null
+  videoTitle: string | null
+  videoSubTitle: string | null
   shortUrl: string | null
   votingLimit: number | null
   votingScope: VotingScope

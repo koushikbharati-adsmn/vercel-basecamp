@@ -1,5 +1,7 @@
+import { IntroVideoScreen } from '@/components/participants/intro-video-screen'
 import { LiveActivityTicker } from '@/components/participants/live-activity-ticker'
 import { OrbitalEntry } from '@/components/participants/orbital-entry'
+import { WalkthroughScreen } from '@/components/participants/walkthrough-screen'
 import { useWorkshopActivities } from '@/hooks/use-workshop-activities'
 import { getVisitorId } from '@/lib/fingerprint'
 import { socket } from '@/lib/socket'
@@ -7,7 +9,8 @@ import { getActivitiesOptions } from '@/services/big-screen'
 import { getParticipantWorkshopOptions } from '@/services/participants'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useMemo, useState } from 'react'
 
 const visitorIdOptions = queryOptions({
   queryKey: ['PARTICIPANT_VISITOR_ID'],
@@ -41,6 +44,13 @@ function ParticipantEntryRoute() {
     getParticipantWorkshopOptions({ code, visitor_id: visitorId }),
   )
   const { activities, isPending, isError } = useWorkshopActivities(code)
+  const workshop = workshopResponse.data
+  const introVideo = workshop.videoFileName?.trim() || null
+  const [screen, setScreen] = useState<'entry' | 'video' | 'walkthrough' | 'ready'>('entry')
+  const walkthroughSteps = useMemo(
+    () => [...workshop.walkThrough].sort((first, second) => first.DisplayOrder - second.DisplayOrder),
+    [workshop.walkThrough],
+  )
 
   useEffect(() => {
     const joinRoom = () => socket.emit('join_room', { roomId: code })
@@ -51,11 +61,60 @@ function ParticipantEntryRoute() {
     }
   }, [code])
 
+  const handleEntryComplete = () => {
+    setScreen(introVideo ? 'video' : 'walkthrough')
+  }
+
   return (
     <div className="min-h-dvh bg-[#0d0c0d]">
-      <OrbitalEntry workshopName={workshopResponse.data.Name} />
+      <AnimatePresence mode="wait">
+        {screen === 'entry' && (
+          <motion.div key="entry" exit={{ opacity: 0 }}>
+            <OrbitalEntry workshopName={workshop.Name} onComplete={handleEntryComplete} />
+          </motion.div>
+        )}
+        {screen === 'video' && introVideo && (
+          <motion.div key="video" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <IntroVideoScreen
+              src={introVideo}
+              title={
+                workshop.videoTitle ??
+                '“Unless your advertising has a big idea, it will pass like a ship in the night.”'
+              }
+              subtitle={
+                workshop.videoSubTitle ?? 'DAVID OGILVY · THE VIEW FROM TOUFFOU · 1981'
+              }
+              onComplete={() => setScreen('walkthrough')}
+            />
+          </motion.div>
+        )}
+        {screen === 'walkthrough' && (
+          <motion.div key="walkthrough" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <WalkthroughScreen steps={walkthroughSteps} onComplete={() => setScreen('ready')} />
+          </motion.div>
+        )}
+        {screen === 'ready' && <ParticipantReadyScreen key="ready" workshopName={workshop.Name} />}
+      </AnimatePresence>
       <LiveActivityTicker activities={activities} isPending={isPending} isError={isError} />
     </div>
+  )
+}
+
+function ParticipantReadyScreen({ workshopName }: { workshopName: string }) {
+  return (
+    <motion.main
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="grid min-h-dvh place-items-center bg-[#0d0c0d] px-6 pb-12 text-center text-white"
+    >
+      <div>
+        <p className="text-xs font-bold tracking-[0.22em] text-[#eb3f43] uppercase">You’re in</p>
+        <h1 className="font-display mt-4 text-4xl sm:text-6xl">{workshopName}</h1>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-white/60">
+          Your participant workspace is ready for the next experience screen.
+        </p>
+      </div>
+    </motion.main>
   )
 }
 

@@ -41,11 +41,16 @@ function OrbitType({ pathId }: { pathId: string }) {
   )
 }
 
-export function OrbitalEntry({ workshopName }: { workshopName: string }) {
+export function OrbitalEntry({
+  workshopName,
+  onComplete,
+}: {
+  workshopName: string
+  onComplete: () => void
+}) {
   const outerPathId = `orbital-outer-${useId().replace(/:/g, '')}`
   const timerRef = useRef<number | null>(null)
   const [unlocking, setUnlocking] = useState(false)
-  const [entered, setEntered] = useState(false)
 
   useEffect(
     () => () => {
@@ -57,31 +62,7 @@ export function OrbitalEntry({ workshopName }: { workshopName: string }) {
   const handleEnter = () => {
     if (unlocking) return
     setUnlocking(true)
-    timerRef.current = window.setTimeout(() => setEntered(true), 1050)
-  }
-
-  if (entered) {
-    return (
-      <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[#0d0c0d] px-6 pb-12 text-center">
-        <AmbientField />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_47%,rgba(13,12,13,.04)_0%,rgba(13,12,13,.22)_42%,rgba(13,12,13,.72)_100%)]" />
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative z-10"
-        >
-          <p className="text-xs font-bold tracking-[0.22em] text-[#eb3f43] uppercase">
-            You’re in
-          </p>
-          <h1 className="font-display mt-4 text-4xl sm:text-6xl">
-            {workshopName}
-          </h1>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-white/60">
-            Your participant workspace is ready for the next experience screen.
-          </p>
-        </motion.div>
-      </main>
-    )
+    timerRef.current = window.setTimeout(onComplete, 1050)
   }
 
   return (
