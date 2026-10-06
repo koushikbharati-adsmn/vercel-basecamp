@@ -1,4 +1,8 @@
 import { IMAGE_GENERATION_LIMIT } from '@/components/participants/participant-idea-constants'
+import { IdeaImageGenerating } from '@/components/participants/idea-image-generating'
+import { DUR, EASE } from '@/lib/motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { useState } from 'react'
 import { formatActivityTime, formatRelativeDate } from '@/lib/date'
 import type { ParticipantIdea } from '@/services/participants'
 import { Clock, Expand, ImagePlus, LoaderCircle, Pencil, RefreshCw, Shapes, Sparkles, Star, Users } from 'lucide-react'
@@ -27,20 +31,22 @@ export function IdeateIdeaCard({ idea, number, canEdit, canSharpen, isGenerating
       <div className="relative aspect-4/3 w-full overflow-hidden bg-[#f6f5f3]">
         {hasImage ? (
           <>
-            <img src={idea.imageFileName} alt={idea.title || 'Idea visualization'} loading="lazy" className={`size-full object-contain ${isGeneratingImage ? 'opacity-35' : ''}`} />
-            <span className="absolute top-2 left-2 bg-[#da291c] px-2 py-0.5 text-sm text-white tabular-nums">{idea.imgCount}/{IMAGE_GENERATION_LIMIT}</span>
-            {isGeneratingImage && <div role="status" className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-white/35 text-sm font-bold"><LoaderCircle size={18} className="animate-spin" />Developing image…</div>}
-            <div className="absolute right-2 bottom-2 flex items-center gap-2">
-              <button type="button" onClick={onGenerateImage} disabled={generationDisabled} aria-busy={isGeneratingImage} aria-label={`Regenerate the image for ${idea.title || 'this idea'}`} title={imageLimitReached ? 'Image generation limit reached' : 'Regenerate image'} className="grid size-8 place-content-center bg-[#da291c] text-white disabled:cursor-not-allowed disabled:opacity-50"><RefreshCw size={16} className={isGeneratingImage ? 'animate-spin' : ''} /></button>
+            <IdeaImage key={idea.imageFileName} src={idea.imageFileName} alt={idea.title || 'Idea visualization'} />
+            <span className="absolute top-2 left-2 z-20 bg-[#da291c] px-2 py-0.5 text-sm text-white tabular-nums">{idea.imgCount}/{IMAGE_GENERATION_LIMIT}</span>
+            <div className="absolute right-2 bottom-2 z-20 flex items-center gap-2">
+              <button type="button" onClick={onGenerateImage} disabled={generationDisabled} aria-busy={isGeneratingImage} aria-label={`Regenerate the image for ${idea.title || 'this idea'}`} title={imageLimitReached ? 'Image generation limit reached' : 'Regenerate image'} className="grid size-8 place-content-center bg-[#da291c] text-white disabled:cursor-not-allowed disabled:opacity-50"><RefreshCw size={16} /></button>
               <button type="button" onClick={onPreview} aria-label={`Open the image for ${idea.title || 'this idea'} in fullscreen`} title="Fullscreen image preview" className="grid size-8 place-content-center bg-[#da291c] text-white"><Expand size={16} /></button>
             </div>
           </>
         ) : (
-          <button type="button" onClick={onGenerateImage} disabled={generationDisabled} aria-busy={isGeneratingImage} className="flex size-full flex-col items-center justify-center gap-2 px-4 py-3 text-xs font-bold text-[#6e6a6c] disabled:cursor-not-allowed disabled:opacity-50" title={!canEdit ? 'Images can be generated during ideation' : imageLimitReached ? 'Image generation limit reached' : undefined}>
-            {isGeneratingImage ? <LoaderCircle size={18} className="shrink-0 animate-spin" /> : <ImagePlus size={18} className="shrink-0" />}
-            <span>{isGeneratingImage ? 'Generating image…' : imageLimitReached ? 'Image generation limit reached' : 'Generate image'}</span>
+          <button type="button" onClick={onGenerateImage} disabled={generationDisabled} aria-busy={isGeneratingImage} style={{ visibility: isGeneratingImage ? 'hidden' : undefined }} className="flex size-full flex-col items-center justify-center gap-2 px-4 py-3 text-xs font-bold text-[#6e6a6c] disabled:cursor-not-allowed disabled:opacity-50" title={!canEdit ? 'Images can be generated during ideation' : imageLimitReached ? 'Image generation limit reached' : undefined}>
+            <ImagePlus size={18} className="shrink-0" />
+            <span>{imageLimitReached ? 'Image generation limit reached' : 'Generate image'}</span>
           </button>
         )}
+        <AnimatePresence>
+          {isGeneratingImage && <IdeaImageGenerating key="generating" regenerating={hasImage} />}
+        </AnimatePresence>
       </div>
       <div className="flex flex-col gap-2.5 p-4">
         <div>
@@ -65,4 +71,13 @@ export function IdeateIdeaCard({ idea, number, canEdit, canSharpen, isGenerating
       </div>
     </article>
   )
+}
+
+function IdeaImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false)
+  const reducedMotion = useReducedMotion()
+  return <motion.img src={src} alt={alt} loading="lazy" className="size-full object-contain"
+    initial={{ opacity: 0 }} animate={{ opacity: loaded ? 1 : 0 }}
+    transition={{ duration: reducedMotion ? 0 : DUR.beat, ease: EASE }}
+    onLoad={() => setLoaded(true)} onError={() => setLoaded(true)} />
 }

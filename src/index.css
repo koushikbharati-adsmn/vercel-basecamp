@@ -269,6 +269,35 @@
 .coach-markdown hr { margin: 16px 0; border-color: rgb(35 31 32 / 20%); }
 .coach-markdown img { margin: 12px 0; max-width: 100%; height: auto; }
 
+.image-developing-grid {
+  opacity: 0.45;
+  background-image: linear-gradient(rgb(35 31 32 / 4%) 1px, transparent 1px), linear-gradient(90deg, rgb(35 31 32 / 4%) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, black, transparent 75%);
+}
+
+.image-developing-sweep {
+  background: linear-gradient(110deg, transparent 25%, rgb(255 255 255 / 75%) 50%, transparent 75%);
+  animation: image-light-sweep 3.2s ease-in-out infinite;
+}
+
+.image-developing-progress { animation: image-progress 1.8s ease-in-out infinite; }
+
+@keyframes image-light-sweep {
+  0%, 10% { transform: translateX(-100%); }
+  85%, 100% { transform: translateX(100%); }
+}
+@keyframes image-progress {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(400%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-developing :is(div, span) { animation: none; }
+  .image-developing-sweep { display: none; }
+  .image-developing-progress { width: 100%; opacity: 0.45; }
+}
+
 .room-fit {
   transform: scale(clamp(1, calc(100vh / 810px), 2.6));
   transform-origin: center center;
