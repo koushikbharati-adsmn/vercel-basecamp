@@ -19,6 +19,10 @@ import {
   useShortlistIdea,
   participantIdeaMutationKeys,
   type GenerateIdeaImagePayload,
+  type IdeaUpsertSocketPayload,
+  type IdeaShortlistSocketPayload,
+  type IdeaCoachSocketPayload,
+  type IdeaImageSocketPayload,
   type ShortlistIdeaPayload,
   type ParticipantIdea,
   type ParticipantWorkshop,
@@ -89,16 +93,15 @@ export function IdeateScreen({
     isError: activityError,
   } = useWorkshopActivities(workshopCode)
   const { timer } = useWorkshopTimer(workshopCode)
-  const ideasQuery = useQuery(
-    getParticipantIdeasOptions({
-      visitor_id: visitorId,
-      workshop_code: workshopCode,
-      team_id: teamId,
-      category_id: categoryId,
-      is_shortlisted: null,
-      is_coached: null,
-    })
-  )
+  const ideasQueryOptions = getParticipantIdeasOptions({
+    visitor_id: visitorId,
+    workshop_code: workshopCode,
+    team_id: teamId,
+    category_id: categoryId,
+    is_shortlisted: null,
+    is_coached: null,
+  })
+  const ideasQuery = useQuery(ideasQueryOptions)
   const ideas = ideasQuery.data?.data ?? []
   // The API owns pillar filtering; only display order is applied locally.
   const sortedIdeas = [...ideas].sort(
@@ -123,8 +126,6 @@ export function IdeateScreen({
             : ideas.length === 0
               ? "Add an idea to this pillar to use Scout."
               : undefined
-  const refreshIdeas = () =>
-    queryClient.invalidateQueries({ queryKey: participantIdeaKeys.all })
   const previewIdea = ideas.find((idea) => idea.ID === previewId)
   const sharpenIdea = ideas.find((idea) => idea.ID === sharpenId)
   const handleGenerateImage = (idea: ParticipantIdea) => {
@@ -134,33 +135,180 @@ export function IdeateScreen({
       idea.imgCount >= IMAGE_GENERATION_LIMIT
     )
       return
-    generateImage.mutate(
-      {
-        idea_id: idea.ID,
-        workshop_code: workshopCode,
-        pillar_context:
-          workshop.category.find((item) => item.ID === idea.CategoryID)
-            ?.Context ?? "",
-        workshop_context: workshop.WorkshopContext,
-        user_idea: idea.Desc,
-        brand_guidelines: workshop.GuidelineFileName,
-      },
-      {
-        onSuccess: () => {
-          void refreshIdeas()
-        },
-      }
-    )
+    generateImage.mutate({
+      idea_id: idea.ID,
+      workshop_code: workshopCode,
+      pillar_context:
+        workshop.category.find((item) => item.ID === idea.CategoryID)
+          ?.Context ?? "",
+      workshop_context: workshop.WorkshopContext,
+      user_idea: idea.Desc,
+      brand_guidelines: workshop.GuidelineFileName,
+    })
   }
 
   useEffect(() => {
-    const refresh = (payload: { roomId: string }) => {
-      if (payload.roomId === workshopCode)
-        void queryClient.invalidateQueries({
-          queryKey: participantIdeaKeys.all,
-        })
+    const handleIdeaUpserted = ({
+      roomId,
+      idea: socketIdea,
+    }: IdeaUpsertSocketPayload) => {
+      if (roomId !== workshopCode) return
+      queryClient.setQueryData(ideasQueryOptions.queryKey, (oldData) => {
+        if (!oldData?.data) return oldData
+        const existing = oldData.data.find(
+          (idea) => idea.ID === socketIdea.ideaId
+        )
+        const matchesFilters =
+          socketIdea.teamId === teamId &&
+          (categoryId === null || socketIdea.categoryId === categoryId)
+        if (!matchesFilters) {
+          return existing
+            ? {
+                ...oldData,
+                data: oldData.data.filter(
+                  (idea) => idea.ID !== socketIdea.ideaId
+                ),
+              }
+            : oldData
+        }
+        const updatedIdea: ParticipantIdea = {
+          ID: socketIdea.ideaId,
+          imageFileName: "",
+          TotalVote: 0,
+          flgSelf: false,
+          flgTeam: false,
+          flgCoach: false,
+          CreatedDttm: new Date(
+            Date.now() + 5.5 * 60 * 60 * 1000
+          ).toISOString(),
+          imgCount: 0,
+          ...existing,
+          TeamID: socketIdea.teamId,
+          TeamName:
+            workshop.teams.find((team) => team.ID === socketIdea.teamId)
+              ?.TeamName ?? "",
+          CategoryID: socketIdea.categoryId,
+          CategoryName: socketIdea.categoryName,
+          Desc: socketIdea.desc,
+          title: socketIdea.title,
+          Context: socketIdea.context,
+        }
+        return {
+          ...oldData,
+          data: existing
+            ? oldData.data.map((idea) =>
+                idea.ID === updatedIdea.ID ? updatedIdea : idea
+              )
+            : [...oldData.data, updatedIdea],
+        }
+      })
     }
+    const handleIdeaShortlistUpdated = ({
+      roomId,
+      idea: socketIdea,
+      isShortlisted,
+    }: IdeaShortlistSocketPayload) => {
+      if (roomId !== workshopCode) return
+      queryClient.setQueryData(ideasQueryOptions.queryKey, (oldData) => {
+        if (!oldData?.data) return oldData
+        const exists = oldData.data.some((idea) => idea.ID === socketIdea.ID)
+        const matchesFilters =
+          socketIdea.TeamID === teamId &&
+          (categoryId === null || socketIdea.CategoryID === categoryId)
+        if (!matchesFilters) {
+          return exists
+            ? {
+                ...oldData,
+                data: oldData.data.filter((idea) => idea.ID !== socketIdea.ID),
+              }
+            : oldData
+        }
+        return {
+          ...oldData,
+          data: exists
+            ? oldData.data.map((idea) =>
+                idea.ID === socketIdea.ID
+                  ? { ...idea, flgTeam: isShortlisted }
+                  : idea
+              )
+            : [...oldData.data, { ...socketIdea, flgTeam: isShortlisted }],
+        }
+      })
+    }
+    const handleIdeaCoachUpdated = ({
+      roomId,
+      idea: socketIdea,
+      flgCoach,
+    }: IdeaCoachSocketPayload) => {
+      if (roomId !== workshopCode) return
+      queryClient.setQueryData(ideasQueryOptions.queryKey, (oldData) => {
+        if (!oldData?.data) return oldData
+        const exists = oldData.data.some((idea) => idea.ID === socketIdea.ID)
+        const matchesFilters =
+          socketIdea.TeamID === teamId &&
+          (categoryId === null || socketIdea.CategoryID === categoryId)
+        if (!matchesFilters) {
+          return exists
+            ? {
+                ...oldData,
+                data: oldData.data.filter((idea) => idea.ID !== socketIdea.ID),
+              }
+            : oldData
+        }
+        return {
+          ...oldData,
+          data: exists
+            ? oldData.data.map((idea) =>
+                idea.ID === socketIdea.ID ? { ...idea, flgCoach } : idea
+              )
+            : [...oldData.data, { ...socketIdea, flgCoach }],
+        }
+      })
+    }
+    const handleIdeaImageGenerated = ({
+      roomId,
+      ideaId,
+      imageUrl,
+    }: IdeaImageSocketPayload) => {
+      if (roomId !== workshopCode) return
+      queryClient.setQueryData(ideasQueryOptions.queryKey, (oldData) => {
+        if (!oldData?.data) return oldData
+        return {
+          ...oldData,
+          data: oldData.data.map((idea) =>
+            idea.ID === ideaId && idea.imageFileName !== imageUrl
+              ? {
+                  ...idea,
+                  imageFileName: imageUrl,
+                  imgCount: Math.min(idea.imgCount + 1, IMAGE_GENERATION_LIMIT),
+                }
+              : idea
+          ),
+        }
+      })
+    }
+    socket.on("idea_upserted", handleIdeaUpserted)
+    socket.on("idea_shortlist_updated", handleIdeaShortlistUpdated)
+    socket.on("idea_coach_updated", handleIdeaCoachUpdated)
+    socket.on("idea_image_generated", handleIdeaImageGenerated)
+    return () => {
+      socket.off("idea_upserted", handleIdeaUpserted)
+      socket.off("idea_shortlist_updated", handleIdeaShortlistUpdated)
+      socket.off("idea_coach_updated", handleIdeaCoachUpdated)
+      socket.off("idea_image_generated", handleIdeaImageGenerated)
+    }
+  }, [
+    workshopCode,
+    teamId,
+    categoryId,
+    workshop.teams,
+    queryClient,
+    ideasQueryOptions.queryKey,
+  ])
+
+  useEffect(() => {
     const reconnect = () => {
+      // Reconnect is the only refetch: recover changes missed while disconnected.
       void queryClient.invalidateQueries({ queryKey: participantIdeaKeys.all })
       void queryClient.invalidateQueries({
         queryKey: getParticipantWorkshopOptions({
@@ -186,17 +334,9 @@ export function IdeateScreen({
           current ? { ...current, data: { ...current.data, status } } : current
       )
     }
-    const events = [
-      "idea_upserted",
-      "idea_shortlist_updated",
-      "idea_coach_updated",
-      "idea_image_generated",
-    ]
-    events.forEach((event) => socket.on(event, refresh))
     socket.on("connect", reconnect)
     socket.on("workshop_status", statusChanged)
     return () => {
-      events.forEach((event) => socket.off(event, refresh))
       socket.off("connect", reconnect)
       socket.off("workshop_status", statusChanged)
     }
@@ -214,10 +354,32 @@ export function IdeateScreen({
       description={editor.description}
       canEdit={canIdeate}
       onClose={() => setEditor(null)}
-      onSaved={() => {
-        if (editor.idea?.ID === sharpenId) setSharpenId(null)
+      onSaved={(savedIdea) => {
+        queryClient.setQueryData(ideasQueryOptions.queryKey, (oldData) => {
+          if (!oldData?.data) return oldData
+          const exists = oldData.data.some((idea) => idea.ID === savedIdea.ID)
+          const matchesFilters =
+            savedIdea.TeamID === teamId &&
+            (categoryId === null || savedIdea.CategoryID === categoryId)
+          if (!matchesFilters) {
+            return exists
+              ? {
+                  ...oldData,
+                  data: oldData.data.filter((idea) => idea.ID !== savedIdea.ID),
+                }
+              : oldData
+          }
+          return {
+            ...oldData,
+            data: exists
+              ? oldData.data.map((idea) =>
+                  idea.ID === savedIdea.ID ? savedIdea : idea
+                )
+              : [...oldData.data, savedIdea],
+          }
+        })
+        if (savedIdea.ID === sharpenId) setSharpenId(null)
         setEditor(null)
-        void refreshIdeas()
       }}
     />
   ) : null
@@ -465,19 +627,12 @@ export function IdeateScreen({
               onSharpen={() => setSharpenId(idea.ID)}
               onShortlist={() => {
                 if (!canIdeate || pendingShortlists.includes(idea.ID)) return
-                shortlist.mutate(
-                  {
-                    workshop_code: workshopCode,
-                    idea_id: idea.ID,
-                    flag: !idea.flgTeam,
-                    idea,
-                  },
-                  {
-                    onSuccess: () => {
-                      void refreshIdeas()
-                    },
-                  }
-                )
+                shortlist.mutate({
+                  workshop_code: workshopCode,
+                  idea_id: idea.ID,
+                  flag: !idea.flgTeam,
+                  idea,
+                })
               }}
             />
           ))}

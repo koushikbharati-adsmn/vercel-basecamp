@@ -34,7 +34,7 @@ export function IdeaEditor({
   description?: string
   canEdit: boolean
   onClose: () => void
-  onSaved: () => void
+  onSaved: (idea: ParticipantIdea) => void
 }) {
   const save = useSaveIdea()
   const [title, setTitle] = useState(idea?.title ?? "")
@@ -86,6 +86,28 @@ export function IdeaEditor({
             setError(response.message || "Your idea could not be saved.")
             return
           }
+          const updatedIdea: ParticipantIdea = {
+            ID: response.data.idea_id,
+            TeamID: teamId,
+            TeamName:
+              workshop.teams.find((team) => team.ID === teamId)?.TeamName ?? "",
+            CategoryID: category,
+            CategoryName:
+              workshop.category.find((item) => item.ID === category)?.Name ??
+              "",
+            Desc: desc.trim(),
+            title: title.trim() || null,
+            Context: context.trim() || null,
+            imageFileName: idea?.imageFileName ?? "",
+            TotalVote: idea?.TotalVote ?? 0,
+            flgSelf: idea?.flgSelf ?? false,
+            flgTeam: idea?.flgTeam ?? false,
+            flgCoach: hasCoachSession || idea?.flgCoach || false,
+            CreatedDttm:
+              idea?.CreatedDttm ??
+              new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString(),
+            imgCount: idea?.imgCount ?? 0,
+          }
           socket.emit("upsert_idea", {
             roomId: workshopCode,
             action: idea ? "update" : "add",
@@ -110,20 +132,10 @@ export function IdeaEditor({
             socket.emit("update_idea_coach", {
               roomId: workshopCode,
               flgCoach: true,
-              idea: {
-                ...idea,
-                flgCoach: true,
-                title: title.trim() || null,
-                Desc: desc.trim(),
-                Context: context.trim() || null,
-                CategoryID: category,
-                CategoryName:
-                  workshop.category.find((item) => item.ID === category)
-                    ?.Name ?? "",
-              },
+              idea: updatedIdea,
             } satisfies IdeaCoachSocketPayload)
           }
-          onSaved()
+          onSaved(updatedIdea)
         },
       }
     )

@@ -211,7 +211,7 @@ export interface GetParticipantIdeasParams {
   is_coached: boolean | null
 }
 
-// Every filter/visitor combination gets its own list; all is an invalidation prefix.
+// Every filter/visitor combination gets its own list; all scopes cache operations.
 export const participantIdeaKeys = {
   all: ["PARTICIPANT_IDEAS"] as const,
 
@@ -325,15 +325,17 @@ export const useShortlistIdea = () => {
     mutationKey: participantIdeaMutationKeys.shortlist,
     mutationFn: shortlistIdea,
 
-    onSuccess: (_response, { workshop_code, flag, idea }) => {
-      socket.emit("update_idea_shortlist", {
+    onSuccess: (response, { workshop_code, flag, idea }) => {
+      if (!response.success) return
+      const payload: IdeaShortlistSocketPayload = {
         roomId: workshop_code,
         isShortlisted: flag,
         idea: {
           ...idea,
           flgTeam: flag,
         },
-      } satisfies IdeaShortlistSocketPayload)
+      }
+      socket.emit("update_idea_shortlist", payload)
     },
 
     onError: (error) => {
@@ -381,11 +383,13 @@ export const useGenerateIdeaImage = () => {
     mutationFn: generateIdeaImage,
 
     onSuccess: (response, { workshop_code, idea_id }) => {
-      socket.emit("idea_image_generated", {
+      if (!response.success) return
+      const payload: IdeaImageSocketPayload = {
         roomId: workshop_code,
         ideaId: idea_id,
         imageUrl: response.data.image,
-      })
+      }
+      socket.emit("idea_image_generated", payload)
     },
 
     onError: (error) => {
