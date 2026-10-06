@@ -90,6 +90,11 @@
   font-family: "Ogilvy Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.room-fit {
+  transform: scale(clamp(1, calc(100vh / 810px), 2.6));
+  transform-origin: center center;
+}
+
 @keyframes orbital-rotate {
   to {
     transform: rotate(360deg);

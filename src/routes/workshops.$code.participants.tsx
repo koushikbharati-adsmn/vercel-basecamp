@@ -1,6 +1,7 @@
 import { IntroVideoScreen } from '@/components/participants/intro-video-screen'
 import { LiveActivityTicker } from '@/components/participants/live-activity-ticker'
 import { OrbitalEntry } from '@/components/participants/orbital-entry'
+import { TeamSelectionScreen } from '@/components/participants/team-selection-screen'
 import { WalkthroughScreen } from '@/components/participants/walkthrough-screen'
 import { useWorkshopActivities } from '@/hooks/use-workshop-activities'
 import { getVisitorId } from '@/lib/fingerprint'
@@ -46,7 +47,8 @@ function ParticipantEntryRoute() {
   const { activities, isPending, isError } = useWorkshopActivities(code)
   const workshop = workshopResponse.data
   const introVideo = workshop.videoFileName?.trim() || null
-  const [screen, setScreen] = useState<'entry' | 'video' | 'walkthrough' | 'ready'>('entry')
+  const [screen, setScreen] = useState<'entry' | 'video' | 'walkthrough' | 'teams' | 'ready'>('entry')
+  const [selectedTeamName, setSelectedTeamName] = useState<string>()
   const walkthroughSteps = useMemo(
     () => [...workshop.walkThrough].sort((first, second) => first.DisplayOrder - second.DisplayOrder),
     [workshop.walkThrough],
@@ -95,17 +97,36 @@ function ParticipantEntryRoute() {
         )}
         {screen === 'walkthrough' && (
           <motion.div key="walkthrough" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <WalkthroughScreen steps={walkthroughSteps} onComplete={() => setScreen('ready')} />
+            <WalkthroughScreen steps={walkthroughSteps} onComplete={() => setScreen('teams')} />
           </motion.div>
         )}
-        {screen === 'ready' && <ParticipantReadyScreen key="ready" workshopName={workshop.Name} />}
+        {screen === 'teams' && (
+          <motion.div key="teams" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <TeamSelectionScreen
+              workshop={workshop}
+              workshopCode={code}
+              visitorId={visitorId}
+              onComplete={(team) => {
+                setSelectedTeamName(team.TeamName)
+                setScreen('ready')
+              }}
+            />
+          </motion.div>
+        )}
+        {screen === 'ready' && (
+          <ParticipantReadyScreen
+            key="ready"
+            workshopName={workshop.Name}
+            teamName={selectedTeamName}
+          />
+        )}
       </AnimatePresence>
       <LiveActivityTicker activities={activities} isPending={isPending} isError={isError} />
     </div>
   )
 }
 
-function ParticipantReadyScreen({ workshopName }: { workshopName: string }) {
+function ParticipantReadyScreen({ workshopName, teamName }: { workshopName: string; teamName?: string }) {
   return (
     <motion.main
       initial={{ opacity: 0, y: 12 }}
@@ -116,7 +137,7 @@ function ParticipantReadyScreen({ workshopName }: { workshopName: string }) {
         <p className="text-xs font-bold tracking-[0.22em] text-[#eb3f43] uppercase">You’re in</p>
         <h1 className="font-display mt-4 text-4xl sm:text-6xl">{workshopName}</h1>
         <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-white/60">
-          Your participant workspace is ready for the next experience screen.
+          {teamName ? `You joined ${teamName}.` : 'Your participant workspace is ready.'}
         </p>
       </div>
     </motion.main>
