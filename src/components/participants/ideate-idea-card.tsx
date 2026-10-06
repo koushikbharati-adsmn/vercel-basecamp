@@ -51,7 +51,7 @@ export function IdeateIdeaCard({
 
   return (
     <article
-      className={`flex flex-col overflow-hidden border bg-white ${idea.flgTeam ? "border-[#da291c] ring-1 ring-[#da291c]" : "border-[#231f20]/25"}`}
+      className="flex flex-col overflow-hidden border border-[#231f20]/25 bg-white"
       aria-label={idea.title || `Idea ${number}`}
     >
       <div className="relative aspect-4/3 w-full overflow-hidden bg-[#f6f5f3]">
