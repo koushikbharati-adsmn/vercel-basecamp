@@ -31,7 +31,7 @@ export function IntroVideoScreen({
             key="intro-video"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, transition: { duration: 0.12, ease: 'easeOut' } }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-black pb-12"
           >
@@ -50,7 +50,12 @@ export function IntroVideoScreen({
               <motion.div
                 initial={{ opacity: 0, scale: 0.5, filter: 'brightness(0.15)' }}
                 animate={{ opacity: 1, scale: 1, filter: 'brightness(1)' }}
-                exit={{ opacity: 0, scale: 0.55, filter: 'brightness(0.15)' }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.96,
+                  filter: 'brightness(0.4)',
+                  transition: { duration: 0.12, ease: 'easeOut' },
+                }}
                 transition={{ duration: 1.6, ease: EASE }}
                 className="relative aspect-video w-full overflow-hidden bg-zinc-900 ring-1 ring-white/10"
               >
@@ -79,7 +84,7 @@ export function IntroVideoScreen({
               <motion.blockquote
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
+                exit={{ opacity: 0, y: -3, transition: { duration: 0.1 } }}
                 transition={{ delay: 0.5, duration: 0.8, ease: EASE }}
                 className="font-display mt-7 max-w-2xl text-xl italic sm:text-2xl"
               >
@@ -88,7 +93,7 @@ export function IntroVideoScreen({
               <motion.figcaption
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
+                exit={{ opacity: 0, y: -3, transition: { duration: 0.1 } }}
                 transition={{ delay: 0.9, duration: 0.8, ease: EASE }}
                 className="mt-2 font-mono text-[9px] tracking-[0.25em] text-white/40 uppercase"
               >
