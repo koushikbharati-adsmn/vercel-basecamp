@@ -393,7 +393,14 @@ export function IdeateScreen({
         className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-[#231f20]/15 bg-white/95 px-5 py-4 backdrop-blur-lg sm:px-12"
       >
         <div className="flex min-w-0 items-center gap-4">
-          <Link to="/" aria-label="Basecamp home">
+          <Link
+            to="/workshops/$code/participants"
+            params={{ code: workshopCode }}
+            search={{
+              selectTeam: true,
+            }}
+            aria-label="Basecamp home"
+          >
             <img
               src="/logos/ogilvy-logo-white.svg"
               alt="Ogilvy"
