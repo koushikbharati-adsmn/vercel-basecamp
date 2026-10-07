@@ -234,7 +234,7 @@ export function StageScreen({
         </div>
         <nav
           aria-label="Workshop views"
-          className="flex items-center gap-5 text-xs font-bold tracking-[.12em] uppercase"
+          className="flex items-center gap-5 text-xs font-bold tracking-[.15em] uppercase sm:gap-8 sm:text-sm"
         >
           {workshop.teamID !== null ? (
             <Link
@@ -242,7 +242,7 @@ export function StageScreen({
               params={{ code: workshopCode, teamId: String(workshop.teamID) }}
               className="text-[#6e6a6c]"
             >
-              Board
+              The Board
             </Link>
           ) : (
             <Link
@@ -255,14 +255,14 @@ export function StageScreen({
             </Link>
           )}
           <span aria-current="page" className="text-[#da291c]">
-            Stage
+            The Stage
           </span>
           <Link
             to="/workshops/$code/participants/newsroom"
             params={{ code: workshopCode }}
             className="text-[#6e6a6c] hover:text-[#231f20]"
           >
-            Newsroom
+            The Newsroom
           </Link>
         </nav>
       </motion.header>

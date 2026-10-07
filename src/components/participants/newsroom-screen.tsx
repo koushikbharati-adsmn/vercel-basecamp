@@ -172,7 +172,7 @@ export function NewsroomScreen({
         </div>
         <nav
           aria-label="Workshop views"
-          className="flex items-center gap-5 text-xs font-bold tracking-[.12em] uppercase"
+          className="flex items-center gap-5 text-xs font-bold tracking-[.15em] uppercase sm:gap-8 sm:text-sm"
         >
           {workshop.teamID !== null ? (
             <Link
@@ -180,7 +180,7 @@ export function NewsroomScreen({
               params={{ code: workshopCode, teamId: String(workshop.teamID) }}
               className="text-[#aaa6a9] hover:text-white"
             >
-              Board
+              The Board
             </Link>
           ) : (
             <Link
@@ -197,10 +197,10 @@ export function NewsroomScreen({
             params={{ code: workshopCode }}
             className="text-[#aaa6a9] hover:text-white"
           >
-            Stage
+            The Stage
           </Link>
-          <span aria-current="page" className="text-white">
-            Newsroom
+          <span aria-current="page" className="text-[#da291c]">
+            The Newsroom
           </span>
         </nav>
       </motion.header>

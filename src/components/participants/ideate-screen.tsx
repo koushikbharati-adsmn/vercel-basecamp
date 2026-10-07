@@ -422,20 +422,23 @@ export function IdeateScreen({
             {workshop.IdeationPage || "The Board"}
           </span>
         </div>
-        <div className="flex items-center gap-5 text-xs font-bold tracking-[.12em] text-[#6e6a6c] uppercase">
-          <Link
-            to="/workshops/$code/participants/newsroom"
-            params={{ code: workshopCode }}
-            className="hover:text-[#231f20]"
-          >
-            Newsroom
-          </Link>
+        <div className="flex items-center gap-5 text-xs font-bold tracking-[.15em] text-[#6e6a6c] uppercase sm:gap-8 sm:text-sm">
+          <span aria-current="page" className="text-[#da291c]">
+            The Board
+          </span>
           <Link
             to="/workshops/$code/participants/stage"
             params={{ code: workshopCode }}
             className="hover:text-[#231f20]"
           >
-            Stage
+            The Stage
+          </Link>
+          <Link
+            to="/workshops/$code/participants/newsroom"
+            params={{ code: workshopCode }}
+            className="hover:text-[#231f20]"
+          >
+            The Newsroom
           </Link>
           {timer.durationSeconds > 0 && (
             <span className="tabular-nums" role="timer">
@@ -445,7 +448,6 @@ export function IdeateScreen({
               :{(timer.remainingSeconds % 60).toString().padStart(2, "0")}
             </span>
           )}
-          <span>{workshop.status || "Waiting to begin"}</span>
         </div>
       </motion.header>
 
