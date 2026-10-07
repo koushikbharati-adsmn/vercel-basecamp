@@ -206,7 +206,11 @@ export function ExperienceSelect<Value extends string | number>({
         <span className={cn("truncate", !selected && "text-muted")}>
           {selected?.label ?? placeholder}
         </span>
-        <ChevronDown size={16} aria-hidden="true" className="shrink-0" />
+        <ChevronDown
+          size={16}
+          aria-hidden="true"
+          className="shrink-0"
+        />
       </button>
       {expanded && (
         <ul
@@ -240,7 +244,8 @@ export function ExperienceSelect<Value extends string | number>({
                 option.disabled
                   ? "cursor-not-allowed opacity-40"
                   : "cursor-pointer",
-                index === activeIndex && "bg-tint/5"
+                option.value === value && "bg-action/5 font-medium",
+                index === activeIndex && "bg-action/10"
               )}
               onPointerMove={() => {
                 if (!option.disabled) setActiveIndex(index)
@@ -249,7 +254,11 @@ export function ExperienceSelect<Value extends string | number>({
             >
               <span>{option.label}</span>
               {option.value === value && (
-                <Check size={14} aria-hidden="true" className="shrink-0" />
+                <Check
+                  size={14}
+                  aria-hidden="true"
+                  className="shrink-0 text-action"
+                />
               )}
             </li>
           ))}
