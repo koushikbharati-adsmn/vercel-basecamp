@@ -44,10 +44,10 @@ export function VoteButton({
           reducedMotion || disabled || isSaving ? undefined : { scale: 0.94 }
         }
         className={cn(
-          "flex w-full items-center justify-center rounded-full border px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50",
+          "flex w-full items-center justify-center border px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50",
           voted
             ? "border-action bg-action text-on-action"
-            : "border-line/25 bg-workspace text-content"
+            : "border-line/25 bg-workspace text-action"
         )}
       >
         <motion.span

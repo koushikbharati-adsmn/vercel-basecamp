@@ -193,7 +193,7 @@ export function VotingScreen({
               <div className="space-y-5 border-t border-line/15 p-8 lg:border-t-0 lg:border-l">
                 {["h-10", "h-10", "h-5 w-24", "h-10 w-3/4", "h-24"].map(
                   (size, row) => (
-                    <div key={row} className={cn("rounded bg-tint/10", size)} />
+                    <div key={row} className={cn("bg-tint/10", size)} />
                   )
                 )}
               </div>
@@ -254,9 +254,9 @@ export function VotingScreen({
                       : { x: -3, scale: 1.05 }
                   }
                   whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-                  className="absolute top-1/2 left-3 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-tint/10 ring-1 ring-line/20 backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-25 sm:left-6 sm:size-12"
+                  className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
                 >
-                  <ChevronLeft size={24} aria-hidden="true" />
+                  <ChevronLeft size={22} aria-hidden="true" className="text-action" />
                 </motion.button>
                 <motion.button
                   type="button"
@@ -269,9 +269,9 @@ export function VotingScreen({
                       : { x: 3, scale: 1.05 }
                   }
                   whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-                  className="absolute top-1/2 right-3 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-tint/10 ring-1 ring-line/20 backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-25 sm:right-6 sm:size-12"
+                  className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
                 >
-                  <ChevronRight size={24} aria-hidden="true" />
+                  <ChevronRight size={22} aria-hidden="true" className="text-action" />
                 </motion.button>
                 <p
                   aria-live="polite"
@@ -297,18 +297,18 @@ export function VotingScreen({
                     variants={item}
                     className="mt-4 flex flex-wrap gap-2 text-xs"
                   >
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-line/20 px-3 py-1.5">
-                      <Users size={14} aria-hidden="true" />
+                    <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                      <Users size={13} aria-hidden="true" className="text-action" />
                       {idea.TeamName || "Unknown team"}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-line/20 px-3 py-1.5">
-                      <Shapes size={14} aria-hidden="true" />
+                    <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                      <Shapes size={13} aria-hidden="true" className="text-action" />
                       {idea.CategoryName || "Unknown pillar"}
                     </span>
                     {idea.flgCoach && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-line/20 px-3 py-1.5">
-                        <Sparkles size={14} aria-hidden="true" />
-                        Sharpened
+                      <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                        <Sparkles size={13} aria-hidden="true" className="text-action" />
+                        <span className="text-action">Sharpened</span>
                       </span>
                     )}
                   </motion.div>
