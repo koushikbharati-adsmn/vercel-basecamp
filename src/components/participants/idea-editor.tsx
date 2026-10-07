@@ -150,7 +150,10 @@ export function IdeaEditor({
     >
       <form onSubmit={submit}>
         <div className="flex items-center justify-between gap-4">
-          <h2 id="idea-editor-title" className="font-display text-2xl">
+          <h2
+            id="idea-editor-title"
+            className="font-display text-2xl text-action"
+          >
             {idea ? "Edit idea" : "Add an idea"}
           </h2>
           <button

@@ -52,7 +52,7 @@ export function StageIdeaPreviewDialog({
     >
       <div className="flex h-full min-h-0 flex-col">
         <header className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-line/15 px-5 sm:px-8">
-          <span className="text-xs font-bold tracking-[.16em] uppercase">
+          <span className="text-sm font-bold tracking-[.16em] text-action uppercase">
             {title}
           </span>
           <button
@@ -86,7 +86,7 @@ export function StageIdeaPreviewDialog({
               onClick={onPrevious}
               className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
             >
-              <ChevronLeft size={22} />
+              <ChevronLeft size={22} className="text-action" />
             </button>
             <button
               type="button"
@@ -95,7 +95,7 @@ export function StageIdeaPreviewDialog({
               onClick={onNext}
               className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
             >
-              <ChevronRight size={22} />
+              <ChevronRight size={22} className="text-action" />
             </button>
             <p
               aria-live="polite"
@@ -116,16 +116,20 @@ export function StageIdeaPreviewDialog({
             </h2>
             <div className="mt-4 flex flex-wrap gap-2 text-xs">
               <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                <Users size={13} aria-hidden="true" />
+                <Users size={13} aria-hidden="true" className="text-action" />
                 {idea.TeamName || "Unknown team"}
               </span>
               <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                <Shapes size={13} aria-hidden="true" />
+                <Shapes size={13} aria-hidden="true" className="text-action" />
                 {idea.CategoryName || "Unknown pillar"}
               </span>
               {idea.flgCoach && (
                 <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                  <Sparkles size={13} aria-hidden="true" />
+                  <Sparkles
+                    size={13}
+                    aria-hidden="true"
+                    className="text-action"
+                  />
                   Sharpened
                 </span>
               )}

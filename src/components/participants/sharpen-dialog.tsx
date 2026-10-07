@@ -151,7 +151,7 @@ export function SharpenDialog({
             <div className="min-w-0">
               <h2
                 id="sharpen-dialog-title"
-                className="font-display text-2xl font-bold"
+                className="font-display text-2xl font-bold text-action"
               >
                 Choose a coach
               </h2>

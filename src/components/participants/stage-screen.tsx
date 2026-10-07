@@ -52,7 +52,7 @@ export function StageScreen({
   const ideas = ideasQuery.data?.data ?? []
   const previewIndex = ideas.findIndex((idea) => idea.ID === previewId)
   const previewIdea = previewIndex < 0 ? null : ideas[previewIndex]
-  const title = workshop.ShortlistedIdeaPage || "The Stage"
+  const title = workshop.ShortlistedIdeaPage
   const getImage = (idea: ParticipantIdea) =>
     idea.imageFileName?.trim() ||
     workshop.placeholderImages[

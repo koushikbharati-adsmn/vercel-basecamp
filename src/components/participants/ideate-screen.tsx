@@ -661,7 +661,7 @@ export function IdeateScreen({
             key="ideate-preview"
             idea={previewIdea}
             image={previewIdea.imageFileName?.trim() || ""}
-            title={workshop.IdeationPage || "The Board"}
+            title={workshop.IdeationPage}
             position={previewIndex + 1}
             total={ideas.length}
             showVotes={false}
@@ -703,7 +703,10 @@ export function IdeateScreen({
             aria-labelledby="scout-title"
           >
             <div className="flex items-center justify-between gap-4">
-              <h2 id="scout-title" className="font-display text-3xl">
+              <h2
+                id="scout-title"
+                className="font-display text-3xl text-action"
+              >
                 The Scout
               </h2>
               <button

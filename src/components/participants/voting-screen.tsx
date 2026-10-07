@@ -153,9 +153,9 @@ export function VotingScreen({
         <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-line/15 px-4 py-3 sm:px-6">
           <h1
             id="participant-voting-heading"
-            className="text-sm font-bold tracking-[.16em] uppercase"
+            className="text-sm font-bold tracking-[.16em] text-action uppercase"
           >
-            {workshop.VotingPage || "Vote for the big ideas"}
+            {workshop.VotingPage}
           </h1>
           <div className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:min-w-80">
             <ExperienceSelect
