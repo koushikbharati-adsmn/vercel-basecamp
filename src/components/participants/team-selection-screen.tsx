@@ -164,9 +164,6 @@ export function TeamSelectionScreen({
           <div className="h-6 w-px bg-white/20" />
           <h1 className="font-display text-xl sm:text-2xl">Team Select</h1>
         </div>
-        <span className="hidden text-[11px] font-bold tracking-[.18em] text-white/45 uppercase sm:block">
-          {workshop.Name}
-        </span>
       </motion.header>
 
       <div className="room-fit relative z-10 flex flex-1 flex-col justify-center">
