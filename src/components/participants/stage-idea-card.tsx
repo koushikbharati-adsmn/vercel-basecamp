@@ -13,7 +13,7 @@ export function StageIdeaCard({
 }) {
   return (
     <article
-      className="flex flex-col overflow-hidden border border-line/25 bg-workspace"
+      className="relative flex flex-col overflow-hidden border border-line/25 bg-workspace"
       aria-label={idea.title || "Untitled idea"}
     >
       <div className="relative aspect-4/3 w-full overflow-hidden bg-surface-muted">
@@ -70,16 +70,14 @@ export function StageIdeaCard({
         <p className="line-clamp-3 text-sm leading-relaxed text-body">
           {idea.Desc}
         </p>
-        <div className="mt-1 border-t border-line/10 pt-2">
-          <button
-            type="button"
-            onClick={onPreview}
-            className="flex items-center gap-2 bg-action px-3 py-2.5 text-[10px] font-bold tracking-widest text-on-action uppercase"
-          >
-            View
-          </button>
-        </div>
       </div>
+      <button
+        type="button"
+        onClick={onPreview}
+        aria-label={`Preview ${idea.title || "Untitled idea"} in fullscreen`}
+        aria-haspopup="dialog"
+        className="absolute inset-0 cursor-pointer focus-visible:-outline-offset-2"
+      />
     </article>
   )
 }
