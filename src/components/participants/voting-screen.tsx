@@ -10,7 +10,7 @@ import {
   type ParticipantWorkshop,
 } from "@/services/participants"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import {
   ChevronLeft,
   ChevronRight,
@@ -33,6 +33,18 @@ export function VotingScreen({
   const [teamId, setTeamId] = useState<number | null>(null)
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [index, setIndex] = useState(0)
+  const [direction, setDirection] = useState(1)
+  const reducedMotion = useReducedMotion()
+  const distance = reducedMotion ? 0 : 32
+  const imageVariants = {
+    enter: (direction: number) => ({ opacity: 0, x: direction * distance }),
+    center: { opacity: 1, x: 0 },
+    exit: (direction: number) => ({ opacity: 0, x: -direction * distance }),
+  }
+  const transition = {
+    duration: reducedMotion ? 0 : 0.16,
+    ease: "easeInOut" as const,
+  }
   const queryClient = useQueryClient()
   const voteIdeasQueryOptions = getParticipantVoteIdeasOptions({
     workshop_code: workshopCode,
@@ -45,6 +57,15 @@ export function VotingScreen({
   const ideas = query.data?.data ?? []
   const boundedIndex = Math.min(index, Math.max(ideas.length - 1, 0))
   const idea = ideas[boundedIndex]
+  const navigate = (direction: number) => {
+    const nextIndex = Math.max(
+      0,
+      Math.min(ideas.length - 1, boundedIndex + direction)
+    )
+    if (nextIndex === boundedIndex) return
+    setDirection(direction)
+    setIndex(nextIndex)
+  }
   const votesUsed = getVotingUsage(
     query.data,
     workshop.votingScope,
@@ -119,15 +140,7 @@ export function VotingScreen({
           return
         if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
           event.preventDefault()
-          setIndex(
-            Math.max(
-              0,
-              Math.min(
-                ideas.length - 1,
-                boundedIndex + (event.key === "ArrowLeft" ? -1 : 1)
-              )
-            )
-          )
+          navigate(event.key === "ArrowLeft" ? -1 : 1)
         }
       }}
     >
@@ -205,26 +218,37 @@ export function VotingScreen({
               key="idea"
               className="grid min-h-0 flex-1 overflow-y-auto overscroll-contain lg:grid-cols-[minmax(0,1fr)_minmax(20rem,30rem)] lg:overflow-hidden"
             >
-              <div
-                className="relative flex min-h-[48dvh] items-center justify-center bg-surface-muted px-14 py-12 sm:px-20 lg:min-h-0"
-              >
-                {image ? (
-                  <img
-                    src={image}
-                    alt={idea.title || "Idea visualization"}
-                    className="max-h-[50dvh] max-w-full object-contain lg:max-h-[calc(100dvh-10rem)]"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center gap-2 text-sm text-secondary">
-                    <ImageIcon size={32} aria-hidden="true" />
-                    No image available
-                  </div>
-                )}
-                <motion.button
+              <div className="relative flex min-h-[48dvh] items-center justify-center overflow-hidden bg-surface-muted px-14 py-12 sm:px-20 lg:min-h-0">
+                <AnimatePresence mode="wait" initial={false} custom={direction}>
+                  <motion.div
+                    key={idea.ID}
+                    custom={direction}
+                    variants={imageVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={transition}
+                    className="flex w-full min-w-0 items-center justify-center"
+                  >
+                    {image ? (
+                      <img
+                        src={image}
+                        alt={idea.title || "Idea visualization"}
+                        className="max-h-[50dvh] max-w-full object-contain lg:max-h-[calc(100dvh-10rem)]"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center gap-2 text-sm text-secondary">
+                        <ImageIcon size={32} aria-hidden="true" />
+                        No image available
+                      </div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+                <button
                   type="button"
                   aria-label="View previous idea"
                   disabled={boundedIndex <= 0}
-                  onClick={() => setIndex(boundedIndex - 1)}
+                  onClick={() => navigate(-1)}
                   className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
                 >
                   <ChevronLeft
@@ -232,12 +256,12 @@ export function VotingScreen({
                     aria-hidden="true"
                     className="text-action"
                   />
-                </motion.button>
-                <motion.button
+                </button>
+                <button
                   type="button"
                   aria-label="View next idea"
                   disabled={boundedIndex >= ideas.length - 1}
-                  onClick={() => setIndex(boundedIndex + 1)}
+                  onClick={() => navigate(1)}
                   className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
                 >
                   <ChevronRight
@@ -245,7 +269,7 @@ export function VotingScreen({
                     aria-hidden="true"
                     className="text-action"
                   />
-                </motion.button>
+                </button>
                 <p
                   aria-live="polite"
                   className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-secondary tabular-nums"
@@ -253,53 +277,57 @@ export function VotingScreen({
                   {boundedIndex + 1} / {ideas.length}
                 </p>
               </div>
-              <aside
-                className="min-w-0 border-t border-line/15 lg:overflow-y-auto lg:border-t-0 lg:border-l"
-              >
+              <aside className="min-w-0 border-t border-line/15 lg:overflow-y-auto lg:border-t-0 lg:border-l">
                 <div className="flex min-h-full flex-col p-6 sm:p-8 lg:p-10">
-                  <div>
-                    <p className="mb-3 text-sm text-secondary">
-                      {formatRelativeDate(idea.CreatedDttm)}
-                    </p>
-                    <h2 className="font-display text-4xl leading-tight break-words">
-                      {idea.title || "Untitled"}
-                    </h2>
-                  </div>
-                  <div
-                    className="mt-4 flex flex-wrap gap-2 text-xs"
-                  >
-                    <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                      <Users
-                        size={13}
-                        aria-hidden="true"
-                        className="text-action"
-                      />
-                      {idea.TeamName || "Unknown team"}
-                    </span>
-                    <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                      <Shapes
-                        size={13}
-                        aria-hidden="true"
-                        className="text-action"
-                      />
-                      {idea.CategoryName || "Unknown pillar"}
-                    </span>
-                    {idea.flgCoach && (
-                      <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                        <Sparkles
-                          size={13}
-                          aria-hidden="true"
-                          className="text-action"
-                        />
-                        Sharpened
-                      </span>
-                    )}
-                  </div>
-                  <p
-                    className="my-8 border-t border-line/15 pt-8 text-base leading-7 break-words whitespace-pre-line text-body"
-                  >
-                    {idea.Desc}
-                  </p>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={idea.ID}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={transition}
+                    >
+                      <div>
+                        <p className="mb-3 text-sm text-secondary">
+                          {formatRelativeDate(idea.CreatedDttm)}
+                        </p>
+                        <h2 className="font-display text-4xl leading-tight break-words">
+                          {idea.title || "Untitled"}
+                        </h2>
+                      </div>
+                      <div className="mt-4 flex flex-wrap gap-2 text-xs">
+                        <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                          <Users
+                            size={13}
+                            aria-hidden="true"
+                            className="text-action"
+                          />
+                          {idea.TeamName || "Unknown team"}
+                        </span>
+                        <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                          <Shapes
+                            size={13}
+                            aria-hidden="true"
+                            className="text-action"
+                          />
+                          {idea.CategoryName || "Unknown pillar"}
+                        </span>
+                        {idea.flgCoach && (
+                          <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                            <Sparkles
+                              size={13}
+                              aria-hidden="true"
+                              className="text-action"
+                            />
+                            Sharpened
+                          </span>
+                        )}
+                      </div>
+                      <p className="my-8 border-t border-line/15 pt-8 text-base leading-7 break-words whitespace-pre-line text-body">
+                        {idea.Desc}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
                   <div className="mt-auto pt-2">
                     <VoteButton
                       key={idea.ID}
