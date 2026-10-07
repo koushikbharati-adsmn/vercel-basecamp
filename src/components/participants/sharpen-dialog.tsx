@@ -98,7 +98,7 @@ export function SharpenDialog({
     <AnimatedDialog
       variant="fullscreen"
       onClose={onClose}
-      className="sharpen-workspace fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-workspace p-0 text-content backdrop:bg-overlay/70"
+      className="fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-workspace p-0 text-content backdrop:bg-overlay/70"
       aria-labelledby="sharpen-dialog-title"
     >
       <AnimatePresence propagate>{children}</AnimatePresence>

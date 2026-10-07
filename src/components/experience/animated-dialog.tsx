@@ -47,7 +47,12 @@ export function AnimatedDialog({
     <motion.dialog
       {...props}
       ref={ref}
-      className={cn("animated-dialog", className)}
+      className={cn(
+        "animated-dialog [&_button:enabled]:cursor-pointer",
+        variant === "panel" &&
+          "fixed inset-0 m-auto max-h-[calc(100dvh-48px)] w-[min(640px,calc(100vw-32px))] overflow-y-auto border border-line/20 bg-workspace p-[clamp(24px,4vw,40px)] text-content shadow-[0_24px_64px_color-mix(in_srgb,var(--dialog-shadow-color)_25%,transparent)] backdrop:bg-[color-mix(in_srgb,var(--dialog-backdrop-color)_65%,transparent)]",
+        className
+      )}
       inert={!present}
       data-state={present ? "open" : "closing"}
       initial={{

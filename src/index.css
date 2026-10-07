@@ -64,35 +64,20 @@
 
 @layer base {
   :root {
-    @apply font-sans;
-    color: var(--text-inverse);
-    background: var(--app-bg);
+    @apply bg-app font-sans text-inverse;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
   }
 
-  * {
-    box-sizing: border-box;
-  }
-
   html,
   body {
-    @apply m-0 min-w-80 bg-app text-inverse antialiased;
-    min-height: 100%;
+    @apply m-0 min-h-full min-w-80 bg-app text-inverse antialiased;
   }
 
   button,
   a {
     @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
-}
-
-.orbital-display {
-  @apply font-display;
-}
-
-.ideate-board button:not(:disabled) {
-  cursor: pointer;
 }
 
 .ideate-hero::after {
@@ -106,70 +91,6 @@
   );
   background-size: 4px 4px;
   pointer-events: none;
-}
-
-.ideate-wall {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-auto-rows: 1px;
-  grid-auto-flow: dense;
-  column-gap: 16px;
-  align-items: start;
-}
-
-@media (min-width: 760px) {
-  .ideate-wall {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1200px) {
-  .ideate-wall {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1800px) {
-  .ideate-wall {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.ideate-pocket {
-  border: 1.5px dashed color-mix(in srgb, var(--border-color) 22%, transparent);
-  background: color-mix(in srgb, var(--surface-tint) 2%, transparent);
-  color: var(--text-body);
-  transition:
-    background 150ms,
-    border-color 150ms;
-}
-
-.ideate-pocket:hover:not(:disabled) {
-  border-color: color-mix(in srgb, var(--border-color) 50%, transparent);
-  background: color-mix(in srgb, var(--surface-tint) 5%, transparent);
-}
-
-.ideate-pocket:disabled {
-  opacity: 0.45;
-}
-
-.ideate-dialog {
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  width: min(640px, calc(100vw - 32px));
-  max-height: calc(100dvh - 48px);
-  overflow-y: auto;
-  padding: clamp(24px, 4vw, 40px);
-  border: 1px solid color-mix(in srgb, var(--border-color) 20%, transparent);
-  background: var(--workspace-bg);
-  color: var(--text-primary);
-  box-shadow: 0 24px 64px
-    color-mix(in srgb, var(--dialog-shadow-color) 25%, transparent);
-}
-
-.ideate-dialog::backdrop {
-  background: color-mix(in srgb, var(--dialog-backdrop-color) 65%, transparent);
 }
 
 @keyframes dialog-veil-in {
@@ -204,73 +125,6 @@
     animation: none;
   }
 }
-.ideate-dialog button:not(:disabled) {
-  cursor: pointer;
-}
-
-.ideate-input {
-  display: block;
-  width: 100%;
-  margin-top: 8px;
-  padding: 12px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 25%, transparent);
-  background: var(--workspace-bg);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.ideate-input:focus {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-.idea-editor-dialog {
-  width: min(560px, calc(100vw - 32px));
-  padding: 24px;
-}
-
-.idea-editor-dialog .ideate-input {
-  margin-top: 6px;
-  padding: 9px 10px;
-}
-
-.idea-editor-dialog[data-keyboard-focus="false"] .ideate-input:focus,
-.idea-editor-dialog[data-keyboard-focus="false"] [data-slot="select-trigger"]:focus {
-  outline: none;
-}
-
-.idea-editor-dialog textarea {
-  resize: none;
-}
-
-@layer components {
-  .idea-card-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    min-height: 40px;
-    padding: 8px 12px;
-    border-width: 1px;
-    border-color: color-mix(in srgb, var(--border-color) 15%, transparent);
-    border-radius: 2px;
-    font-size: 12px;
-    font-weight: 700;
-    transition: filter 150ms;
-  }
-
-  .idea-card-action:hover:not(:disabled) {
-    filter: brightness(0.92);
-  }
-  .idea-card-action:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-}
-.sharpen-workspace button:not(:disabled) {
-  cursor: pointer;
-}
-
 .coach-markdown > :first-child {
   margin-top: 0;
 }
@@ -418,11 +272,6 @@
     width: 100%;
     opacity: 0.45;
   }
-}
-
-.room-fit {
-  transform: scale(clamp(1, calc(100vh / 810px), 2.6));
-  transform-origin: center center;
 }
 
 @keyframes orbital-rotate {

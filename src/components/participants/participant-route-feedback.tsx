@@ -18,7 +18,7 @@ export function ParticipantEntryError({ reset }: { reset: () => void }) {
         <p className="text-xs font-bold tracking-[0.2em] text-feedback uppercase">
           Unable to enter
         </p>
-        <h1 className="orbital-display mt-4 text-4xl">
+        <h1 className="mt-4 font-display text-4xl">
           We couldn’t open this workshop.
         </h1>
         <p className="mt-4 text-sm leading-6 text-inverse/55">

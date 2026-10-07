@@ -166,7 +166,7 @@ export function TeamSelectionScreen({
         </div>
       </motion.header>
 
-      <div className="room-fit relative z-10 flex flex-1 flex-col justify-center">
+      <div className="relative z-10 flex flex-1 origin-center scale-[clamp(1,calc(100vh/810px),2.6)] flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}

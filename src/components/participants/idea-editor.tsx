@@ -15,6 +15,9 @@ import {
 import { X } from "lucide-react"
 import { useRef, useState, type FormEvent } from "react"
 
+const INPUT_CLASS_NAME =
+  "mt-1.5 block w-full border border-line/25 bg-workspace px-2.5 py-[9px] text-base font-normal outline-none group-data-[keyboard-focus=true]/idea-editor:focus:outline-solid group-data-[keyboard-focus=true]/idea-editor:focus:outline-2 group-data-[keyboard-focus=true]/idea-editor:focus:outline-offset-2 group-data-[keyboard-focus=true]/idea-editor:focus:outline-focus"
+
 export function IdeaEditor({
   workshop,
   workshopCode,
@@ -144,7 +147,7 @@ export function IdeaEditor({
 
   return (
     <AnimatedDialog
-      className="ideate-dialog idea-editor-dialog"
+      className="group/idea-editor w-[min(560px,calc(100vw-32px))] p-6"
       aria-labelledby="idea-editor-title"
       dismissDisabled={save.isPending}
       onClose={onClose}
@@ -192,6 +195,7 @@ export function IdeaEditor({
             required
             disabled={!canEdit || save.isPending}
             error={pillarError}
+            triggerClassName={!keyboardFocus ? "focus-visible:outline-none" : undefined}
           />
           <label className="block text-sm font-bold">
             Idea
@@ -201,7 +205,7 @@ export function IdeaEditor({
               onChange={(event) => setDesc(event.target.value)}
               required
               rows={3}
-              className="ideate-input"
+              className={`${INPUT_CLASS_NAME} resize-none`}
               placeholder="What’s the big idea?"
             />
           </label>
@@ -210,7 +214,7 @@ export function IdeaEditor({
             <input
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              className="ideate-input"
+              className={INPUT_CLASS_NAME}
               placeholder="Give it a name"
             />
           </label>
@@ -220,7 +224,7 @@ export function IdeaEditor({
               value={context}
               onChange={(event) => setContext(event.target.value)}
               rows={2}
-              className="ideate-input"
+              className={`${INPUT_CLASS_NAME} resize-none`}
               placeholder="The insight or thinking behind it"
             />
           </label>

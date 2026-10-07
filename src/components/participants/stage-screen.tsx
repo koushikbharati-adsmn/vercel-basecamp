@@ -204,7 +204,7 @@ export function StageScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="ideate-board min-h-dvh bg-workspace pb-14 text-content"
+      className="min-h-dvh bg-workspace pb-14 text-content [&_button:enabled]:cursor-pointer"
     >
       <motion.header
         initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}

@@ -59,7 +59,7 @@ function MasonryItem({
 
 export function IdeaMasonry({ children }: { children: ReactNode }) {
   return (
-    <div className="ideate-wall">
+    <div className="grid auto-rows-[1px] grid-flow-dense grid-cols-1 items-start gap-x-4 min-[760px]:grid-cols-2 min-[1200px]:grid-cols-3 min-[1800px]:grid-cols-4">
       <AnimatePresence>
         {Children.toArray(children).map((child, index) => (
           <MasonryItem

@@ -37,6 +37,9 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { Binoculars, X } from "lucide-react"
 import { useEffect, useState } from "react"
 
+const POCKET_CLASS_NAME =
+  "border-[1.5px] border-dashed border-line/22 bg-tint/2 text-body transition-[background,border-color] duration-150 enabled:hover:border-line/50 enabled:hover:bg-tint/5 disabled:opacity-45"
+
 export function IdeateScreen({
   workshop,
   workshopCode,
@@ -381,7 +384,7 @@ export function IdeateScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="ideate-board min-h-dvh bg-workspace pb-14 text-content"
+      className="min-h-dvh bg-workspace pb-14 text-content [&_button:enabled]:cursor-pointer"
     >
       <motion.header
         initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
@@ -564,7 +567,7 @@ export function IdeateScreen({
               type="button"
               disabled={!canIdeate || workshop.category.length === 0}
               onClick={() => setEditor({})}
-              className="ideate-pocket text-base"
+              className={`${POCKET_CLASS_NAME} text-base`}
             >
               + Add an idea
             </button>
@@ -591,7 +594,7 @@ export function IdeateScreen({
                   }
                 )
               }}
-              className="ideate-pocket flex flex-col items-center justify-center gap-1.5"
+              className={`${POCKET_CLASS_NAME} flex flex-col items-center justify-center gap-1.5`}
             >
               <Binoculars size={26} strokeWidth={1.5} />
               <span className="text-[15px] font-bold">The Scout</span>
@@ -699,7 +702,6 @@ export function IdeateScreen({
           <AnimatedDialog
             key="scout"
             onClose={() => setScoutOpen(false)}
-            className="ideate-dialog"
             aria-labelledby="scout-title"
           >
             <div className="flex items-center justify-between gap-4">
