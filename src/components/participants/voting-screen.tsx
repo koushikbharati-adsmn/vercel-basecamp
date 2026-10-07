@@ -3,7 +3,6 @@ import { ExperienceSelect } from "@/components/experience/experience-select"
 import { VoteButton } from "@/components/participants/vote-button"
 import { formatRelativeDate } from "@/lib/date"
 import { applyParticipantVote, getVotingUsage } from "@/lib/participant-voting"
-import { DUR, EASE, STAGGER_DENSE } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 import {
   getParticipantVoteIdeasOptions,
@@ -11,7 +10,7 @@ import {
   type ParticipantWorkshop,
 } from "@/services/participants"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import {
   ChevronLeft,
   ChevronRight,
@@ -35,7 +34,6 @@ export function VotingScreen({
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [index, setIndex] = useState(0)
   const queryClient = useQueryClient()
-  const reducedMotion = useReducedMotion()
   const voteIdeasQueryOptions = getParticipantVoteIdeasOptions({
     workshop_code: workshopCode,
     visitor_id: visitorId,
@@ -79,22 +77,6 @@ export function VotingScreen({
       label: pillar.Name,
     })),
   ]
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: reducedMotion ? 0 : STAGGER_DENSE },
-    },
-    exit: { opacity: 0, transition: { duration: reducedMotion ? 0 : 0.1 } },
-  }
-  const item = {
-    hidden: { opacity: 0, y: reducedMotion ? 0 : 8 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: reducedMotion ? 0 : DUR.cut, ease: EASE },
-    },
-  }
   const toggleVote = () => {
     if (!idea || isSaving || cannotAddVote || workshop.status !== "Vote") return
     const voted = !idea.flgSelf
@@ -219,16 +201,11 @@ export function VotingScreen({
               </button>
             </div>
           ) : idea ? (
-            <motion.div
-              key={idea.ID}
-              variants={container}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+            <div
+              key="idea"
               className="grid min-h-0 flex-1 overflow-y-auto overscroll-contain lg:grid-cols-[minmax(0,1fr)_minmax(20rem,30rem)] lg:overflow-hidden"
             >
-              <motion.div
-                variants={item}
+              <div
                 className="relative flex min-h-[48dvh] items-center justify-center bg-surface-muted px-14 py-12 sm:px-20 lg:min-h-0"
               >
                 {image ? (
@@ -275,22 +252,20 @@ export function VotingScreen({
                 >
                   {boundedIndex + 1} / {ideas.length}
                 </p>
-              </motion.div>
-              <motion.aside
-                variants={item}
+              </div>
+              <aside
                 className="min-w-0 border-t border-line/15 lg:overflow-y-auto lg:border-t-0 lg:border-l"
               >
                 <div className="flex min-h-full flex-col p-6 sm:p-8 lg:p-10">
-                  <motion.div variants={item}>
+                  <div>
                     <p className="mb-3 text-sm text-secondary">
                       {formatRelativeDate(idea.CreatedDttm)}
                     </p>
                     <h2 className="font-display text-4xl leading-tight break-words">
                       {idea.title || "Untitled"}
                     </h2>
-                  </motion.div>
-                  <motion.div
-                    variants={item}
+                  </div>
+                  <div
                     className="mt-4 flex flex-wrap gap-2 text-xs"
                   >
                     <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
@@ -319,14 +294,13 @@ export function VotingScreen({
                         Sharpened
                       </span>
                     )}
-                  </motion.div>
-                  <motion.p
-                    variants={item}
+                  </div>
+                  <p
                     className="my-8 border-t border-line/15 pt-8 text-base leading-7 break-words whitespace-pre-line text-body"
                   >
                     {idea.Desc}
-                  </motion.p>
-                  <motion.div variants={item} className="mt-auto pt-2">
+                  </p>
+                  <div className="mt-auto pt-2">
                     <VoteButton
                       key={idea.ID}
                       voted={idea.flgSelf}
@@ -366,10 +340,10 @@ export function VotingScreen({
                         )}
                       </div>
                     )}
-                  </motion.div>
+                  </div>
                 </div>
-              </motion.aside>
-            </motion.div>
+              </aside>
+            </div>
           ) : (
             <div
               key="empty"
