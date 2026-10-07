@@ -1,5 +1,6 @@
 import { IMAGE_GENERATION_LIMIT } from "@/components/participants/participant-idea-constants"
 import { IdeaImageGenerating } from "@/components/participants/idea-image-generating"
+import { ActionSparkle } from "@/components/participants/action-sparkle"
 import { DUR, EASE } from "@/lib/motion"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useState } from "react"
@@ -13,7 +14,6 @@ import {
   Pencil,
   RefreshCw,
   Shapes,
-  Sparkle,
   Sparkles,
   Star,
   Users,
@@ -197,7 +197,7 @@ export function IdeateIdeaCard({
                 </motion.span>
               </button>
               {sparkling && !reducedMotion && (
-                <ShortlistSparkle onComplete={() => setSparkling(false)} />
+                <ActionSparkle onComplete={() => setSparkling(false)} />
               )}
             </span>
             <button
@@ -227,41 +227,6 @@ export function IdeateIdeaCard({
         </div>
       </div>
     </article>
-  )
-}
-
-const SHORTLIST_SPARKLES = [
-  { x: -12, y: -11, size: 7 },
-  { x: 2, y: -16, size: 6 },
-  { x: 14, y: -6, size: 8 },
-  { x: 10, y: 13, size: 6 },
-  { x: -13, y: 10, size: 5 },
-] as const
-
-/** Local click feedback only; incoming shortlist updates do not celebrate. */
-function ShortlistSparkle({ onComplete }: { onComplete: () => void }) {
-  return (
-    <motion.span
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-10 text-action"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 1, 1, 0] }}
-      transition={{ duration: 0.5, times: [0, 0.12, 0.65, 1] }}
-      onAnimationComplete={onComplete}
-    >
-      {SHORTLIST_SPARKLES.map(({ x, y, size }, index) => (
-        <motion.span
-          key={index}
-          className="absolute top-1/2 left-1/2"
-          style={{ marginLeft: -size / 2, marginTop: -size / 2 }}
-          initial={{ x: x * 0.35, y: y * 0.35, scale: 0 }}
-          animate={{ x, y, scale: [0, 1, 0], rotate: [0, 20] }}
-          transition={{ duration: 0.42, delay: index * 0.015, ease: EASE }}
-        >
-          <Sparkle size={size} fill="currentColor" strokeWidth={1.5} />
-        </motion.span>
-      ))}
-    </motion.span>
   )
 }
 

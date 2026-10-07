@@ -1,5 +1,6 @@
 import { AnimatedDialog } from "@/components/experience/animated-dialog"
 import { ExperienceSelect } from "@/components/experience/experience-select"
+import { VoteButton } from "@/components/participants/vote-button"
 import { formatRelativeDate } from "@/lib/date"
 import { applyParticipantVote, getVotingUsage } from "@/lib/participant-voting"
 import { DUR, EASE, STAGGER_DENSE } from "@/lib/motion"
@@ -15,10 +16,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ImageIcon,
-  LoaderCircle,
   Shapes,
   Sparkles,
-  ThumbsUp,
   Users,
 } from "lucide-react"
 import { useState } from "react"
@@ -320,46 +319,18 @@ export function VotingScreen({
                     {idea.Desc}
                   </motion.p>
                   <motion.div variants={item} className="mt-auto pt-2">
-                    <motion.button
-                      type="button"
-                      aria-label={
-                        idea.flgSelf ? "Remove vote" : "Vote for this idea"
-                      }
-                      aria-pressed={idea.flgSelf}
-                      aria-busy={isSaving}
-                      aria-describedby={
+                    <VoteButton
+                      key={idea.ID}
+                      voted={idea.flgSelf}
+                      isSaving={isSaving}
+                      describedBy={
                         workshop.votingLimit !== null
                           ? "participant-voting-usage"
                           : undefined
                       }
-                      disabled={isSaving || cannotAddVote}
-                      onClick={toggleVote}
-                      whileHover={
-                        reducedMotion || isSaving || cannotAddVote
-                          ? undefined
-                          : { y: -2, scale: 1.04 }
-                      }
-                      whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-                      className={cn(
-                        "mx-auto flex w-24 items-center justify-center rounded-full border px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50",
-                        idea.flgSelf
-                          ? "border-action bg-action text-on-action"
-                          : "border-line/25 bg-workspace text-content"
-                      )}
-                    >
-                      {isSaving ? (
-                        <LoaderCircle
-                          className="size-5 animate-spin"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <ThumbsUp
-                          className="size-5"
-                          fill={idea.flgSelf ? "currentColor" : "none"}
-                          aria-hidden="true"
-                        />
-                      )}
-                    </motion.button>
+                      disabled={cannotAddVote || workshop.status !== "Vote"}
+                      onVote={toggleVote}
+                    />
                     {vote.isError && (
                       <p
                         role="alert"
