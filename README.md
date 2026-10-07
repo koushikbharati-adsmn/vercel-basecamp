@@ -43,6 +43,18 @@ the file, including light/dark surfaces, text, borders, errors, ticker, overlays
 and ambient effects. Roles with identical defaults are independent on purpose:
 changing a button color must not implicitly change an error color.
 
+Sprite (green/lime) and Nestlé (brown/cream) test presets are included. These are
+brand-inspired sample palettes, not official specifications. Preview them by
+changing `<html data-brand="ogilvy">` in `index.html`, or run in the browser console:
+
+```js
+document.documentElement.dataset.brand = "sprite" // or "nestle"
+document.documentElement.dataset.brand = "ogilvy" // restore the default
+```
+
+Both test presets define every color role, including ambient effects. Team and
+coach identity colors remain unchanged when switching brands.
+
 Components use semantic Tailwind utilities such as `bg-action`, `text-content`
 and `border-line/20`, backed by `@theme inline` aliases. CSS gradients and inline
 styles use the same variables directly. Keep opacity modifiers at the usage
