@@ -84,15 +84,6 @@ export function IdeateIdeaCard({
               >
                 <RefreshCw size={16} />
               </button>
-              <button
-                type="button"
-                onClick={onPreview}
-                aria-label={`Open the image for ${idea.title || "this idea"} in fullscreen`}
-                title="Fullscreen image preview"
-                className="grid size-8 place-content-center bg-action text-on-action"
-              >
-                <Expand size={16} />
-              </button>
             </div>
           </>
         ) : (
@@ -209,6 +200,15 @@ export function IdeateIdeaCard({
               className="grid size-8 place-items-center disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Pencil size={17} />
+            </button>
+            <button
+              type="button"
+              onClick={onPreview}
+              aria-label={`Preview ${idea.title || "this idea"} in fullscreen`}
+              title="Fullscreen idea preview"
+              className="grid size-8 place-items-center"
+            >
+              <Expand size={17} />
             </button>
           </div>
           <button

@@ -18,6 +18,7 @@ export function StageIdeaPreviewDialog({
   title,
   position,
   total,
+  showVotes = true,
   onPrevious,
   onNext,
   onClose,
@@ -27,6 +28,7 @@ export function StageIdeaPreviewDialog({
   title: string
   position: number
   total: number
+  showVotes?: boolean
   onPrevious: () => void
   onNext: () => void
   onClose: () => void
@@ -128,7 +130,7 @@ export function StageIdeaPreviewDialog({
                 </span>
               )}
             </div>
-            {idea.TotalVote > 0 && (
+            {showVotes && idea.TotalVote > 0 && (
               <div className="mt-5 inline-flex items-center gap-3.5 self-start py-3.5">
                 <span
                   className="grid size-11 shrink-0 place-items-center rounded-full bg-action text-on-action"

@@ -2,7 +2,7 @@ import { LiveActivityTicker } from "@/components/participants/live-activity-tick
 import { IdeaEditor } from "@/components/participants/idea-editor"
 import { IdeaMasonry } from "@/components/participants/idea-masonry"
 import { IdeateIdeaCard } from "@/components/participants/ideate-idea-card"
-import { IdeaImageFullscreenDialog } from "@/components/participants/idea-image-fullscreen-dialog"
+import { StageIdeaPreviewDialog } from "@/components/participants/stage-idea-preview-dialog"
 import { IMAGE_GENERATION_LIMIT } from "@/components/participants/participant-idea-constants"
 import { SharpenDialog } from "@/components/participants/sharpen-dialog"
 import { AnimatedDialog } from "@/components/experience/animated-dialog"
@@ -117,7 +117,8 @@ export function IdeateScreen({
             : ideas.length === 0
               ? "Add an idea to this pillar to use Scout."
               : undefined
-  const previewIdea = ideas.find((idea) => idea.ID === previewId)
+  const previewIndex = ideas.findIndex((idea) => idea.ID === previewId)
+  const previewIdea = previewIndex < 0 ? null : ideas[previewIndex]
   const sharpenIdea = ideas.find((idea) => idea.ID === sharpenId)
   const handleGenerateImage = (idea: ParticipantIdea) => {
     if (
@@ -655,10 +656,22 @@ export function IdeateScreen({
 
       <AnimatePresence>{!sharpenIdea && ideaDialog}</AnimatePresence>
       <AnimatePresence>
-        {previewIdea?.imageFileName?.trim() && (
-          <IdeaImageFullscreenDialog
-            key={previewIdea.ID}
+        {previewIdea && (
+          <StageIdeaPreviewDialog
+            key="ideate-preview"
             idea={previewIdea}
+            image={previewIdea.imageFileName?.trim() || ""}
+            title={workshop.IdeationPage || "The Board"}
+            position={previewIndex + 1}
+            total={ideas.length}
+            showVotes={false}
+            onPrevious={() => {
+              if (previewIndex > 0) setPreviewId(ideas[previewIndex - 1].ID)
+            }}
+            onNext={() => {
+              if (previewIndex < ideas.length - 1)
+                setPreviewId(ideas[previewIndex + 1].ID)
+            }}
             onClose={() => setPreviewId(null)}
           />
         )}
