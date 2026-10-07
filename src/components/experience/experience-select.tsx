@@ -195,7 +195,7 @@ export function ExperienceSelect<Value extends string | number>({
         }
         disabled={disabled}
         className={cn(
-          "flex w-full items-center justify-between gap-3 border border-[#231f20]/25 bg-white px-2.5 py-[9px] text-left text-base font-normal text-[#231f20] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#231f20] disabled:cursor-not-allowed disabled:opacity-50",
+          "flex w-full items-center justify-between gap-3 border border-line/25 bg-workspace px-2.5 py-[9px] text-left text-base font-normal text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-input-focus disabled:cursor-not-allowed disabled:opacity-50",
           label && "mt-1.5",
           triggerClassName
         )}
@@ -203,7 +203,7 @@ export function ExperienceSelect<Value extends string | number>({
         onKeyDown={handleKeyDown}
         onClick={() => (expanded ? setOpen(false) : openList())}
       >
-        <span className={cn("truncate", !selected && "text-[#8a8689]")}>
+        <span className={cn("truncate", !selected && "text-muted")}>
           {selected?.label ?? placeholder}
         </span>
         <ChevronDown size={16} aria-hidden="true" className="shrink-0" />
@@ -215,17 +215,14 @@ export function ExperienceSelect<Value extends string | number>({
           role="listbox"
           aria-label={ariaLabel ?? label ?? placeholder}
           className={cn(
-            "absolute top-full right-0 left-0 z-20 mt-1 max-h-48 overflow-y-auto border border-[#231f20]/25 bg-white py-1 shadow-lg",
+            "absolute top-full right-0 left-0 z-20 mt-1 max-h-48 overflow-y-auto border border-line/25 bg-workspace py-1 shadow-lg shadow-shadow/10",
             listboxClassName
           )}
           data-slot="select-listbox"
           onPointerDown={(event) => event.preventDefault()}
         >
           {options.length === 0 && (
-            <li
-              role="presentation"
-              className="px-3 py-2 text-sm text-[#8a8689]"
-            >
+            <li role="presentation" className="px-3 py-2 text-sm text-muted">
               No options available
             </li>
           )}
@@ -243,7 +240,7 @@ export function ExperienceSelect<Value extends string | number>({
                 option.disabled
                   ? "cursor-not-allowed opacity-40"
                   : "cursor-pointer",
-                index === activeIndex && "bg-[#231f20]/5"
+                index === activeIndex && "bg-tint/5"
               )}
               onPointerMove={() => {
                 if (!option.disabled) setActiveIndex(index)
@@ -259,7 +256,7 @@ export function ExperienceSelect<Value extends string | number>({
         </ul>
       )}
       {error && (
-        <p id={`${id}-error`} className="mt-1 text-xs text-[#da291c]">
+        <p id={`${id}-error`} className="mt-1 text-xs text-error">
           {error}
         </p>
       )}

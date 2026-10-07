@@ -13,10 +13,10 @@ export function StageIdeaCard({
 }) {
   return (
     <article
-      className="flex flex-col overflow-hidden border border-[#231f20]/25 bg-white"
+      className="flex flex-col overflow-hidden border border-line/25 bg-workspace"
       aria-label={idea.title || "Untitled idea"}
     >
-      <div className="relative aspect-4/3 w-full overflow-hidden bg-[#f6f5f3]">
+      <div className="relative aspect-4/3 w-full overflow-hidden bg-surface-muted">
         {image ? (
           <img
             src={image}
@@ -25,13 +25,13 @@ export function StageIdeaCard({
             className="size-full object-contain"
           />
         ) : (
-          <div className="flex size-full flex-col items-center justify-center gap-2 text-xs text-[#6e6a6c]">
+          <div className="flex size-full flex-col items-center justify-center gap-2 text-xs text-secondary">
             <ImageIcon size={28} aria-hidden="true" />
             No image available
           </div>
         )}
         {idea.TotalVote > 0 && (
-          <div className="absolute top-2 right-2 text-center font-bold text-white [text-shadow:0_1px_4px_rgb(0_0_0/0.6)]">
+          <div className="absolute top-2 right-2 text-center font-bold text-inverse [text-shadow:0_1px_4px_color-mix(in_srgb,var(--shadow-color)_60%,transparent)]">
             <p className="text-2xl leading-none">
               {idea.TotalVote.toString().padStart(2, "0")}
             </p>
@@ -46,35 +46,35 @@ export function StageIdeaCard({
           <h2 className="line-clamp-2 text-[22px] leading-tight font-bold tracking-[-.02em]">
             {idea.title || "Untitled"}
           </h2>
-          <p className="mt-1 flex items-center gap-1.5 text-[11px] text-[#6e6a6c]">
+          <p className="mt-1 flex items-center gap-1.5 text-[11px] text-secondary">
             <Clock size={12} aria-hidden="true" />
             {formatRelativeDate(idea.CreatedDttm)}
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5 text-[10px]">
-          <span className="inline-flex items-center gap-1 border border-[#231f20]/20 px-2 py-0.5 text-[#4a4749]">
+          <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
             <Users size={12} aria-hidden="true" />
             {idea.TeamName || "Unknown team"}
           </span>
-          <span className="inline-flex items-center gap-1 border border-[#231f20]/20 px-2 py-0.5 text-[#4a4749]">
+          <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
             <Shapes size={12} aria-hidden="true" />
             {idea.CategoryName || "Unknown pillar"}
           </span>
           {idea.flgCoach && (
-            <span className="inline-flex items-center gap-1 border border-[#231f20]/20 px-2 py-0.5 text-[#4a4749]">
+            <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
               <Sparkles size={12} aria-hidden="true" />
               Sharpened
             </span>
           )}
         </div>
-        <p className="line-clamp-3 text-sm leading-relaxed text-[#4a4749]">
+        <p className="line-clamp-3 text-sm leading-relaxed text-body">
           {idea.Desc}
         </p>
-        <div className="mt-1 border-t border-[#231f20]/10 pt-2">
+        <div className="mt-1 border-t border-line/10 pt-2">
           <button
             type="button"
             onClick={onPreview}
-            className="flex items-center gap-2 bg-[#231f20] px-3 py-2.5 text-[10px] font-bold tracking-widest text-white uppercase"
+            className="flex items-center gap-2 bg-action-neutral px-3 py-2.5 text-[10px] font-bold tracking-widest text-on-action-neutral uppercase"
           >
             View
           </button>

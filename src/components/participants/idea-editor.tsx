@@ -197,7 +197,7 @@ export function IdeaEditor({
             />
           </label>
           <label className="block text-sm font-bold">
-            Title <span className="font-normal text-[#8a8689]">(optional)</span>
+            Title <span className="font-normal text-muted">(optional)</span>
             <input
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -206,8 +206,7 @@ export function IdeaEditor({
             />
           </label>
           <label className="block text-sm font-bold">
-            Context{" "}
-            <span className="font-normal text-[#8a8689]">(optional)</span>
+            Context <span className="font-normal text-muted">(optional)</span>
             <textarea
               value={context}
               onChange={(event) => setContext(event.target.value)}
@@ -218,7 +217,7 @@ export function IdeaEditor({
           </label>
         </fieldset>
         {(error || save.error) && (
-          <p role="alert" className="mt-4 text-sm text-[#da291c]">
+          <p role="alert" className="mt-4 text-sm text-error">
             {error || save.error?.message}
           </p>
         )}
@@ -227,7 +226,7 @@ export function IdeaEditor({
             type="button"
             onClick={onClose}
             disabled={save.isPending}
-            className="border border-[#231f20]/20 px-4 py-2.5 text-xs font-bold tracking-widest uppercase"
+            className="border border-line/20 px-4 py-2.5 text-xs font-bold tracking-widest uppercase"
           >
             {canEdit ? "Cancel" : "Close"}
           </button>
@@ -235,7 +234,7 @@ export function IdeaEditor({
             <button
               type="submit"
               disabled={save.isPending}
-              className="bg-[#da291c] px-4 py-2.5 text-xs font-bold tracking-widest text-white uppercase disabled:opacity-50"
+              className="bg-action px-4 py-2.5 text-xs font-bold tracking-widest text-on-action uppercase disabled:opacity-50"
             >
               {save.isPending
                 ? "Saving…"

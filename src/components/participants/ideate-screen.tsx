@@ -380,7 +380,7 @@ export function IdeateScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="ideate-board min-h-dvh bg-white pb-14 text-[#231f20]"
+      className="ideate-board min-h-dvh bg-workspace pb-14 text-content"
     >
       <motion.header
         initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
@@ -390,7 +390,7 @@ export function IdeateScreen({
           delay: reducedMotion ? 0 : BEAT.structure,
           ease: EASE,
         }}
-        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-[#231f20]/15 bg-white/95 px-5 py-4 backdrop-blur-lg sm:px-12"
+        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line/15 bg-workspace/95 px-5 py-4 backdrop-blur-lg sm:px-12"
       >
         <div className="flex min-w-0 items-center gap-4">
           <Link
@@ -407,7 +407,7 @@ export function IdeateScreen({
               className="h-[26px] brightness-0"
             />
           </Link>
-          <span className="h-5 w-px bg-[#231f20]/15" />
+          <span className="h-5 w-px bg-tint/15" />
           <Link
             to="/workshops/$code/participants"
             params={{ code: workshopCode }}
@@ -422,21 +422,21 @@ export function IdeateScreen({
             {workshop.IdeationPage || "The Board"}
           </span>
         </div>
-        <div className="flex items-center gap-5 text-xs font-bold tracking-[.15em] text-[#6e6a6c] uppercase sm:gap-8 sm:text-sm">
-          <span aria-current="page" className="text-[#da291c]">
+        <div className="flex items-center gap-5 text-xs font-bold tracking-[.15em] text-secondary uppercase sm:gap-8 sm:text-sm">
+          <span aria-current="page" className="text-action">
             The Board
           </span>
           <Link
             to="/workshops/$code/participants/stage"
             params={{ code: workshopCode }}
-            className="hover:text-[#231f20]"
+            className="hover:text-content"
           >
             The Stage
           </Link>
           <Link
             to="/workshops/$code/participants/newsroom"
             params={{ code: workshopCode }}
-            className="hover:text-[#231f20]"
+            className="hover:text-content"
           >
             The Newsroom
           </Link>
@@ -496,7 +496,7 @@ export function IdeateScreen({
           delay: reducedMotion ? 0 : BEAT.content,
           ease: EASE,
         }}
-        className="overflow-x-auto border-b border-[#231f20]/15 px-5 sm:px-12"
+        className="overflow-x-auto border-b border-line/15 px-5 sm:px-12"
       >
         <div
           className="flex w-max min-w-full"
@@ -515,7 +515,7 @@ export function IdeateScreen({
                   setScoutOpen(false)
                   scout.reset()
                 }}
-                className={`relative flex items-center gap-2 px-4 py-5 text-[13px] font-bold tracking-[.12em] uppercase sm:px-6 ${categoryId === item.ID ? "text-[#231f20]" : "text-[#8a8689]"}`}
+                className={`relative flex items-center gap-2 px-4 py-5 text-[13px] font-bold tracking-[.12em] uppercase sm:px-6 ${categoryId === item.ID ? "text-content" : "text-muted"}`}
               >
                 {item.Name}
                 {categoryId === item.ID && (
@@ -526,7 +526,7 @@ export function IdeateScreen({
                       duration: reducedMotion ? 0 : DUR.cut,
                       ease: EASE,
                     }}
-                    className="absolute right-4 bottom-0 left-4 h-[3px] origin-left bg-[#231f20]"
+                    className="absolute right-4 bottom-0 left-4 h-[3px] origin-left bg-tint"
                   />
                 )}
               </button>
@@ -546,14 +546,14 @@ export function IdeateScreen({
         className="px-5 pt-6 pb-12 sm:px-12"
       >
         {!canIdeate && (
-          <p className="mb-5 text-sm text-[#6e6a6c]" role="status">
+          <p className="mb-5 text-sm text-secondary" role="status">
             {workshop.status === null
               ? "Your facilitator hasn’t opened ideation yet."
               : "Ideation is closed. You can still explore your team’s ideas."}
           </p>
         )}
         {workshop.category.length === 0 && (
-          <p className="mb-5 text-sm text-[#6e6a6c]">
+          <p className="mb-5 text-sm text-secondary">
             No categories are available yet. Ask your facilitator to add one.
           </p>
         )}
@@ -594,7 +594,7 @@ export function IdeateScreen({
             >
               <Binoculars size={26} strokeWidth={1.5} />
               <span className="text-[15px] font-bold">The Scout</span>
-              <span className="px-2 text-center text-xs leading-4 text-[#8a8689]">
+              <span className="px-2 text-center text-xs leading-4 text-muted">
                 {scoutDisabledReason ??
                   (scout.data
                     ? `${scout.data.data.text.length} pitches ready`
@@ -603,7 +603,7 @@ export function IdeateScreen({
             </button>
           </div>
           {ideasQuery.isPending && (
-            <p className="text-sm text-[#8a8689]" role="status">
+            <p className="text-sm text-muted" role="status">
               Loading your team’s ideas…
             </p>
           )}
@@ -620,7 +620,7 @@ export function IdeateScreen({
             </div>
           )}
           {/* {ideasQuery.isSuccess && ideas.length === 0 && (
-            <p className="py-6 text-base leading-relaxed text-[#8a8689]">
+            <p className="py-6 text-base leading-relaxed text-muted">
               {category
                 ? "No ideas in this pillar yet. Add the first idea."
                 : "The board is empty. Add the first idea and choose its pillar."}
@@ -701,7 +701,7 @@ export function IdeateScreen({
                 <X size={22} />
               </button>
             </div>
-            <p className="mt-2 text-sm text-[#8a8689]">
+            <p className="mt-2 text-sm text-muted">
               Fresh directions for {category?.Name}.
             </p>
             <div className="mt-6 space-y-4">
@@ -732,7 +732,7 @@ export function IdeateScreen({
                       : Math.min(index, 6) * STAGGER_DENSE,
                     ease: EASE,
                   }}
-                  className="border border-[#231f20]/20 p-5"
+                  className="border border-line/20 p-5"
                 >
                   <p className="text-lg leading-relaxed">{pitch}</p>
                 </motion.div>

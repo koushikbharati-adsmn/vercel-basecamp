@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/brand-colors.css";
 
 @font-face {
   font-family: "Ogilvy Sans";
@@ -59,8 +60,8 @@
 @layer base {
   :root {
     font-family: "Ogilvy Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #ffffff;
-    background: #0d0c0d;
+    color: var(--text-inverse);
+    background: var(--app-bg);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
   }
@@ -71,13 +72,13 @@
 
   html,
   body {
-    @apply m-0 min-w-80 bg-[#0d0c0d] text-white antialiased;
+    @apply m-0 min-w-80 bg-app text-inverse antialiased;
     min-height: 100%;
   }
 
   button,
   a {
-    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e74246];
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 }
 
@@ -99,7 +100,10 @@
   position: absolute;
   inset: 0;
   opacity: 0.12;
-  background-image: radial-gradient(#231f20 0.7px, transparent 0.7px);
+  background-image: radial-gradient(
+    var(--pattern-color) 0.7px,
+    transparent 0.7px
+  );
   background-size: 4px 4px;
   pointer-events: none;
 }
@@ -132,17 +136,17 @@
 }
 
 .ideate-pocket {
-  border: 1.5px dashed rgb(35 31 32 / 22%);
-  background: rgb(35 31 32 / 2%);
-  color: #4a4749;
+  border: 1.5px dashed color-mix(in srgb, var(--border-color) 22%, transparent);
+  background: color-mix(in srgb, var(--surface-tint) 2%, transparent);
+  color: var(--text-body);
   transition:
     background 150ms,
     border-color 150ms;
 }
 
 .ideate-pocket:hover:not(:disabled) {
-  border-color: rgb(35 31 32 / 50%);
-  background: rgb(35 31 32 / 5%);
+  border-color: color-mix(in srgb, var(--border-color) 50%, transparent);
+  background: color-mix(in srgb, var(--surface-tint) 5%, transparent);
 }
 
 .ideate-pocket:disabled {
@@ -157,14 +161,15 @@
   max-height: calc(100dvh - 48px);
   overflow-y: auto;
   padding: clamp(24px, 4vw, 40px);
-  border: 1px solid rgb(35 31 32 / 20%);
-  background: white;
-  color: #231f20;
-  box-shadow: 0 24px 64px rgb(35 31 32 / 25%);
+  border: 1px solid color-mix(in srgb, var(--border-color) 20%, transparent);
+  background: var(--workspace-bg);
+  color: var(--text-primary);
+  box-shadow: 0 24px 64px
+    color-mix(in srgb, var(--dialog-shadow-color) 25%, transparent);
 }
 
 .ideate-dialog::backdrop {
-  background: rgb(20 19 22 / 65%);
+  background: color-mix(in srgb, var(--dialog-backdrop-color) 65%, transparent);
 }
 
 @keyframes dialog-veil-in {
@@ -208,14 +213,14 @@
   width: 100%;
   margin-top: 8px;
   padding: 12px;
-  border: 1px solid rgb(35 31 32 / 25%);
-  background: white;
+  border: 1px solid color-mix(in srgb, var(--border-color) 25%, transparent);
+  background: var(--workspace-bg);
   font-size: 16px;
   font-weight: 400;
 }
 
 .ideate-input:focus {
-  outline: 2px solid #231f20;
+  outline: 2px solid var(--input-focus-ring);
   outline-offset: 2px;
 }
 
@@ -242,7 +247,7 @@
     min-height: 40px;
     padding: 8px 12px;
     border-width: 1px;
-    border-color: rgb(35 31 32 / 15%);
+    border-color: color-mix(in srgb, var(--border-color) 15%, transparent);
     border-radius: 2px;
     font-size: 12px;
     font-weight: 700;
@@ -301,12 +306,13 @@
 }
 .coach-markdown blockquote {
   margin: 12px 0;
-  border-left: 2px solid rgb(35 31 32 / 30%);
+  border-left: 2px solid
+    color-mix(in srgb, var(--border-color) 30%, transparent);
   padding-left: 12px;
   font-style: italic;
 }
 .coach-markdown code {
-  background: rgb(35 31 32 / 6%);
+  background: color-mix(in srgb, var(--surface-tint) 6%, transparent);
   padding: 2px 4px;
   font-size: 0.875em;
 }
@@ -314,7 +320,7 @@
   margin: 12px 0;
   max-width: 100%;
   overflow-x: auto;
-  background: rgb(35 31 32 / 6%);
+  background: color-mix(in srgb, var(--surface-tint) 6%, transparent);
   padding: 12px;
   white-space: pre;
 }
@@ -330,16 +336,16 @@
   font-size: 12px;
 }
 .coach-markdown :is(td, th) {
-  border: 1px solid rgb(35 31 32 / 20%);
+  border: 1px solid color-mix(in srgb, var(--border-color) 20%, transparent);
   padding: 6px 8px;
 }
 .coach-markdown th {
-  background: rgb(35 31 32 / 5%);
+  background: color-mix(in srgb, var(--surface-tint) 5%, transparent);
   font-weight: 700;
 }
 .coach-markdown hr {
   margin: 16px 0;
-  border-color: rgb(35 31 32 / 20%);
+  border-color: color-mix(in srgb, var(--border-color) 20%, transparent);
 }
 .coach-markdown img {
   margin: 12px 0;
@@ -350,8 +356,15 @@
 .image-developing-grid {
   opacity: 0.45;
   background-image:
-    linear-gradient(rgb(35 31 32 / 4%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(35 31 32 / 4%) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--pattern-color) 4%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--pattern-color) 4%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 24px 24px;
   mask-image: radial-gradient(ellipse at center, black, transparent 75%);
 }
@@ -360,7 +373,7 @@
   background: linear-gradient(
     110deg,
     transparent 25%,
-    rgb(255 255 255 / 75%) 50%,
+    color-mix(in srgb, var(--image-sweep-color) 75%, transparent) 50%,
     transparent 75%
   );
   animation: image-light-sweep 3.2s ease-in-out infinite;
@@ -416,6 +429,35 @@
 .orbital-rotate {
   animation: orbital-rotate 52s linear infinite;
   transform-origin: center;
+}
+
+.ambient-fallback {
+  background:
+    radial-gradient(
+      circle at 16% 22%,
+      var(--ambient-accent) 0%,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 82% 68%,
+      var(--ambient-secondary) 0%,
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 62% 12%,
+      var(--ambient-highlight) 0%,
+      transparent 31%
+    ),
+    var(--app-bg);
+}
+
+.orbital-vignette {
+  background: radial-gradient(
+    circle at 50% 47%,
+    color-mix(in srgb, var(--app-bg) 4%, transparent) 0%,
+    color-mix(in srgb, var(--app-bg) 22%, transparent) 42%,
+    color-mix(in srgb, var(--app-bg) 72%, transparent) 100%
+  );
 }
 
 @keyframes live-pulse {

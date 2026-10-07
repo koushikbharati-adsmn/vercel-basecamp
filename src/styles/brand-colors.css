@@ -1,0 +1,105 @@
+/* Ogilvy is the default. Override these roles on :root[data-brand="…"]
+ * for another brand; never populate them from legacy workshop theme fields.
+ * Team and coach identity colors intentionally do not belong here.
+ */
+:root {
+  --app-bg: #0d0c0d;
+  --workspace-bg: #ffffff;
+  --surface-muted: #f6f5f3;
+  --avatar-bg: #eeedeb;
+  --entry-panel-bg: #1b1a1d;
+  --team-selection-bg: #0a0a0c;
+  --newsroom-bg: #151315;
+  --ticker-bg: #171416;
+  --media-bg: #000000;
+  --media-placeholder-bg: oklch(21% 0.006 285.885);
+
+  --text-primary: #231f20;
+  --text-body: #4a4749;
+  --text-secondary: #6e6a6c;
+  --text-muted: #8a8689;
+  --text-inverse: #ffffff;
+  --newsroom-text-muted: #aaa6a9;
+  --action-primary-bg: #da291c;
+  --action-primary-text: #ffffff;
+  --action-neutral-bg: #231f20;
+  --action-neutral-text: #ffffff;
+  --entry-action-bg: #eb3f43;
+  --entry-action-text: #ffffff;
+  --entry-action-hover-bg: #f26b6e;
+  --error-text: #da291c;
+  --error-inverse-text: #f26b6e;
+  --feedback-accent: #e74246;
+  --focus-ring: #e74246;
+  --input-focus-ring: #231f20;
+  --link-text: oklch(78.9% 0.154 211.53);
+  --link-hover-text: oklch(86.5% 0.127 207.078);
+
+  --border-color: #231f20;
+  --border-inverse-color: #ffffff;
+  --surface-tint: #231f20;
+  --surface-inverse-tint: #ffffff;
+  --pattern-color: #231f20;
+  --pattern-inverse-color: #ffffff;
+  --overlay-color: #000000;
+  --dialog-backdrop-color: #141316;
+  --shadow-color: #000000;
+  --dialog-shadow-color: #231f20;
+  --image-sweep-color: #ffffff;
+  --ticker-live-bg: #b91423;
+  --ticker-live-text: #ffffff;
+
+  --ambient-ink: #17090a;
+  --ambient-deep: #8c2226;
+  --ambient-accent: #eb3f43;
+  --ambient-secondary: #7a2b2e;
+  --ambient-highlight: #f5bac5;
+  --orbital-active-center: #1d1114;
+  --orbital-active-edge: #0a0809;
+  --orbital-idle-center: #26181b;
+  --orbital-idle-edge: #0d0c0d;
+}
+
+/* Inline aliases keep utilities tied to the active document's color roles,
+ * including Tailwind opacity modifiers (e.g. border-line/20).
+ */
+@theme inline {
+  --color-app: var(--app-bg);
+  --color-workspace: var(--workspace-bg);
+  --color-surface-muted: var(--surface-muted);
+  --color-avatar: var(--avatar-bg);
+  --color-entry-panel: var(--entry-panel-bg);
+  --color-team-selection: var(--team-selection-bg);
+  --color-newsroom: var(--newsroom-bg);
+  --color-ticker: var(--ticker-bg);
+  --color-media: var(--media-bg);
+  --color-media-placeholder: var(--media-placeholder-bg);
+  --color-content: var(--text-primary);
+  --color-body: var(--text-body);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-inverse: var(--text-inverse);
+  --color-newsroom-muted: var(--newsroom-text-muted);
+  --color-action: var(--action-primary-bg);
+  --color-on-action: var(--action-primary-text);
+  --color-action-neutral: var(--action-neutral-bg);
+  --color-on-action-neutral: var(--action-neutral-text);
+  --color-entry-action: var(--entry-action-bg);
+  --color-on-entry-action: var(--entry-action-text);
+  --color-entry-action-hover: var(--entry-action-hover-bg);
+  --color-error: var(--error-text);
+  --color-error-inverse: var(--error-inverse-text);
+  --color-feedback: var(--feedback-accent);
+  --color-focus: var(--focus-ring);
+  --color-input-focus: var(--input-focus-ring);
+  --color-link: var(--link-text);
+  --color-link-hover: var(--link-hover-text);
+  --color-line: var(--border-color);
+  --color-line-inverse: var(--border-inverse-color);
+  --color-tint: var(--surface-tint);
+  --color-tint-inverse: var(--surface-inverse-tint);
+  --color-overlay: var(--overlay-color);
+  --color-shadow: var(--shadow-color);
+  --color-ticker-live: var(--ticker-live-bg);
+  --color-on-ticker-live: var(--ticker-live-text);
+}

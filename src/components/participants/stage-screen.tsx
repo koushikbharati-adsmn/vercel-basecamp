@@ -204,7 +204,7 @@ export function StageScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="ideate-board min-h-dvh bg-white pb-14 text-[#231f20]"
+      className="ideate-board min-h-dvh bg-workspace pb-14 text-content"
     >
       <motion.header
         initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
@@ -214,7 +214,7 @@ export function StageScreen({
           delay: reducedMotion ? 0 : BEAT.structure,
           ease: EASE,
         }}
-        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-[#231f20]/15 bg-white/95 px-5 py-4 backdrop-blur-lg sm:px-12"
+        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line/15 bg-workspace/95 px-5 py-4 backdrop-blur-lg sm:px-12"
       >
         <div className="flex items-center gap-4">
           <Link
@@ -229,7 +229,7 @@ export function StageScreen({
               className="h-[26px] brightness-0"
             />
           </Link>
-          <span className="h-5 w-px bg-[#231f20]/15" />
+          <span className="h-5 w-px bg-tint/15" />
           <span className="font-display text-[28px] capitalize">{title}</span>
         </div>
         <nav
@@ -240,7 +240,7 @@ export function StageScreen({
             <Link
               to="/workshops/$code/participants/$teamId"
               params={{ code: workshopCode, teamId: String(workshop.teamID) }}
-              className="text-[#6e6a6c]"
+              className="text-secondary"
             >
               The Board
             </Link>
@@ -249,18 +249,18 @@ export function StageScreen({
               to="/workshops/$code/participants"
               params={{ code: workshopCode }}
               search={{ selectTeam: true }}
-              className="text-[#6e6a6c]"
+              className="text-secondary"
             >
               Choose team
             </Link>
           )}
-          <span aria-current="page" className="text-[#da291c]">
+          <span aria-current="page" className="text-action">
             The Stage
           </span>
           <Link
             to="/workshops/$code/participants/newsroom"
             params={{ code: workshopCode }}
-            className="text-[#6e6a6c] hover:text-[#231f20]"
+            className="text-secondary hover:text-content"
           >
             The Newsroom
           </Link>
@@ -278,7 +278,7 @@ export function StageScreen({
       >
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <p
-            className="text-xs font-bold tracking-[.12em] text-[#6e6a6c] uppercase"
+            className="text-xs font-bold tracking-[.12em] text-secondary uppercase"
             aria-live="polite"
           >
             {ideasQuery.isPending ? "Loading shortlist…" : ""}
@@ -317,24 +317,24 @@ export function StageScreen({
           </div>
         </div>
         {ideasQuery.isPending ? (
-          <p role="status" className="py-12 text-center text-sm text-[#6e6a6c]">
+          <p role="status" className="py-12 text-center text-sm text-secondary">
             Loading shortlisted ideas…
           </p>
         ) : ideasQuery.isError ? (
           <div role="alert" className="py-12 text-center">
-            <p className="text-sm text-[#6e6a6c]">
+            <p className="text-sm text-secondary">
               Could not load shortlisted ideas.
             </p>
             <button
               type="button"
               onClick={() => void ideasQuery.refetch()}
-              className="mt-3 border border-[#231f20]/25 px-4 py-2 text-xs font-bold"
+              className="mt-3 border border-line/25 px-4 py-2 text-xs font-bold"
             >
               Try again
             </button>
           </div>
         ) : ideas.length === 0 ? (
-          <p className="py-12 text-center text-sm text-[#6e6a6c]">
+          <p className="py-12 text-center text-sm text-secondary">
             No shortlisted ideas match the selected filters.
           </p>
         ) : (

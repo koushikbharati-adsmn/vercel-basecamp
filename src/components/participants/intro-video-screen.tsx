@@ -24,7 +24,7 @@ export function IntroVideoScreen({
   }
 
   return (
-    <main className="relative h-dvh overflow-hidden bg-black text-white">
+    <main className="relative h-dvh overflow-hidden bg-media text-inverse">
       <AnimatePresence onExitComplete={onComplete}>
         {isVisible && (
           <motion.section
@@ -36,7 +36,7 @@ export function IntroVideoScreen({
               transition: { duration: 0.12, ease: "easeOut" },
             }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-black pb-12"
+            className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-media pb-12"
           >
             <motion.button
               type="button"
@@ -44,7 +44,7 @@ export function IntroVideoScreen({
               initial={{ opacity: 0, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8, ease: EASE }}
-              className="absolute top-5 right-6 z-20 cursor-pointer text-[11px] font-bold tracking-[0.2em] text-white/60 uppercase transition-colors hover:text-white"
+              className="absolute top-5 right-6 z-20 cursor-pointer text-[11px] font-bold tracking-[0.2em] text-inverse/60 uppercase transition-colors hover:text-inverse"
             >
               Skip →
             </motion.button>
@@ -60,7 +60,7 @@ export function IntroVideoScreen({
                   transition: { duration: 0.12, ease: "easeOut" },
                 }}
                 transition={{ duration: 1.6, ease: EASE }}
-                className="relative aspect-video w-full overflow-hidden bg-zinc-900 ring-1 ring-white/10"
+                className="relative aspect-video w-full overflow-hidden bg-media-placeholder ring-1 ring-line-inverse/10"
               >
                 <video
                   src={src}
@@ -100,7 +100,7 @@ export function IntroVideoScreen({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -3, transition: { duration: 0.1 } }}
                 transition={{ delay: 0.9, duration: 0.8, ease: EASE }}
-                className="mt-2 font-mono text-[9px] tracking-[0.25em] text-white/40 uppercase"
+                className="mt-2 font-mono text-[9px] tracking-[0.25em] text-inverse/40 uppercase"
               >
                 {subtitle}
               </motion.figcaption>
@@ -110,7 +110,7 @@ export function IntroVideoScreen({
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              className="absolute bottom-16 h-px w-40 overflow-hidden bg-white/10"
+              className="absolute bottom-16 h-px w-40 overflow-hidden bg-tint-inverse/10"
               aria-label={
                 duration > 0
                   ? `${Math.round(progress * 100)}% played`
@@ -120,7 +120,7 @@ export function IntroVideoScreen({
               <motion.div
                 animate={{ scaleX: progress }}
                 transition={{ duration: 0.08, ease: "linear" }}
-                className="h-full origin-left bg-[#eb3f43]"
+                className="h-full origin-left bg-entry-action"
               />
             </motion.div>
           </motion.section>

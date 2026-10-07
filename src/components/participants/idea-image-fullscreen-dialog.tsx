@@ -13,7 +13,7 @@ export function IdeaImageFullscreenDialog({
     <AnimatedDialog
       variant="fullscreen"
       onClose={onClose}
-      className="fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-black/95 p-0 text-white backdrop-blur-sm"
+      className="fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-overlay/95 p-0 text-inverse backdrop-blur-sm"
       aria-labelledby="fullscreen-idea-image-title"
     >
       <div className="relative flex size-full items-center justify-center p-4 sm:p-8">
@@ -29,7 +29,7 @@ export function IdeaImageFullscreenDialog({
           type="button"
           onClick={onClose}
           aria-label="Close fullscreen image"
-          className="absolute top-4 right-4 grid size-10 cursor-pointer place-items-center bg-black/70 text-white ring-1 ring-white/30 transition-colors hover:bg-black focus-visible:outline-white sm:top-6 sm:right-6"
+          className="absolute top-4 right-4 grid size-10 cursor-pointer place-items-center bg-overlay/70 text-inverse ring-1 ring-line-inverse/30 transition-colors hover:bg-overlay focus-visible:outline-inverse sm:top-6 sm:right-6"
         >
           <X size={20} />
         </button>

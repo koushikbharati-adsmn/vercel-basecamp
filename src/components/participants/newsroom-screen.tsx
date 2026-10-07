@@ -136,7 +136,7 @@ export function NewsroomScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="min-h-dvh bg-[#151315] pb-14 text-white"
+      className="min-h-dvh bg-newsroom pb-14 text-inverse"
     >
       <motion.header
         initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
@@ -146,7 +146,7 @@ export function NewsroomScreen({
           delay: reducedMotion ? 0 : BEAT.structure,
           ease: EASE,
         }}
-        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-white/15 bg-[#151315]/95 px-5 py-4 backdrop-blur-lg sm:px-12"
+        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line-inverse/15 bg-newsroom/95 px-5 py-4 backdrop-blur-lg sm:px-12"
       >
         <div className="flex min-w-0 flex-wrap items-center gap-4">
           <Link
@@ -161,12 +161,12 @@ export function NewsroomScreen({
               className="h-[26px]"
             />
           </Link>
-          <span className="h-5 w-px bg-white/20" />
+          <span className="h-5 w-px bg-tint-inverse/20" />
           <h1 className="font-display text-[28px] capitalize">{title}</h1>
-          <span className="inline-flex items-center gap-2 border border-white/15 bg-white/5 px-2.5 py-1 text-[10px] font-bold tracking-[.16em]">
+          <span className="inline-flex items-center gap-2 border border-line-inverse/15 bg-tint-inverse/5 px-2.5 py-1 text-[10px] font-bold tracking-[.16em]">
             <span
               aria-hidden="true"
-              className="size-1.5 rounded-full bg-[#da291c]"
+              className="size-1.5 rounded-full bg-action"
             />
             LIVE
           </span>
@@ -179,7 +179,7 @@ export function NewsroomScreen({
             <Link
               to="/workshops/$code/participants/$teamId"
               params={{ code: workshopCode, teamId: String(workshop.teamID) }}
-              className="text-[#aaa6a9] hover:text-white"
+              className="text-newsroom-muted hover:text-inverse"
             >
               The Board
             </Link>
@@ -188,7 +188,7 @@ export function NewsroomScreen({
               to="/workshops/$code/participants"
               params={{ code: workshopCode }}
               search={{ selectTeam: true }}
-              className="text-[#aaa6a9] hover:text-white"
+              className="text-newsroom-muted hover:text-inverse"
             >
               Choose team
             </Link>
@@ -196,11 +196,11 @@ export function NewsroomScreen({
           <Link
             to="/workshops/$code/participants/stage"
             params={{ code: workshopCode }}
-            className="text-[#aaa6a9] hover:text-white"
+            className="text-newsroom-muted hover:text-inverse"
           >
             The Stage
           </Link>
-          <span aria-current="page" className="text-[#da291c]">
+          <span aria-current="page" className="text-action">
             The Newsroom
           </span>
         </nav>
@@ -210,15 +210,15 @@ export function NewsroomScreen({
           <div
             role="status"
             aria-label="Loading newsroom statistics"
-            className="grid grid-cols-2 border-y border-white/15 lg:grid-cols-4"
+            className="grid grid-cols-2 border-y border-line-inverse/15 lg:grid-cols-4"
           >
             {summary.map((stat) => (
               <div
                 key={stat.label}
-                className="border-white/15 px-4 py-7 sm:px-8"
+                className="border-line-inverse/15 px-4 py-7 sm:px-8"
               >
-                <div className="h-20 bg-white/5" />
-                <p className="mt-3 text-xs tracking-widest text-[#aaa6a9] uppercase">
+                <div className="h-20 bg-tint-inverse/5" />
+                <p className="mt-3 text-xs tracking-widest text-newsroom-muted uppercase">
                   {stat.label}
                 </p>
               </div>
@@ -227,18 +227,18 @@ export function NewsroomScreen({
         ) : dashboardQuery.isError ? (
           <div
             role="alert"
-            className="border-y border-white/15 py-12 text-center"
+            className="border-y border-line-inverse/15 py-12 text-center"
           >
             <h2 className="text-lg font-bold">
               Unable to load newsroom statistics
             </h2>
-            <p className="mt-2 text-sm text-[#aaa6a9]">
+            <p className="mt-2 text-sm text-newsroom-muted">
               Check the connection and try again.
             </p>
             <button
               type="button"
               onClick={() => void dashboardQuery.refetch()}
-              className="mt-4 border border-white/25 px-4 py-2 text-xs font-bold"
+              className="mt-4 border border-line-inverse/25 px-4 py-2 text-xs font-bold"
             >
               Retry statistics
             </button>
@@ -253,14 +253,14 @@ export function NewsroomScreen({
                 delay: reducedMotion ? 0 : BEAT.hero,
                 ease: EASE,
               }}
-              className="grid grid-cols-2 border-t border-white/15 lg:grid-cols-4"
+              className="grid grid-cols-2 border-t border-line-inverse/15 lg:grid-cols-4"
             >
               {summary.map((stat, index) => (
                 <div
                   key={stat.label}
-                  className={`flex min-w-0 flex-col-reverse gap-3 border-b border-white/15 px-4 py-6 sm:px-8 sm:py-7 ${index % 2 === 1 ? "border-l" : ""} ${index === 2 ? "lg:border-l" : ""}`}
+                  className={`flex min-w-0 flex-col-reverse gap-3 border-b border-line-inverse/15 px-4 py-6 sm:px-8 sm:py-7 ${index % 2 === 1 ? "border-l" : ""} ${index === 2 ? "lg:border-l" : ""}`}
                 >
-                  <dt className="text-[11px] font-bold tracking-[3px] text-[#aaa6a9] uppercase sm:text-[clamp(13px,0.8125vw,18px)]">
+                  <dt className="text-[11px] font-bold tracking-[3px] text-newsroom-muted uppercase sm:text-[clamp(13px,0.8125vw,18px)]">
                     {stat.label}
                   </dt>
                   <dd className="font-display text-[48px] leading-none tabular-nums sm:text-[clamp(84px,5.25vw,112px)]">
@@ -280,13 +280,13 @@ export function NewsroomScreen({
               }}
               className="mt-10"
             >
-              <div className="hidden grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] pb-3 text-center text-[13px] font-bold tracking-[3px] text-[#aaa6a9] uppercase lg:grid">
+              <div className="hidden grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] pb-3 text-center text-[13px] font-bold tracking-[3px] text-newsroom-muted uppercase lg:grid">
                 <span className="pl-7 text-left">Team</span>
                 {summary.map((stat) => (
                   <span key={stat.label}>{stat.label}</span>
                 ))}
               </div>
-              <ul className="border-t border-white/15">
+              <ul className="border-t border-line-inverse/15">
                 {(dashboard?.teams ?? []).map((team, index) => {
                   const config = workshop.teams.find(
                     (item) => item.ID === team.TeamID
@@ -322,7 +322,7 @@ export function NewsroomScreen({
                           {team.TeamName || config?.TeamName || "Unknown team"}
                         </h3>
                         {config?.Description && (
-                          <p className="mt-1 line-clamp-2 text-[clamp(16px,1vw,20px)] text-[#aaa6a9]">
+                          <p className="mt-1 line-clamp-2 text-[clamp(16px,1vw,20px)] text-newsroom-muted">
                             {config.Description}
                           </p>
                         )}
@@ -332,7 +332,7 @@ export function NewsroomScreen({
                           key={stat.label}
                           className="min-w-0 px-5 py-5 lg:text-center"
                         >
-                          <dt className="mb-2 text-[10px] font-bold tracking-widest text-[#aaa6a9] uppercase lg:sr-only">
+                          <dt className="mb-2 text-[10px] font-bold tracking-widest text-newsroom-muted uppercase lg:sr-only">
                             {stat.label}
                           </dt>
                           <dd className="font-display text-[42px] leading-none tabular-nums sm:text-[clamp(52px,3.25vw,72px)]">
@@ -345,7 +345,7 @@ export function NewsroomScreen({
                 })}
               </ul>
               {dashboard?.teams.length === 0 && (
-                <p className="border-b border-white/15 py-8 text-center text-sm text-[#aaa6a9]">
+                <p className="border-b border-line-inverse/15 py-8 text-center text-sm text-newsroom-muted">
                   Team statistics will appear here as the workshop gets going.
                 </p>
               )}
@@ -365,37 +365,39 @@ export function NewsroomScreen({
         >
           <h2
             id="newsroom-wire-title"
-            className="mb-4 text-[13px] font-bold tracking-[3px] text-[#aaa6a9] uppercase"
+            className="mb-4 text-[13px] font-bold tracking-[3px] text-newsroom-muted uppercase"
           >
             The wire
           </h2>
           {activityPending ? (
             <p
               role="status"
-              className="border-y border-white/15 py-8 text-center text-sm text-[#aaa6a9]"
+              className="border-y border-line-inverse/15 py-8 text-center text-sm text-newsroom-muted"
             >
               Loading latest activity…
             </p>
           ) : activityError ? (
             <div
               role="alert"
-              className="flex flex-wrap items-center justify-between gap-3 border-y border-white/15 py-6"
+              className="flex flex-wrap items-center justify-between gap-3 border-y border-line-inverse/15 py-6"
             >
-              <p className="text-sm text-[#aaa6a9]">Unable to load activity.</p>
+              <p className="text-sm text-newsroom-muted">
+                Unable to load activity.
+              </p>
               <button
                 type="button"
                 onClick={() => void refetchActivities()}
-                className="border border-white/25 px-4 py-2 text-xs font-bold"
+                className="border border-line-inverse/25 px-4 py-2 text-xs font-bold"
               >
                 Retry activity
               </button>
             </div>
           ) : activities.length === 0 ? (
-            <p className="border-y border-white/15 py-8 text-center text-sm text-[#aaa6a9]">
+            <p className="border-y border-line-inverse/15 py-8 text-center text-sm text-newsroom-muted">
               Quiet so far. Activity crosses the wire as teams work.
             </p>
           ) : (
-            <ul className="border-t border-white/15">
+            <ul className="border-t border-line-inverse/15">
               <AnimatePresence initial={false}>
                 {activities.map((activity) => {
                   const teamColor =
@@ -415,11 +417,11 @@ export function NewsroomScreen({
                         duration: reducedMotion ? 0 : DUR.cut,
                         ease: EASE,
                       }}
-                      className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-white/10 px-2 py-3"
+                      className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line-inverse/10 px-2 py-3"
                     >
                       <time
                         dateTime={activity.CreatedDttm}
-                        className="shrink-0 font-mono text-[11px] text-[#aaa6a9]"
+                        className="shrink-0 font-mono text-[11px] text-newsroom-muted"
                       >
                         {formatActivityTime(activity.CreatedDttm)}
                       </time>
@@ -432,10 +434,10 @@ export function NewsroomScreen({
                       >
                         {activity.TeamName || "Unknown team"}
                       </span>
-                      <p className="min-w-0 basis-full text-sm leading-relaxed break-words text-white/75 sm:flex-1 sm:basis-auto sm:text-base">
+                      <p className="min-w-0 basis-full text-sm leading-relaxed break-words text-inverse/75 sm:flex-1 sm:basis-auto sm:text-base">
                         {activity.Message}
                       </p>
-                      <span className="ml-auto shrink-0 text-[10px] font-bold tracking-[.16em] text-[#aaa6a9] uppercase">
+                      <span className="ml-auto shrink-0 text-[10px] font-bold tracking-[.16em] text-newsroom-muted uppercase">
                         {activity.Type}
                       </span>
                     </motion.li>

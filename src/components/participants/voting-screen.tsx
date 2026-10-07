@@ -129,7 +129,7 @@ export function VotingScreen({
       dismissDisabled
       onClose={() => {}}
       aria-labelledby="participant-voting-heading"
-      className="fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-white p-0 text-[#231f20]"
+      className="fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-workspace p-0 text-content"
       onKeyDown={(event) => {
         if (
           event.target instanceof HTMLElement &&
@@ -151,7 +151,7 @@ export function VotingScreen({
       }}
     >
       <div className="flex h-full min-h-0 flex-col">
-        <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-[#231f20]/15 px-4 py-3 sm:px-6">
+        <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-line/15 px-4 py-3 sm:px-6">
           <h1
             id="participant-voting-heading"
             className="text-sm font-bold tracking-[.16em] uppercase"
@@ -190,14 +190,11 @@ export function VotingScreen({
               aria-busy="true"
               className="grid min-h-0 flex-1 animate-pulse overflow-y-auto lg:grid-cols-[minmax(0,1fr)_minmax(20rem,30rem)]"
             >
-              <div className="min-h-[48dvh] bg-[#f6f5f3] lg:min-h-0" />
-              <div className="space-y-5 border-t border-[#231f20]/15 p-8 lg:border-t-0 lg:border-l">
+              <div className="min-h-[48dvh] bg-surface-muted lg:min-h-0" />
+              <div className="space-y-5 border-t border-line/15 p-8 lg:border-t-0 lg:border-l">
                 {["h-10", "h-10", "h-5 w-24", "h-10 w-3/4", "h-24"].map(
                   (size, row) => (
-                    <div
-                      key={row}
-                      className={cn("rounded bg-[#231f20]/10", size)}
-                    />
+                    <div key={row} className={cn("rounded bg-tint/10", size)} />
                   )
                 )}
               </div>
@@ -211,13 +208,13 @@ export function VotingScreen({
               <h2 className="font-display text-3xl">
                 Unable to load voting ideas
               </h2>
-              <p className="text-sm text-[#6e6a6c]">
+              <p className="text-sm text-secondary">
                 Check your connection and try again.
               </p>
               <button
                 type="button"
                 onClick={() => void query.refetch()}
-                className="mx-auto bg-[#da291c] px-5 py-3 text-sm font-bold text-white"
+                className="mx-auto bg-action px-5 py-3 text-sm font-bold text-on-action"
               >
                 Try again
               </button>
@@ -233,7 +230,7 @@ export function VotingScreen({
             >
               <motion.div
                 variants={item}
-                className="relative flex min-h-[48dvh] items-center justify-center bg-[#f6f5f3] px-14 py-12 sm:px-20 lg:min-h-0"
+                className="relative flex min-h-[48dvh] items-center justify-center bg-surface-muted px-14 py-12 sm:px-20 lg:min-h-0"
               >
                 {image ? (
                   <img
@@ -242,7 +239,7 @@ export function VotingScreen({
                     className="max-h-[50dvh] max-w-full object-contain lg:max-h-[calc(100dvh-10rem)]"
                   />
                 ) : (
-                  <div className="flex flex-col items-center gap-2 text-sm text-[#6e6a6c]">
+                  <div className="flex flex-col items-center gap-2 text-sm text-secondary">
                     <ImageIcon size={32} aria-hidden="true" />
                     No image available
                   </div>
@@ -258,7 +255,7 @@ export function VotingScreen({
                       : { x: -3, scale: 1.05 }
                   }
                   whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-                  className="absolute top-1/2 left-3 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-[#231f20]/10 ring-1 ring-[#231f20]/20 backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-25 sm:left-6 sm:size-12"
+                  className="absolute top-1/2 left-3 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-tint/10 ring-1 ring-line/20 backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-25 sm:left-6 sm:size-12"
                 >
                   <ChevronLeft size={24} aria-hidden="true" />
                 </motion.button>
@@ -273,24 +270,24 @@ export function VotingScreen({
                       : { x: 3, scale: 1.05 }
                   }
                   whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-                  className="absolute top-1/2 right-3 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-[#231f20]/10 ring-1 ring-[#231f20]/20 backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-25 sm:right-6 sm:size-12"
+                  className="absolute top-1/2 right-3 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-tint/10 ring-1 ring-line/20 backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-25 sm:right-6 sm:size-12"
                 >
                   <ChevronRight size={24} aria-hidden="true" />
                 </motion.button>
                 <p
                   aria-live="polite"
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-[#6e6a6c] tabular-nums"
+                  className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-secondary tabular-nums"
                 >
                   {boundedIndex + 1} / {ideas.length}
                 </p>
               </motion.div>
               <motion.aside
                 variants={item}
-                className="min-w-0 border-t border-[#231f20]/15 lg:overflow-y-auto lg:border-t-0 lg:border-l"
+                className="min-w-0 border-t border-line/15 lg:overflow-y-auto lg:border-t-0 lg:border-l"
               >
                 <div className="flex min-h-full flex-col p-6 sm:p-8 lg:p-10">
                   <motion.div variants={item}>
-                    <p className="mb-3 text-sm text-[#6e6a6c]">
+                    <p className="mb-3 text-sm text-secondary">
                       {formatRelativeDate(idea.CreatedDttm)}
                     </p>
                     <h2 className="font-display text-4xl leading-tight break-words">
@@ -301,16 +298,16 @@ export function VotingScreen({
                     variants={item}
                     className="mt-4 flex flex-wrap gap-2 text-xs"
                   >
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#231f20]/20 px-3 py-1.5">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-line/20 px-3 py-1.5">
                       <Users size={14} aria-hidden="true" />
                       {idea.TeamName || "Unknown team"}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#231f20]/20 px-3 py-1.5">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-line/20 px-3 py-1.5">
                       <Shapes size={14} aria-hidden="true" />
                       {idea.CategoryName || "Unknown pillar"}
                     </span>
                     {idea.flgCoach && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#231f20]/20 px-3 py-1.5">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-line/20 px-3 py-1.5">
                         <Sparkles size={14} aria-hidden="true" />
                         Sharpened
                       </span>
@@ -318,7 +315,7 @@ export function VotingScreen({
                   </motion.div>
                   <motion.p
                     variants={item}
-                    className="my-8 border-t border-[#231f20]/15 pt-8 text-base leading-7 break-words whitespace-pre-line text-[#4a4749]"
+                    className="my-8 border-t border-line/15 pt-8 text-base leading-7 break-words whitespace-pre-line text-body"
                   >
                     {idea.Desc}
                   </motion.p>
@@ -346,8 +343,8 @@ export function VotingScreen({
                       className={cn(
                         "mx-auto flex w-24 items-center justify-center rounded-full border px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50",
                         idea.flgSelf
-                          ? "border-[#da291c] bg-[#da291c] text-white"
-                          : "border-[#231f20]/25 bg-white text-[#231f20]"
+                          ? "border-action bg-action text-on-action"
+                          : "border-line/25 bg-workspace text-content"
                       )}
                     >
                       {isSaving ? (
@@ -366,7 +363,7 @@ export function VotingScreen({
                     {vote.isError && (
                       <p
                         role="alert"
-                        className="mt-3 text-center text-sm text-[#da291c]"
+                        className="mt-3 text-center text-sm text-error"
                       >
                         Unable to save your vote. Please try again.
                       </p>
@@ -375,7 +372,7 @@ export function VotingScreen({
                       <div
                         id="participant-voting-usage"
                         aria-live="polite"
-                        className="mt-4 text-center text-sm text-[#6e6a6c]"
+                        className="mt-4 text-center text-sm text-secondary"
                       >
                         <p className="tabular-nums">
                           {votesUsed} of {workshop.votingLimit}{" "}
@@ -400,7 +397,7 @@ export function VotingScreen({
               className="grid min-h-0 flex-1 place-content-center gap-2 p-6 text-center"
             >
               <h2 className="font-display text-3xl">No ideas available</h2>
-              <p className="text-sm text-[#6e6a6c]">
+              <p className="text-sm text-secondary">
                 No voting ideas match the selected team and pillar.
               </p>
             </div>

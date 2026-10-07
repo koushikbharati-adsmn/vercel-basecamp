@@ -98,11 +98,11 @@ function ActivityStrip({ activities }: { activities: WorkshopActivity[] }) {
                       {activity.TeamName}
                     </span>
                     <span className="font-medium">{activity.Message}</span>
-                    <span className="text-white/35" aria-hidden="true">
+                    <span className="text-inverse/35" aria-hidden="true">
                       ·
                     </span>
                     <time
-                      className="font-mono text-[11px] text-white/55"
+                      className="font-mono text-[11px] text-inverse/55"
                       dateTime={activity.CreatedDttm}
                     >
                       {formatActivityTime(activity.CreatedDttm)}
@@ -129,9 +129,9 @@ export function LiveActivityTicker({
   isError: boolean
 }) {
   return (
-    <footer className="fixed inset-x-0 bottom-0 z-50 flex h-12 overflow-hidden border-t border-white/10 bg-[#171416] text-white">
-      <div className="relative z-10 flex shrink-0 items-center bg-[#b91423] px-5">
-        <span className="live-pulse mr-2 size-1.5 rounded-full bg-white" />
+    <footer className="fixed inset-x-0 bottom-0 z-50 flex h-12 overflow-hidden border-t border-line-inverse/10 bg-ticker text-inverse">
+      <div className="relative z-10 flex shrink-0 items-center bg-ticker-live px-5 text-on-ticker-live">
+        <span className="live-pulse mr-2 size-1.5 rounded-full bg-on-ticker-live" />
         <span className="text-[11px] font-bold tracking-[0.2em] uppercase">
           Live
         </span>
@@ -140,7 +140,7 @@ export function LiveActivityTicker({
         {activities.length > 0 ? (
           <ActivityStrip activities={activities} />
         ) : (
-          <p className="px-8 text-xs font-medium text-white/65">
+          <p className="px-8 text-xs font-medium text-inverse/65">
             {isPending
               ? "Loading latest activity…"
               : isError

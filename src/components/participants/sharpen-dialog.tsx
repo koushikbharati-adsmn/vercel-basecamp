@@ -37,7 +37,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
 const ACTION =
-  "inline-flex min-h-10 items-center justify-center gap-2 border border-[#231f20]/20 px-3 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-40"
+  "inline-flex min-h-10 items-center justify-center gap-2 border border-line/20 px-3 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-40"
 
 export function SharpenDialog({
   idea,
@@ -98,12 +98,12 @@ export function SharpenDialog({
     <AnimatedDialog
       variant="fullscreen"
       onClose={onClose}
-      className="sharpen-workspace fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-white p-0 text-[#231f20] backdrop:bg-black/70"
+      className="sharpen-workspace fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-hidden border-0 bg-workspace p-0 text-content backdrop:bg-overlay/70"
       aria-labelledby="sharpen-dialog-title"
     >
       <AnimatePresence propagate>{children}</AnimatePresence>
       <div className="flex size-full min-h-0 flex-col">
-        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-[#231f20]/15 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
+        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line/15 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
           {coach ? (
             <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
@@ -119,7 +119,7 @@ export function SharpenDialog({
                   >
                     {coach.CoachName}
                   </h2>
-                  <p className="truncate text-xs text-[#6e6a6c] sm:text-sm">
+                  <p className="truncate text-xs text-secondary sm:text-sm">
                     {coach.Title}
                   </p>
                 </div>
@@ -161,7 +161,7 @@ export function SharpenDialog({
             type="button"
             onClick={onClose}
             aria-label="Close coaching"
-            className="grid size-10 shrink-0 place-items-center border border-[#231f20]/15 hover:bg-[#231f20]/5"
+            className="grid size-10 shrink-0 place-items-center border border-line/15 hover:bg-tint/5"
           >
             <X size={20} />
           </button>
@@ -176,7 +176,7 @@ export function SharpenDialog({
           >
             <div className="mx-auto max-w-5xl px-4 py-6 sm:px-8 sm:py-10">
               {!canEdit && (
-                <p role="status" className="mb-5 text-sm text-[#8a8689]">
+                <p role="status" className="mb-5 text-sm text-muted">
                   Ideation has closed. Coaching is currently unavailable.
                 </p>
               )}
@@ -199,7 +199,7 @@ export function SharpenDialog({
                         disabled={!canEdit}
                         onClick={() => selectCoach(item.ID)}
                         aria-label={`Select ${item.CoachName} as your coach`}
-                        className="flex h-full w-full items-center gap-4 border border-[#231f20]/20 p-4 text-left transition-colors hover:border-[#231f20]/50 disabled:opacity-40 sm:p-5"
+                        className="flex h-full w-full items-center gap-4 border border-line/20 p-4 text-left transition-colors hover:border-line/50 disabled:opacity-40 sm:p-5"
                         style={{ backgroundColor: item.BGColor || "#f6f5f3" }}
                       >
                         <CoachAvatar
@@ -240,12 +240,12 @@ export function SharpenDialog({
                   ))}
                 </ul>
               ) : (
-                <div className="grid min-h-64 place-content-center border border-[#231f20]/20 p-6 text-center">
+                <div className="grid min-h-64 place-content-center border border-line/20 p-6 text-center">
                   <Users size={36} className="mx-auto" />
                   <h3 className="mt-4 text-lg font-bold">
                     No coaches available
                   </h3>
-                  <p className="mt-1 text-sm text-[#6e6a6c]">
+                  <p className="mt-1 text-sm text-secondary">
                     This workshop does not have any coaches assigned yet.
                   </p>
                 </div>
@@ -261,10 +261,10 @@ export function SharpenDialog({
             className="grid min-h-0 flex-1 lg:grid-cols-[16rem_minmax(0,1fr)]"
           >
             <aside
-              className="hidden min-h-0 flex-col overflow-y-auto border-r border-[#231f20]/15 p-3 lg:flex"
+              className="hidden min-h-0 flex-col overflow-y-auto border-r border-line/15 p-3 lg:flex"
               aria-label="Coaches"
             >
-              <p className="px-2 py-3 text-xs font-bold tracking-wider text-[#8a8689] uppercase">
+              <p className="px-2 py-3 text-xs font-bold tracking-wider text-muted uppercase">
                 Coaches
               </p>
               <ul className="grid gap-1.5">
@@ -278,8 +278,8 @@ export function SharpenDialog({
                       className={cn(
                         "flex w-full items-center gap-3 border px-3 py-2.5 text-left transition-colors",
                         item.ID === coach.ID
-                          ? "border-[#231f20]/20 bg-[#f6f5f3]"
-                          : "border-transparent hover:bg-[#231f20]/3",
+                          ? "border-line/20 bg-surface-muted"
+                          : "border-transparent hover:bg-tint/3",
                         chat.isBusy && "opacity-50"
                       )}
                     >
@@ -288,7 +288,7 @@ export function SharpenDialog({
                         <span className="block truncate text-sm font-bold">
                           {item.CoachName}
                         </span>
-                        <span className="block truncate text-xs text-[#8a8689]">
+                        <span className="block truncate text-xs text-muted">
                           {item.Title}
                         </span>
                       </span>
@@ -457,7 +457,7 @@ function ChatWorkspace({
                 <CoachAvatar coach={coach} className="size-8" />
                 <p
                   role="status"
-                  className="flex items-center gap-2 border border-[#231f20]/15 bg-[#f6f5f3] px-4 py-3 text-sm text-[#6e6a6c]"
+                  className="flex items-center gap-2 border border-line/15 bg-surface-muted px-4 py-3 text-sm text-secondary"
                 >
                   <LoaderCircle size={15} className="animate-spin" />
                   Coach is thinking…
@@ -471,7 +471,8 @@ function ChatWorkspace({
         ref={composerRef}
         className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pt-10 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-5"
         style={{
-          background: "linear-gradient(to top, #ffffff 55%, transparent)",
+          background:
+            "linear-gradient(to top, var(--workspace-bg) 55%, transparent)",
         }}
         onSubmit={(event) => {
           event.preventDefault()
@@ -486,7 +487,7 @@ function ChatWorkspace({
             <button
               type="button"
               onClick={jumpToBottom}
-              className="mx-auto mb-3 flex items-center gap-2 border border-[#231f20]/20 bg-[#f6f5f3] px-3 py-2 text-xs font-bold"
+              className="mx-auto mb-3 flex items-center gap-2 border border-line/20 bg-surface-muted px-3 py-2 text-xs font-bold"
             >
               <ArrowDown size={14} />
               New message
@@ -495,7 +496,7 @@ function ChatWorkspace({
           <label htmlFor="participant-chat-message" className="sr-only">
             Message {coach.CoachName}
           </label>
-          <div className="flex items-end gap-2 border border-[#231f20]/20 bg-[#f6f5f3] p-2 focus-within:border-[#231f20]/60">
+          <div className="flex items-end gap-2 border border-line/20 bg-surface-muted p-2 focus-within:border-line/60">
             <textarea
               ref={textareaRef}
               id="participant-chat-message"
@@ -528,12 +529,12 @@ function ChatWorkspace({
                     ? "Waiting for coach"
                     : "Send message"
               }
-              className="grid size-10 shrink-0 place-items-center bg-[#231f20] text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="grid size-10 shrink-0 place-items-center bg-action-neutral text-on-action-neutral disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Send size={16} />
             </button>
           </div>
-          <div className="mt-1.5 flex justify-between gap-3 text-[11px] text-[#8a8689]">
+          <div className="mt-1.5 flex justify-between gap-3 text-[11px] text-muted">
             <p className="w-full text-center">
               Enter to send, Shift + Enter for a new line
             </p>
@@ -562,7 +563,7 @@ function ChatMessage({
 }) {
   if (message.author === "system")
     return (
-      <p className="max-w-xl justify-self-center border border-[#231f20]/15 px-3 py-2 text-center text-xs wrap-break-word text-[#8a8689]">
+      <p className="max-w-xl justify-self-center border border-line/15 px-3 py-2 text-center text-xs wrap-break-word text-muted">
         {message.text}
       </p>
     )
@@ -583,8 +584,8 @@ function ChatMessage({
           className={cn(
             "px-4 py-2.5 text-sm leading-6 wrap-break-word",
             isCoach
-              ? "border border-[#231f20]/15 bg-[#f6f5f3]"
-              : "bg-[#231f20] whitespace-pre-wrap text-white"
+              ? "border border-line/15 bg-surface-muted"
+              : "bg-action-neutral whitespace-pre-wrap text-on-action-neutral"
           )}
         >
           {isCoach ? (
@@ -595,7 +596,7 @@ function ChatMessage({
         </div>
         <div
           className={cn(
-            "mt-1 flex items-center gap-2 text-[11px] text-[#8a8689]",
+            "mt-1 flex items-center gap-2 text-[11px] text-muted",
             !isCoach && "justify-end"
           )}
         >
@@ -668,7 +669,7 @@ function StatusNotice({
 }) {
   return (
     <div
-      className="flex items-center gap-3 border border-[#231f20]/20 px-4 py-3 text-sm"
+      className="flex items-center gap-3 border border-line/20 px-4 py-3 text-sm"
       role={loading ? "status" : "alert"}
     >
       {loading ? (
@@ -699,7 +700,7 @@ function CoachAvatar({
     <span
       aria-hidden="true"
       className={cn(
-        "grid shrink-0 place-items-center overflow-hidden bg-[#eeedeb] text-xs font-bold text-[#4a4749]",
+        "grid shrink-0 place-items-center overflow-hidden bg-avatar text-xs font-bold text-body",
         className
       )}
     >

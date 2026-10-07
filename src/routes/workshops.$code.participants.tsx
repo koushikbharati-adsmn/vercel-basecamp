@@ -88,7 +88,7 @@ function ParticipantEntryRoute() {
       visitorId={visitorId}
       enabled={screen === "teams"}
     >
-      <div className="min-h-dvh bg-[#0d0c0d]">
+      <div className="min-h-dvh bg-app">
         <AnimatePresence mode="wait">
           {screen === "entry" && (
             <motion.div key="entry" exit={{ opacity: 0 }}>

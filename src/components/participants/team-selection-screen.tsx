@@ -126,10 +126,10 @@ export function TeamSelectionScreen({
 
   if (workshop.teams.length === 0) {
     return (
-      <main className="grid min-h-dvh place-items-center bg-[#0a0a0c] px-6 pb-12 text-center text-white">
+      <main className="grid min-h-dvh place-items-center bg-team-selection px-6 pb-12 text-center text-inverse">
         <div>
           <h1 className="font-display text-5xl">No teams are available yet.</h1>
-          <p className="mt-4 text-white/55">
+          <p className="mt-4 text-inverse/55">
             Ask your facilitator to add teams to this workshop.
           </p>
         </div>
@@ -138,7 +138,7 @@ export function TeamSelectionScreen({
   }
 
   return (
-    <main className="relative flex h-dvh flex-col overflow-hidden bg-[#0a0a0c] pb-12 text-white">
+    <main className="relative flex h-dvh flex-col overflow-hidden bg-team-selection pb-12 text-inverse">
       <motion.div
         key={activeIndex}
         initial={{ opacity: 0.25 }}
@@ -153,7 +153,7 @@ export function TeamSelectionScreen({
         initial={{ y: -56, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.1, ease: EASE }}
-        className="relative z-20 flex shrink-0 items-center justify-between border-b border-white/14 bg-[#0a0a0c] px-5 py-4 sm:px-10 sm:py-5"
+        className="relative z-20 flex shrink-0 items-center justify-between border-b border-line-inverse/14 bg-team-selection px-5 py-4 sm:px-10 sm:py-5"
       >
         <div className="flex items-center gap-4">
           <img
@@ -161,7 +161,7 @@ export function TeamSelectionScreen({
             alt="Ogilvy"
             className="h-[28px] w-auto sm:h-[30px]"
           />
-          <div className="h-6 w-px bg-white/20" />
+          <div className="h-6 w-px bg-tint-inverse/20" />
           <h1 className="font-display text-xl sm:text-2xl">Team Select</h1>
         </div>
       </motion.header>
@@ -173,10 +173,10 @@ export function TeamSelectionScreen({
           transition={{ duration: 0.6, delay: 0.28, ease: EASE }}
           className="relative z-0 -mb-4 px-10 text-center"
         >
-          <div className="mb-4 text-[12px] font-bold tracking-[4px] text-white/55 uppercase">
+          <div className="mb-4 text-[12px] font-bold tracking-[4px] text-inverse/55 uppercase">
             {workshop.Name}
           </div>
-          <h2 className="font-display text-[clamp(64px,8.5vw,128px)] leading-[.98] tracking-[-.02em] text-white/95">
+          <h2 className="font-display text-[clamp(64px,8.5vw,128px)] leading-[.98] tracking-[-.02em] text-inverse/95">
             Choose your team.
           </h2>
         </motion.div>
@@ -191,7 +191,7 @@ export function TeamSelectionScreen({
             type="button"
             onClick={() => rotateRing(-1)}
             aria-label="Previous team"
-            className="absolute top-1/2 left-3 z-[100] flex size-[46px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-white/30 bg-transparent text-[22px] text-white transition hover:border-white/70 hover:bg-white/6 sm:left-5"
+            className="absolute top-1/2 left-3 z-[100] flex size-[46px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-line-inverse/30 bg-transparent text-[22px] text-inverse transition hover:border-line-inverse/70 hover:bg-tint-inverse/6 sm:left-5"
           >
             ‹
           </button>
@@ -199,13 +199,13 @@ export function TeamSelectionScreen({
             type="button"
             onClick={() => rotateRing(1)}
             aria-label="Next team"
-            className="absolute top-1/2 right-3 z-[100] flex size-[46px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-white/30 bg-transparent text-[22px] text-white transition hover:border-white/70 hover:bg-white/6 sm:right-5"
+            className="absolute top-1/2 right-3 z-[100] flex size-[46px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-line-inverse/30 bg-transparent text-[22px] text-inverse transition hover:border-line-inverse/70 hover:bg-tint-inverse/6 sm:right-5"
           >
             ›
           </button>
 
           <div className="relative flex h-[400px] items-center justify-center overflow-visible [perspective:1200px]">
-            <div className="pointer-events-none absolute bottom-[-52px] left-1/2 h-[90px] w-[560px] -translate-x-1/2 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgba(0,0,0,.55),transparent_70%)]" />
+            <div className="pointer-events-none absolute bottom-[-52px] left-1/2 h-[90px] w-[560px] -translate-x-1/2 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,color-mix(in_srgb,var(--shadow-color)_55%,transparent),transparent_70%)]" />
             <motion.div
               animate={{ rotateY: rotationAngle }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
@@ -251,7 +251,9 @@ export function TeamSelectionScreen({
                 className="size-3 cursor-pointer rounded-full border-2 p-0"
                 style={{
                   borderColor:
-                    index === activeIndex ? "rgba(255,255,255,.85)" : "#4a4749",
+                    index === activeIndex
+                      ? "color-mix(in srgb, var(--surface-inverse-tint) 85%, transparent)"
+                      : "var(--text-body)",
                   background:
                     index === activeIndex
                       ? teamColor(team, index)
@@ -262,7 +264,10 @@ export function TeamSelectionScreen({
           </div>
 
           {selectTeam.isError && !pendingTeam && (
-            <p className="mt-5 text-center text-sm text-[#f26b6e]" role="alert">
+            <p
+              className="mt-5 text-center text-sm text-error-inverse"
+              role="alert"
+            >
               {selectTeam.error.message}
             </p>
           )}
@@ -289,7 +294,7 @@ export function TeamSelectionScreen({
             key="launch"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 z-[10000] grid place-items-center bg-black"
+            className="fixed inset-0 z-[10000] grid place-items-center bg-overlay"
           >
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
@@ -355,7 +360,7 @@ function TeamCodeDialog({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9000] grid place-items-center bg-black/70 px-4"
+      className="fixed inset-0 z-[9000] grid place-items-center bg-overlay/70 px-4"
       onClick={onClose}
     >
       <motion.form
@@ -372,15 +377,15 @@ function TeamCodeDialog({
           setValidationError(undefined)
           onSubmit(code)
         }}
-        className="w-full max-w-md border border-white/15 bg-[#1b1a1d] p-7 text-white shadow-2xl"
+        className="w-full max-w-md border border-line-inverse/15 bg-entry-panel p-7 text-inverse shadow-2xl shadow-shadow/25"
       >
-        <p className="text-[11px] font-bold tracking-[.2em] text-[#eb3f43] uppercase">
+        <p className="text-[11px] font-bold tracking-[.2em] text-entry-action uppercase">
           Protected team
         </p>
         <h2 className="font-display mt-3 text-3xl">
           Enter {team.TeamName}’s PIN
         </h2>
-        <p className="mt-2 text-sm text-white/55">
+        <p className="mt-2 text-sm text-inverse/55">
           Ask your facilitator for the four-digit code.
         </p>
         <input
@@ -392,12 +397,12 @@ function TeamCodeDialog({
             setCode(event.target.value.replace(/\D/g, "").slice(0, 4))
             setValidationError(undefined)
           }}
-          className="mt-7 h-14 w-full border border-white/20 bg-black/25 px-4 text-center font-mono text-xl tracking-[.5em] outline-none focus:border-white/60"
+          className="mt-7 h-14 w-full border border-line-inverse/20 bg-overlay/25 px-4 text-center font-mono text-xl tracking-[.5em] outline-none focus:border-line-inverse/60"
           aria-label={`PIN for ${team.TeamName}`}
           aria-invalid={Boolean(message)}
         />
         {message && (
-          <p className="mt-3 text-sm text-[#f26b6e]" role="alert">
+          <p className="mt-3 text-sm text-error-inverse" role="alert">
             {message}
           </p>
         )}
@@ -406,14 +411,14 @@ function TeamCodeDialog({
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="cursor-pointer border border-white/20 px-5 py-3 text-xs font-bold tracking-[.12em] uppercase disabled:opacity-50"
+            className="cursor-pointer border border-line-inverse/20 px-5 py-3 text-xs font-bold tracking-[.12em] uppercase disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="cursor-pointer bg-[#eb3f43] px-6 py-3 text-xs font-bold tracking-[.12em] uppercase disabled:cursor-wait disabled:opacity-60"
+            className="cursor-pointer bg-entry-action px-6 py-3 text-xs font-bold tracking-[.12em] text-on-entry-action uppercase disabled:cursor-wait disabled:opacity-60"
           >
             {isPending ? "Checking…" : "Join team"}
           </button>

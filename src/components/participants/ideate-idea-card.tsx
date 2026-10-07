@@ -51,10 +51,10 @@ export function IdeateIdeaCard({
 
   return (
     <article
-      className="flex flex-col overflow-hidden border border-[#231f20]/25 bg-white"
+      className="flex flex-col overflow-hidden border border-line/25 bg-workspace"
       aria-label={idea.title || `Idea ${number}`}
     >
-      <div className="relative aspect-4/3 w-full overflow-hidden bg-[#f6f5f3]">
+      <div className="relative aspect-4/3 w-full overflow-hidden bg-surface-muted">
         {hasImage ? (
           <>
             <IdeaImage
@@ -62,7 +62,7 @@ export function IdeateIdeaCard({
               src={idea.imageFileName}
               alt={idea.title || "Idea visualization"}
             />
-            <span className="absolute top-2 left-2 z-20 bg-[#da291c] px-2 py-0.5 text-sm text-white tabular-nums">
+            <span className="absolute top-2 left-2 z-20 bg-action px-2 py-0.5 text-sm text-on-action tabular-nums">
               {idea.imgCount}/{IMAGE_GENERATION_LIMIT}
             </span>
             <div className="absolute right-2 bottom-2 z-20 flex items-center gap-2">
@@ -77,7 +77,7 @@ export function IdeateIdeaCard({
                     ? "Image generation limit reached"
                     : "Regenerate image"
                 }
-                className="grid size-8 place-content-center bg-[#da291c] text-white disabled:cursor-not-allowed disabled:opacity-50"
+                className="grid size-8 place-content-center bg-action text-on-action disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <RefreshCw size={16} />
               </button>
@@ -86,7 +86,7 @@ export function IdeateIdeaCard({
                 onClick={onPreview}
                 aria-label={`Open the image for ${idea.title || "this idea"} in fullscreen`}
                 title="Fullscreen image preview"
-                className="grid size-8 place-content-center bg-[#da291c] text-white"
+                className="grid size-8 place-content-center bg-action text-on-action"
               >
                 <Expand size={16} />
               </button>
@@ -99,7 +99,7 @@ export function IdeateIdeaCard({
             disabled={generationDisabled}
             aria-busy={isGeneratingImage}
             style={{ visibility: isGeneratingImage ? "hidden" : undefined }}
-            className="flex size-full flex-col items-center justify-center gap-2 px-4 py-3 text-xs font-bold text-[#6e6a6c] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex size-full flex-col items-center justify-center gap-2 px-4 py-3 text-xs font-bold text-secondary disabled:cursor-not-allowed disabled:opacity-50"
             title={
               !canEdit
                 ? "Images can be generated during ideation"
@@ -128,7 +128,7 @@ export function IdeateIdeaCard({
             {idea.title || "Untitled"}
           </h2>
           <p
-            className="mt-1 flex items-center gap-1.5 text-[11px] text-[#6e6a6c]"
+            className="mt-1 flex items-center gap-1.5 text-[11px] text-secondary"
             title={submitted ? `Submitted ${submitted}` : undefined}
           >
             <Clock size={12} />
@@ -138,29 +138,29 @@ export function IdeateIdeaCard({
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5 text-[10px]">
-          <span className="inline-flex items-center gap-1 border border-[#231f20]/20 px-2 py-0.5 text-[#4a4749]">
+          <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
             <Users size={12} className="shrink-0" />
             {idea.TeamName || "Unknown team"}
           </span>
-          <span className="inline-flex items-center gap-1 border border-[#231f20]/20 px-2 py-0.5 text-[#4a4749]">
+          <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
             <Shapes size={12} className="shrink-0" />
             {idea.CategoryName || "Unknown pillar"}
           </span>
           {idea.flgCoach && (
-            <span className="inline-flex items-center gap-1 border border-[#231f20]/20 px-2 py-0.5 text-[#4a4749]">
+            <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
               <Sparkles size={12} />
               Sharpened
             </span>
           )}
         </div>
-        <p className="line-clamp-3 text-sm leading-relaxed text-[#4a4749]">
+        <p className="line-clamp-3 text-sm leading-relaxed text-body">
           {idea.Desc}
         </p>
-        <div className="mt-1 flex items-center justify-between gap-2 border-t border-[#231f20]/10 pt-2">
+        <div className="mt-1 flex items-center justify-between gap-2 border-t border-line/10 pt-2">
           <div className="flex items-center gap-1">
             <button
               type="button"
-              className={`grid size-8 place-items-center disabled:cursor-not-allowed disabled:opacity-50 ${idea.flgTeam ? "text-[#da291c]" : ""}`}
+              className={`grid size-8 place-items-center disabled:cursor-not-allowed disabled:opacity-50 ${idea.flgTeam ? "text-action" : ""}`}
               disabled={!canEdit || isShortlisting}
               aria-label={
                 idea.flgTeam
@@ -191,7 +191,7 @@ export function IdeateIdeaCard({
           </div>
           <button
             type="button"
-            className="bg-[#231f20] px-3 py-2.5 text-[10px] font-bold tracking-widest text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-action-neutral px-3 py-2.5 text-[10px] font-bold tracking-widest text-on-action-neutral uppercase disabled:cursor-not-allowed disabled:opacity-50"
             disabled={!canEdit || !canSharpen}
             title={
               !canSharpen

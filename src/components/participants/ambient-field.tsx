@@ -18,8 +18,8 @@ const FRAGMENT_SHADER = `
   uniform vec2 uPointer;
   uniform vec3 uInk;
   uniform vec3 uDeep;
-  uniform vec3 uRed;
-  uniform vec3 uPink;
+  uniform vec3 uAccent;
+  uniform vec3 uHighlight;
 
   float hash21(vec2 p) {
     p = fract(p * vec2(123.34, 456.21));
@@ -83,11 +83,11 @@ const FRAGMENT_SHADER = `
     float silk = 1.0 - smoothstep(0.12, 0.68, abs(counter - 0.18));
     float depth = fbm(point * 1.30 + secondWarp * 0.84 + time * 0.025);
     vec3 color = mix(uInk, uDeep, 0.58 + depth * 0.42);
-    color = mix(color, uRed, broadLight * (0.78 + depth * 0.22));
-    color = mix(color, uPink, pinkLift * broadLight * 0.52);
-    color = mix(color, uPink, silk * broadLight * 0.18);
-    color += uRed * smoothstep(0.62, 1.0, depth) * 0.30;
-    color += uRed * broadLight * 0.10;
+    color = mix(color, uAccent, broadLight * (0.78 + depth * 0.22));
+    color = mix(color, uHighlight, pinkLift * broadLight * 0.52);
+    color = mix(color, uHighlight, silk * broadLight * 0.18);
+    color += uAccent * smoothstep(0.62, 1.0, depth) * 0.30;
+    color += uAccent * broadLight * 0.10;
     float grain = hash21(gl_FragCoord.xy + uTime * 0.17) - 0.5;
     color += grain * 0.012;
     color *= mix(0.63, 1.0, vignette(vUv));
@@ -118,7 +118,6 @@ export function AmbientField() {
     }
 
     renderer.outputColorSpace = THREE.SRGBColorSpace
-    renderer.setClearColor("#17090A", 1)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.35))
     renderer.domElement.className = "absolute inset-0 h-full w-full"
     container.appendChild(renderer.domElement)
@@ -130,10 +129,10 @@ export function AmbientField() {
       uTime: { value: reducedMotion ? 8 : 0 },
       uResolution: { value: new THREE.Vector2(1, 1) },
       uPointer: { value: new THREE.Vector2(0.5, 0.5) },
-      uInk: { value: new THREE.Color("#17090A") },
-      uDeep: { value: new THREE.Color("#8C2226") },
-      uRed: { value: new THREE.Color("#EB3F43") },
-      uPink: { value: new THREE.Color("#F5BAC5") },
+      uInk: { value: new THREE.Color() },
+      uDeep: { value: new THREE.Color() },
+      uAccent: { value: new THREE.Color() },
+      uHighlight: { value: new THREE.Color() },
     }
     const material = new THREE.ShaderMaterial({
       vertexShader: VERTEX_SHADER,
@@ -144,6 +143,25 @@ export function AmbientField() {
       toneMapped: false,
     })
     scene.add(new THREE.Mesh(geometry, material))
+
+    // WebGL cannot resolve var() itself. Read the same document-level roles
+    // used by the CSS fallback, including when the brand changes at runtime.
+    const updateColors = () => {
+      const styles = getComputedStyle(container)
+      const readColor = (name: string) => styles.getPropertyValue(name).trim()
+      uniforms.uInk.value.set(readColor("--ambient-ink"))
+      uniforms.uDeep.value.set(readColor("--ambient-deep"))
+      uniforms.uAccent.value.set(readColor("--ambient-accent"))
+      uniforms.uHighlight.value.set(readColor("--ambient-highlight"))
+      renderer.setClearColor(uniforms.uInk.value, 1)
+      renderer.render(scene, camera)
+    }
+    const themeObserver = new MutationObserver(updateColors)
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-brand", "class", "style"],
+    })
+    updateColors()
 
     const pointerTarget = new THREE.Vector2(0.5, 0.5)
     const pointerCurrent = new THREE.Vector2(0.5, 0.5)
@@ -202,6 +220,7 @@ export function AmbientField() {
     return () => {
       window.cancelAnimationFrame(animationFrame)
       resizeObserver.disconnect()
+      themeObserver.disconnect()
       intersectionObserver.disconnect()
       window.removeEventListener("pointermove", onPointerMove)
       document.removeEventListener("visibilitychange", onVisibilityChange)
@@ -215,10 +234,10 @@ export function AmbientField() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-0 overflow-hidden bg-[#0d0c0d]"
+      className="pointer-events-none absolute inset-0 overflow-hidden bg-app"
       aria-hidden="true"
     >
-      <div className="absolute inset-0 scale-105 bg-[radial-gradient(circle_at_16%_22%,#EB3F43_0%,transparent_35%),radial-gradient(circle_at_82%_68%,#7A2B2E_0%,transparent_42%),radial-gradient(circle_at_62%_12%,#F5BAC5_0%,transparent_31%),#0D0C0D] blur-[28px] saturate-[1.08]" />
+      <div className="ambient-fallback absolute inset-0 scale-105 blur-[28px] saturate-[1.08]" />
     </div>
   )
 }

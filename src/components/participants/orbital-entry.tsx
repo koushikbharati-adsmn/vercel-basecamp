@@ -23,7 +23,7 @@ function OrbitType({ pathId }: { pathId: string }) {
         />
       </defs>
       <text
-        fill="rgba(255,255,255,0.74)"
+        fill="color-mix(in srgb, var(--text-inverse) 74%, transparent)"
         fontSize="12"
         fontWeight="700"
         letterSpacing="3.4"
@@ -69,15 +69,15 @@ export function OrbitalEntry({
     <motion.section
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="relative min-h-screen overflow-hidden bg-[#0d0c0d] text-white"
+      className="relative min-h-screen overflow-hidden bg-app text-inverse"
     >
       <AmbientField />
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(circle_at_50%_47%,rgba(13,12,13,.04)_0%,rgba(13,12,13,.22)_42%,rgba(13,12,13,.72)_100%)]" />
+      <div className="orbital-vignette pointer-events-none absolute inset-0 z-[1]" />
       <div
         className="pointer-events-none absolute inset-0 z-[2] opacity-30"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+            "linear-gradient(color-mix(in srgb, var(--pattern-inverse-color) 2.5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--pattern-inverse-color) 2.5%, transparent) 1px, transparent 1px)",
           backgroundSize: "48px 48px",
           maskImage:
             "radial-gradient(circle at 50% 47%, transparent 12%, black 78%)",
@@ -94,13 +94,13 @@ export function OrbitalEntry({
           <span className="font-display text-[15px] sm:text-[16px]">
             Basecamp
           </span>
-          <span className="hidden text-[12px] font-medium tracking-[0.03em] text-white/60 sm:inline">
+          <span className="hidden text-[12px] font-medium tracking-[0.03em] text-inverse/60 sm:inline">
             by Ogilvy
           </span>
         </div>
-        <div className="max-w-[52vw] text-right text-[11px] leading-[1.6] font-medium tracking-[0.03em] text-white/64 sm:text-[12px]">
+        <div className="max-w-[52vw] text-right text-[11px] leading-[1.6] font-medium tracking-[0.03em] text-inverse/64 sm:text-[12px]">
           <div className="truncate">{workshopName}</div>
-          <div className="text-white/45">2026</div>
+          <div className="text-inverse/45">2026</div>
         </div>
       </motion.header>
 
@@ -121,16 +121,16 @@ export function OrbitalEntry({
           containerType: "inline-size",
         }}
       >
-        <div className="absolute inset-[1%] rounded-full border border-white/20" />
-        <div className="absolute inset-[3%] rounded-full border border-white/10" />
+        <div className="absolute inset-[1%] rounded-full border border-line-inverse/20" />
+        <div className="absolute inset-[3%] rounded-full border border-line-inverse/10" />
         <OrbitType pathId={outerPathId} />
 
         <div
-          className="absolute inset-[9%] flex flex-col items-center justify-center overflow-hidden rounded-full border border-white/35 px-[10%] text-center shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+          className="absolute inset-[9%] flex flex-col items-center justify-center overflow-hidden rounded-full border border-line-inverse/35 px-[10%] text-center shadow-[0_40px_120px_color-mix(in_srgb,var(--shadow-color)_45%,transparent)]"
           style={{
             background: unlocking
-              ? "radial-gradient(circle at 50% 42%, rgba(29,17,20,0.96), rgba(10,8,9,0.99) 72%)"
-              : "radial-gradient(circle at 50% 42%, rgba(38,24,27,0.58), rgba(13,12,13,0.78) 72%)",
+              ? "radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--orbital-active-center) 96%, transparent), color-mix(in srgb, var(--orbital-active-edge) 99%, transparent) 72%)"
+              : "radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--orbital-idle-center) 58%, transparent), color-mix(in srgb, var(--orbital-idle-edge) 78%, transparent) 72%)",
             backdropFilter: unlocking ? "none" : "blur(22px)",
             WebkitBackdropFilter: unlocking ? "none" : "blur(22px)",
             transition: "background 0.5s ease",
@@ -146,17 +146,17 @@ export function OrbitalEntry({
               alt="Ogilvy"
               className="mb-[3%] h-auto w-[clamp(62px,15cqw,108px)]"
             />
-            <div className="mb-[1.5%] text-[clamp(11px,2cqw,14px)] font-medium tracking-[0.05em] text-white/68">
+            <div className="mb-[1.5%] text-[clamp(11px,2cqw,14px)] font-medium tracking-[0.05em] text-inverse/68">
               Welcome to
             </div>
             <h1 className="font-display text-[clamp(36px,12.6cqw,92px)] leading-[0.92] tracking-[-0.03em] [text-wrap:balance]">
               Basecamp
             </h1>
-            <div className="my-[3%] h-px w-[clamp(52px,7cqw,92px)] bg-[#eb3f43]" />
-            <p className="font-display max-w-[440px] text-[clamp(17px,4.1cqw,30px)] leading-[1.1] tracking-[-0.015em] text-white/96">
+            <div className="my-[3%] h-px w-[clamp(52px,7cqw,92px)] bg-entry-action" />
+            <p className="font-display max-w-[440px] text-[clamp(17px,4.1cqw,30px)] leading-[1.1] tracking-[-0.015em] text-inverse/96">
               {workshopName}
             </p>
-            <p className="mt-[3%] max-w-[380px] text-[clamp(12px,2.2cqw,15px)] leading-[1.5] font-medium text-white/72">
+            <p className="mt-[3%] max-w-[380px] text-[clamp(12px,2.2cqw,15px)] leading-[1.5] font-medium text-inverse/72">
               Where the room’s best ideas become inevitable.
             </p>
           </motion.div>
@@ -173,16 +173,16 @@ export function OrbitalEntry({
         }
         className="absolute bottom-[62px] left-1/2 z-20 w-[calc(100%-40px)] max-w-[620px] -translate-x-1/2 sm:bottom-[70px]"
       >
-        <div className="mb-2.5 text-center text-[11px] font-medium tracking-[0.03em] text-white/62 sm:text-[12px]">
+        <div className="mb-2.5 text-center text-[11px] font-medium tracking-[0.03em] text-inverse/62 sm:text-[12px]">
           Enter the workshop when you’re ready
         </div>
         <button
           type="button"
           onClick={handleEnter}
           disabled={unlocking}
-          className="w-full cursor-pointer border border-white/30 bg-black/35 p-1.5 backdrop-blur-xl disabled:pointer-events-none"
+          className="w-full cursor-pointer border border-line-inverse/30 bg-overlay/35 p-1.5 backdrop-blur-xl disabled:pointer-events-none"
         >
-          <span className="block bg-[#eb3f43] px-5 py-3 text-[11px] font-bold tracking-[0.22em] text-white uppercase transition-[background,transform] duration-200 hover:-translate-y-px hover:bg-[#f26b6e] sm:text-[12px]">
+          <span className="block bg-entry-action px-5 py-3 text-[11px] font-bold tracking-[0.22em] text-on-entry-action uppercase transition-[background,transform] duration-200 hover:-translate-y-px hover:bg-entry-action-hover sm:text-[12px]">
             Enter workshop
           </span>
         </button>
