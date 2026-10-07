@@ -13,6 +13,7 @@ import {
   Pencil,
   RefreshCw,
   Shapes,
+  Sparkle,
   Sparkles,
   Star,
   Users,
@@ -44,6 +45,8 @@ export function IdeateIdeaCard({
   onShortlist: () => void
   onSharpen: () => void
 }) {
+  const reducedMotion = useReducedMotion()
+  const [sparkling, setSparkling] = useState(false)
   const hasImage = Boolean(idea.imageFileName?.trim())
   const imageLimitReached = idea.imgCount >= IMAGE_GENERATION_LIMIT
   const submitted = formatActivityTime(idea.CreatedDttm)
@@ -158,26 +161,45 @@ export function IdeateIdeaCard({
         </p>
         <div className="mt-1 flex items-center justify-between gap-2 border-t border-line/10 pt-2">
           <div className="flex items-center gap-1">
-            <button
-              type="button"
-              className={`grid size-8 place-items-center disabled:cursor-not-allowed disabled:opacity-50 ${idea.flgTeam ? "text-action" : ""}`}
-              disabled={!canEdit || isShortlisting}
-              aria-label={
-                idea.flgTeam
-                  ? `Remove ${idea.title || "idea"} from shortlist`
-                  : `Shortlist ${idea.title || "idea"}`
-              }
-              title={idea.flgTeam ? "Remove from shortlist" : "Shortlist"}
-              aria-pressed={idea.flgTeam}
-              aria-busy={isShortlisting}
-              onClick={onShortlist}
-            >
-              {isShortlisting ? (
-                <LoaderCircle size={17} className="animate-spin" />
-              ) : (
-                <Star size={17} fill={idea.flgTeam ? "currentColor" : "none"} />
+            <span className="relative inline-grid size-8 shrink-0">
+              <button
+                type="button"
+                className={`grid size-8 place-items-center disabled:cursor-not-allowed disabled:opacity-50 ${idea.flgTeam ? "text-action" : ""}`}
+                disabled={!canEdit || isShortlisting}
+                aria-label={
+                  idea.flgTeam
+                    ? `Remove ${idea.title || "idea"} from shortlist`
+                    : `Shortlist ${idea.title || "idea"}`
+                }
+                title={idea.flgTeam ? "Remove from shortlist" : "Shortlist"}
+                aria-pressed={idea.flgTeam}
+                aria-busy={isShortlisting}
+                onClick={() => {
+                  setSparkling(!idea.flgTeam && !reducedMotion)
+                  onShortlist()
+                }}
+              >
+                <motion.span
+                  className="inline-grid place-items-center"
+                  animate={{
+                    scale: sparkling && !reducedMotion ? [1, 1.18, 1] : 1,
+                  }}
+                  transition={{ duration: reducedMotion ? 0 : 0.3, ease: EASE }}
+                >
+                  {isShortlisting ? (
+                    <LoaderCircle size={17} className="animate-spin" />
+                  ) : (
+                    <Star
+                      size={17}
+                      fill={idea.flgTeam ? "currentColor" : "none"}
+                    />
+                  )}
+                </motion.span>
+              </button>
+              {sparkling && !reducedMotion && (
+                <ShortlistSparkle onComplete={() => setSparkling(false)} />
               )}
-            </button>
+            </span>
             <button
               type="button"
               disabled={!canEdit || isGeneratingImage}
@@ -205,6 +227,41 @@ export function IdeateIdeaCard({
         </div>
       </div>
     </article>
+  )
+}
+
+const SHORTLIST_SPARKLES = [
+  { x: -12, y: -11, size: 7 },
+  { x: 2, y: -16, size: 6 },
+  { x: 14, y: -6, size: 8 },
+  { x: 10, y: 13, size: 6 },
+  { x: -13, y: 10, size: 5 },
+] as const
+
+/** Local click feedback only; incoming shortlist updates do not celebrate. */
+function ShortlistSparkle({ onComplete }: { onComplete: () => void }) {
+  return (
+    <motion.span
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-10 text-action"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: [0, 1, 1, 0] }}
+      transition={{ duration: 0.5, times: [0, 0.12, 0.65, 1] }}
+      onAnimationComplete={onComplete}
+    >
+      {SHORTLIST_SPARKLES.map(({ x, y, size }, index) => (
+        <motion.span
+          key={index}
+          className="absolute top-1/2 left-1/2"
+          style={{ marginLeft: -size / 2, marginTop: -size / 2 }}
+          initial={{ x: x * 0.35, y: y * 0.35, scale: 0 }}
+          animate={{ x, y, scale: [0, 1, 0], rotate: [0, 20] }}
+          transition={{ duration: 0.42, delay: index * 0.015, ease: EASE }}
+        >
+          <Sparkle size={size} fill="currentColor" strokeWidth={1.5} />
+        </motion.span>
+      ))}
+    </motion.span>
   )
 }
 
