@@ -271,7 +271,7 @@ export function StageScreen({
         animate={{ opacity: 1 }}
         transition={{
           duration: reducedMotion ? 0 : DUR.beat,
-          delay: reducedMotion ? 0 : BEAT.detail,
+          delay: 0,
           ease: EASE,
         }}
         className="px-5 pt-6 pb-12 sm:px-12"

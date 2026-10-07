@@ -3,6 +3,7 @@ import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
 import { formatActivityTime } from "@/lib/date"
 import { BEAT, DUR, EASE, STAGGER_DENSE } from "@/lib/motion"
 import { socket } from "@/lib/socket"
+import { getReadableTextColor } from "@/lib/utils"
 import { getDashboardOptions } from "@/services/big-screen"
 import {
   type IdeaCoachSocketPayload,
@@ -396,45 +397,50 @@ export function NewsroomScreen({
           ) : (
             <ul className="border-t border-white/15">
               <AnimatePresence initial={false}>
-                {activities.map((activity) => (
-                  <motion.li
-                    key={activity.ID}
-                    initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                      duration: reducedMotion ? 0 : DUR.cut,
-                      ease: EASE,
-                    }}
-                    className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-white/10 px-2 py-3"
-                  >
-                    <time
-                      dateTime={activity.CreatedDttm}
-                      className="shrink-0 font-mono text-[11px] text-[#aaa6a9]"
-                    >
-                      {formatActivityTime(activity.CreatedDttm)}
-                    </time>
-                    <span
-                      className="shrink-0 border-l-[3px] bg-white/5 px-2 py-1 text-[11px] font-bold tracking-wide"
-                      style={{
-                        borderLeftColor:
-                          activity.TeamColorCode ||
-                          workshop.teams.find(
-                            (team) => team.TeamName === activity.TeamName
-                          )?.TeamColorCode ||
-                          "#da291c",
+                {activities.map((activity) => {
+                  const teamColor =
+                    activity.TeamColorCode ||
+                    workshop.teams.find(
+                      (team) => team.TeamName === activity.TeamName
+                    )?.TeamColorCode ||
+                    "#da291c"
+
+                  return (
+                    <motion.li
+                      key={activity.ID}
+                      initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        duration: reducedMotion ? 0 : DUR.cut,
+                        ease: EASE,
                       }}
+                      className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-white/10 px-2 py-3"
                     >
-                      {activity.TeamName || "Unknown team"}
-                    </span>
-                    <p className="min-w-0 basis-full text-sm leading-relaxed break-words text-white/75 sm:flex-1 sm:basis-auto sm:text-base">
-                      {activity.Message}
-                    </p>
-                    <span className="ml-auto shrink-0 text-[10px] font-bold tracking-[.16em] text-[#aaa6a9] uppercase">
-                      {activity.Type}
-                    </span>
-                  </motion.li>
-                ))}
+                      <time
+                        dateTime={activity.CreatedDttm}
+                        className="shrink-0 font-mono text-[11px] text-[#aaa6a9]"
+                      >
+                        {formatActivityTime(activity.CreatedDttm)}
+                      </time>
+                      <span
+                        className="shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-[0.1em] uppercase"
+                        style={{
+                          backgroundColor: teamColor,
+                          color: getReadableTextColor(teamColor),
+                        }}
+                      >
+                        {activity.TeamName || "Unknown team"}
+                      </span>
+                      <p className="min-w-0 basis-full text-sm leading-relaxed break-words text-white/75 sm:flex-1 sm:basis-auto sm:text-base">
+                        {activity.Message}
+                      </p>
+                      <span className="ml-auto shrink-0 text-[10px] font-bold tracking-[.16em] text-[#aaa6a9] uppercase">
+                        {activity.Type}
+                      </span>
+                    </motion.li>
+                  )
+                })}
               </AnimatePresence>
             </ul>
           )}

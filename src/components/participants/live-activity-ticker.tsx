@@ -1,4 +1,5 @@
 import { formatActivityTime } from "@/lib/date"
+import { getReadableTextColor } from "@/lib/utils"
 import type { WorkshopActivity } from "@/services/big-screen"
 import { useLayoutEffect, useRef, useState } from "react"
 
@@ -79,26 +80,36 @@ function ActivityStrip({ activities }: { activities: WorkshopActivity[] }) {
               ref={copy === 0 ? contentRef : undefined}
               className="flex shrink-0 items-center"
             >
-              {activities.map((activity) => (
-                <div
-                  key={`${copy}-${activity.ID}`}
-                  className="flex items-center gap-2 px-8 text-[13px]"
-                >
-                  <span className="bg-[#b91423] px-2 py-0.5 text-[10px] font-bold tracking-[0.1em] uppercase">
-                    {activity.TeamName}
-                  </span>
-                  <span className="font-medium">{activity.Message}</span>
-                  <span className="text-white/35" aria-hidden="true">
-                    ·
-                  </span>
-                  <time
-                    className="font-mono text-[11px] text-white/55"
-                    dateTime={activity.CreatedDttm}
+              {activities.map((activity) => {
+                const teamColor = activity.TeamColorCode || "#b91423"
+
+                return (
+                  <div
+                    key={`${copy}-${activity.ID}`}
+                    className="flex items-center gap-2 px-8 text-[13px]"
                   >
-                    {formatActivityTime(activity.CreatedDttm)}
-                  </time>
-                </div>
-              ))}
+                    <span
+                      className="px-2 py-0.5 text-[10px] font-bold tracking-[0.1em] uppercase"
+                      style={{
+                        backgroundColor: teamColor,
+                        color: getReadableTextColor(teamColor),
+                      }}
+                    >
+                      {activity.TeamName}
+                    </span>
+                    <span className="font-medium">{activity.Message}</span>
+                    <span className="text-white/35" aria-hidden="true">
+                      ·
+                    </span>
+                    <time
+                      className="font-mono text-[11px] text-white/55"
+                      dateTime={activity.CreatedDttm}
+                    >
+                      {formatActivityTime(activity.CreatedDttm)}
+                    </time>
+                  </div>
+                )
+              })}
             </div>
             <div className="shrink-0" style={{ width: spacerWidth }} />
           </div>

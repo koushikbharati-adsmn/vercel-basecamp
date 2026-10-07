@@ -28,6 +28,29 @@ export function getInitials(name?: string, fallback = "U") {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
 }
 
+/** Chooses dark or white text for a solid hex-color background. */
+export function getReadableTextColor(background: string) {
+  const value = background.replace("#", "")
+  const hex =
+    value.length === 3
+      ? value
+          .split("")
+          .map((character) => character.repeat(2))
+          .join("")
+      : value
+
+  if (!/^[0-9a-f]{6}$/i.test(hex)) return "#ffffff"
+
+  const color = Number.parseInt(hex, 16)
+  const brightness =
+    (((color >> 16) & 255) * 299 +
+      ((color >> 8) & 255) * 587 +
+      (color & 255) * 114) /
+    1000
+
+  return brightness > 150 ? "#231f20" : "#ffffff"
+}
+
 /** Selects an item randomly, returning undefined for an empty collection. */
 export function getRandomItem<T>(items: readonly T[]) {
   if (items.length === 0) return undefined
