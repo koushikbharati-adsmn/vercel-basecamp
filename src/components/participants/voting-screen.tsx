@@ -248,30 +248,26 @@ export function VotingScreen({
                   aria-label="View previous idea"
                   disabled={boundedIndex <= 0}
                   onClick={() => setIndex(boundedIndex - 1)}
-                  whileHover={
-                    reducedMotion || boundedIndex <= 0
-                      ? undefined
-                      : { x: -3, scale: 1.05 }
-                  }
-                  whileTap={reducedMotion ? undefined : { scale: 0.94 }}
                   className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
                 >
-                  <ChevronLeft size={22} aria-hidden="true" className="text-action" />
+                  <ChevronLeft
+                    size={22}
+                    aria-hidden="true"
+                    className="text-action"
+                  />
                 </motion.button>
                 <motion.button
                   type="button"
                   aria-label="View next idea"
                   disabled={boundedIndex >= ideas.length - 1}
                   onClick={() => setIndex(boundedIndex + 1)}
-                  whileHover={
-                    reducedMotion || boundedIndex >= ideas.length - 1
-                      ? undefined
-                      : { x: 3, scale: 1.05 }
-                  }
-                  whileTap={reducedMotion ? undefined : { scale: 0.94 }}
                   className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
                 >
-                  <ChevronRight size={22} aria-hidden="true" className="text-action" />
+                  <ChevronRight
+                    size={22}
+                    aria-hidden="true"
+                    className="text-action"
+                  />
                 </motion.button>
                 <p
                   aria-live="polite"
@@ -298,17 +294,29 @@ export function VotingScreen({
                     className="mt-4 flex flex-wrap gap-2 text-xs"
                   >
                     <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                      <Users size={13} aria-hidden="true" className="text-action" />
+                      <Users
+                        size={13}
+                        aria-hidden="true"
+                        className="text-action"
+                      />
                       {idea.TeamName || "Unknown team"}
                     </span>
                     <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                      <Shapes size={13} aria-hidden="true" className="text-action" />
+                      <Shapes
+                        size={13}
+                        aria-hidden="true"
+                        className="text-action"
+                      />
                       {idea.CategoryName || "Unknown pillar"}
                     </span>
                     {idea.flgCoach && (
                       <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                        <Sparkles size={13} aria-hidden="true" className="text-action" />
-                        <span className="text-action">Sharpened</span>
+                        <Sparkles
+                          size={13}
+                          aria-hidden="true"
+                          className="text-action"
+                        />
+                        Sharpened
                       </span>
                     )}
                   </motion.div>

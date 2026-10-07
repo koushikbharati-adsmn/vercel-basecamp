@@ -1,5 +1,4 @@
 import { ActionSparkle } from "@/components/participants/action-sparkle"
-import { EASE } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 import { motion, useReducedMotion } from "framer-motion"
 import { LoaderCircle, ThumbsUp } from "lucide-react"
@@ -35,14 +34,6 @@ export function VoteButton({
           setSparkling(!voted && !reducedMotion)
           onVote()
         }}
-        whileHover={
-          reducedMotion || disabled || isSaving
-            ? undefined
-            : { y: -2, scale: 1.04 }
-        }
-        whileTap={
-          reducedMotion || disabled || isSaving ? undefined : { scale: 0.94 }
-        }
         className={cn(
           "flex w-full items-center justify-center border px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50",
           voted
@@ -52,8 +43,6 @@ export function VoteButton({
       >
         <motion.span
           className="inline-grid place-items-center"
-          animate={{ scale: sparkling && !reducedMotion ? [1, 1.18, 1] : 1 }}
-          transition={{ duration: reducedMotion ? 0 : 0.3, ease: EASE }}
         >
           {isSaving ? (
             <LoaderCircle className="size-5 animate-spin" aria-hidden="true" />
