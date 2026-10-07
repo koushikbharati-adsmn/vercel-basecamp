@@ -31,9 +31,14 @@ export function StageIdeaCard({
           </div>
         )}
         {idea.TotalVote > 0 && (
-          <span className="absolute top-2 right-2 bg-[#231f20] px-2 py-1 text-xs text-white">
-            {idea.TotalVote} {idea.TotalVote === 1 ? "vote" : "votes"}
-          </span>
+          <div className="absolute top-2 right-2 text-center font-bold text-white [text-shadow:0_1px_4px_rgb(0_0_0/0.6)]">
+            <p className="text-2xl leading-none">
+              {idea.TotalVote.toString().padStart(2, "0")}
+            </p>
+            <p className="text-sm uppercase">
+              {idea.TotalVote === 1 ? "Vote" : "Votes"}
+            </p>
+          </div>
         )}
       </div>
       <div className="flex flex-col gap-2.5 p-4">

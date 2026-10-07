@@ -7,6 +7,7 @@ import {
   ImageIcon,
   Shapes,
   Sparkles,
+  ThumbsUp,
   Users,
   X,
 } from "lucide-react"
@@ -128,9 +129,26 @@ export function StageIdeaPreviewDialog({
               )}
             </div>
             {idea.TotalVote > 0 && (
-              <p className="mt-5 text-xl font-bold">
-                {idea.TotalVote} {idea.TotalVote === 1 ? "vote" : "votes"}
-              </p>
+              <div className="mt-5 inline-flex items-center gap-3.5 self-start py-3.5">
+                <span
+                  className="grid size-11 shrink-0 place-items-center rounded-full bg-[#da291c] text-white"
+                  aria-hidden="true"
+                >
+                  <ThumbsUp
+                    className="size-5.5"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  />
+                </span>
+                <div>
+                  <p className="m-0 text-3xl leading-none font-bold tabular-nums">
+                    {idea.TotalVote.toString().padStart(1, "0")}
+                  </p>
+                  <p className="m-0 text-xs font-medium tracking-wide text-[#6e6a6c] uppercase">
+                    {idea.TotalVote === 1 ? "Total vote" : "Total votes"}
+                  </p>
+                </div>
+              </div>
             )}
             <p className="mt-7 border-t border-[#231f20]/15 pt-6 text-base leading-7 break-words whitespace-pre-line text-[#4a4749]">
               {idea.Desc}
