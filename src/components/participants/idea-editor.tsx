@@ -45,6 +45,7 @@ export function IdeaEditor({
   )
   const [error, setError] = useState("")
   const [pillarError, setPillarError] = useState("")
+  const [keyboardFocus, setKeyboardFocus] = useState(false)
   const pillarRef = useRef<HTMLButtonElement>(null)
   const submit = (event: FormEvent) => {
     event.preventDefault()
@@ -147,6 +148,11 @@ export function IdeaEditor({
       aria-labelledby="idea-editor-title"
       dismissDisabled={save.isPending}
       onClose={onClose}
+      data-keyboard-focus={keyboardFocus}
+      onKeyDownCapture={(event) => {
+        if (event.key === "Tab") setKeyboardFocus(true)
+      }}
+      onPointerDownCapture={() => setKeyboardFocus(false)}
     >
       <form onSubmit={submit}>
         <div className="flex items-center justify-between gap-4">

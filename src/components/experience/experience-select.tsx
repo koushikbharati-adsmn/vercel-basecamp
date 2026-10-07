@@ -195,7 +195,7 @@ export function ExperienceSelect<Value extends string | number>({
         }
         disabled={disabled}
         className={cn(
-          "flex w-full items-center justify-between gap-3 border border-line/25 bg-workspace px-2.5 py-[9px] text-left text-base font-normal text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-input-focus disabled:cursor-not-allowed disabled:opacity-50",
+          "flex w-full items-center justify-between gap-3 border border-line/25 bg-workspace px-2.5 py-[9px] text-left text-base font-normal text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-50",
           label && "mt-1.5",
           triggerClassName
         )}
