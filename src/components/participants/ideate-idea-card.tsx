@@ -133,16 +133,16 @@ export function IdeateIdeaCard({
         </div>
         <div className="flex flex-wrap gap-1.5 text-[10px]">
           <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
-            <Users size={12} className="shrink-0" />
+            <Users size={12} className="shrink-0 text-action" />
             {idea.TeamName || "Unknown team"}
           </span>
           <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
-            <Shapes size={12} className="shrink-0" />
+            <Shapes size={12} className="shrink-0 text-action" />
             {idea.CategoryName || "Unknown pillar"}
           </span>
           {idea.flgCoach && (
             <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
-              <Sparkles size={12} />
+              <Sparkles size={12} className="text-action" />
               Sharpened
             </span>
           )}
@@ -213,7 +213,7 @@ export function IdeateIdeaCard({
           </div>
           <button
             type="button"
-            className="bg-action-neutral px-3 py-2.5 text-[10px] font-bold tracking-widest text-on-action-neutral uppercase disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-action px-3 py-2.5 text-[10px] font-bold tracking-widest text-on-action uppercase disabled:cursor-not-allowed disabled:opacity-50"
             disabled={!canEdit || !canSharpen}
             title={
               !canSharpen

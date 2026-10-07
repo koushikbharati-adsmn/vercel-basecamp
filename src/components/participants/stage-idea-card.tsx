@@ -53,16 +53,16 @@ export function StageIdeaCard({
         </div>
         <div className="flex flex-wrap gap-1.5 text-[10px]">
           <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
-            <Users size={12} aria-hidden="true" />
+            <Users size={12} aria-hidden="true" className="text-action" />
             {idea.TeamName || "Unknown team"}
           </span>
           <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
-            <Shapes size={12} aria-hidden="true" />
+            <Shapes size={12} aria-hidden="true" className="text-action" />
             {idea.CategoryName || "Unknown pillar"}
           </span>
           {idea.flgCoach && (
             <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-0.5 text-body">
-              <Sparkles size={12} aria-hidden="true" />
+              <Sparkles size={12} aria-hidden="true" className="text-action" />
               Sharpened
             </span>
           )}
@@ -74,7 +74,7 @@ export function StageIdeaCard({
           <button
             type="button"
             onClick={onPreview}
-            className="flex items-center gap-2 bg-action-neutral px-3 py-2.5 text-[10px] font-bold tracking-widest text-on-action-neutral uppercase"
+            className="flex items-center gap-2 bg-action px-3 py-2.5 text-[10px] font-bold tracking-widest text-on-action uppercase"
           >
             View
           </button>
