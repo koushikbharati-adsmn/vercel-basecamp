@@ -1,3 +1,4 @@
+import { HalftoneBackground } from "@/components/experience/halftone-background"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { IdeaEditor } from "@/components/participants/idea-editor"
 import { IdeaMasonry } from "@/components/participants/idea-masonry"
@@ -420,7 +421,7 @@ export function IdeateScreen({
           >
             {team.TeamName} ▾
           </Link>
-          <span className="font-display hidden text-[28px] capitalize md:block">
+          <span className="hidden font-display text-[28px] capitalize md:block">
             {workshop.IdeationPage || "The Board"}
           </span>
         </div>
@@ -461,7 +462,7 @@ export function IdeateScreen({
       >
         <motion.div
           aria-hidden="true"
-          className="ideate-hero absolute inset-0 origin-left"
+          className="absolute inset-0 origin-left"
           style={{ backgroundColor: color }}
           initial={{ scaleX: reducedMotion ? 1 : 0 }}
           animate={{ scaleX: 1 }}
@@ -470,7 +471,9 @@ export function IdeateScreen({
             delay: reducedMotion ? 0 : BEAT.hero,
             ease: EASE,
           }}
-        />
+        >
+          <HalftoneBackground className="bg-[radial-gradient(var(--pattern-color)_0.75px,transparent_0.75px)]" />
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, x: reducedMotion ? 0 : -24 }}
           animate={{ opacity: 1, x: 0 }}
