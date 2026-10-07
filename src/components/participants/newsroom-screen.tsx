@@ -204,7 +204,7 @@ export function NewsroomScreen({
           </span>
         </nav>
       </motion.header>
-      <main className="mx-auto max-w-[1400px] px-5 pt-8 pb-12 sm:px-12">
+      <main className="mx-auto max-w-[1400px] px-5 pt-8 pb-12 sm:px-10">
         {dashboardQuery.isPending ? (
           <div
             role="status"
@@ -259,10 +259,10 @@ export function NewsroomScreen({
                   key={stat.label}
                   className={`flex min-w-0 flex-col-reverse gap-3 border-b border-white/15 px-4 py-6 sm:px-8 sm:py-7 ${index % 2 === 1 ? "border-l" : ""} ${index === 2 ? "lg:border-l" : ""}`}
                 >
-                  <dt className="text-[11px] font-bold tracking-[.16em] text-[#aaa6a9] uppercase sm:text-xs">
+                  <dt className="text-[11px] font-bold tracking-[3px] text-[#aaa6a9] uppercase sm:text-[clamp(13px,0.8125vw,18px)]">
                     {stat.label}
                   </dt>
-                  <dd className="font-display text-[clamp(48px,6vw,84px)] leading-none tabular-nums">
+                  <dd className="font-display text-[48px] leading-none tabular-nums sm:text-[clamp(84px,5.25vw,112px)]">
                     {stat.value.toLocaleString()}
                   </dd>
                 </div>
@@ -279,13 +279,7 @@ export function NewsroomScreen({
               }}
               className="mt-10"
             >
-              <h2
-                id="newsroom-teams-title"
-                className="mb-4 text-xs font-bold tracking-[.2em] text-[#aaa6a9] uppercase"
-              >
-                The teams
-              </h2>
-              <div className="hidden grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] pb-3 text-center text-[11px] font-bold tracking-[.16em] text-[#aaa6a9] uppercase lg:grid">
+              <div className="hidden grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] pb-3 text-center text-[13px] font-bold tracking-[3px] text-[#aaa6a9] uppercase lg:grid">
                 <span className="pl-7 text-left">Team</span>
                 {summary.map((stat) => (
                   <span key={stat.label}>{stat.label}</span>
@@ -323,11 +317,11 @@ export function NewsroomScreen({
                       style={{ borderLeftColor: color }}
                     >
                       <div className="col-span-2 flex min-w-0 flex-col justify-center px-5 pt-5 lg:col-span-1 lg:py-6">
-                        <h3 className="text-2xl leading-tight font-bold break-words sm:text-[30px]">
+                        <h3 className="text-2xl leading-tight font-bold break-words sm:text-[clamp(32px,2vw,42px)]">
                           {team.TeamName || config?.TeamName || "Unknown team"}
                         </h3>
                         {config?.Description && (
-                          <p className="mt-1 line-clamp-2 text-sm text-[#aaa6a9]">
+                          <p className="mt-1 line-clamp-2 text-[clamp(16px,1vw,20px)] text-[#aaa6a9]">
                             {config.Description}
                           </p>
                         )}
@@ -340,7 +334,7 @@ export function NewsroomScreen({
                           <dt className="mb-2 text-[10px] font-bold tracking-widest text-[#aaa6a9] uppercase lg:sr-only">
                             {stat.label}
                           </dt>
-                          <dd className="font-display text-[42px] leading-none tabular-nums sm:text-[52px]">
+                          <dd className="font-display text-[42px] leading-none tabular-nums sm:text-[clamp(52px,3.25vw,72px)]">
                             {stat.value.toLocaleString()}
                           </dd>
                         </dl>
@@ -370,7 +364,7 @@ export function NewsroomScreen({
         >
           <h2
             id="newsroom-wire-title"
-            className="mb-4 text-xs font-bold tracking-[.2em] text-[#aaa6a9] uppercase"
+            className="mb-4 text-[13px] font-bold tracking-[3px] text-[#aaa6a9] uppercase"
           >
             The wire
           </h2>
