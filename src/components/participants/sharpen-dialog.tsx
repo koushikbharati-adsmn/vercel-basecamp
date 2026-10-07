@@ -200,7 +200,7 @@ export function SharpenDialog({
                         onClick={() => selectCoach(item.ID)}
                         aria-label={`Select ${item.CoachName} as your coach`}
                         className="flex h-full w-full items-center gap-4 border border-line/20 p-4 text-left transition-colors hover:border-line/50 disabled:opacity-40 sm:p-5"
-                        style={{ backgroundColor: item.BGColor || "#f6f5f3" }}
+                        style={{ backgroundColor: item.BGColor }}
                       >
                         <CoachAvatar
                           coach={item}
@@ -209,14 +209,14 @@ export function SharpenDialog({
                         <span className="min-w-0 flex-1">
                           <span
                             className="block text-base font-bold sm:text-lg"
-                            style={{ color: item.PrimaryTxtColor || "#231f20" }}
+                            style={{ color: item.PrimaryTxtColor }}
                           >
                             {item.CoachName}
                           </span>
                           <span
                             className="mt-0.5 block text-sm"
                             style={{
-                              color: item.SecondaryTxtColor || "#6e6a6c",
+                              color: item.SecondaryTxtColor,
                             }}
                           >
                             {item.Title}
@@ -224,7 +224,7 @@ export function SharpenDialog({
                           <span
                             className="mt-2 line-clamp-2 block text-sm leading-5"
                             style={{
-                              color: item.SecondaryTxtColor || "#6e6a6c",
+                              color: item.SecondaryTxtColor,
                             }}
                           >
                             {item.Description}
@@ -233,7 +233,7 @@ export function SharpenDialog({
                         <ChevronRight
                           size={20}
                           className="shrink-0"
-                          style={{ color: item.PrimaryTxtColor || "#231f20" }}
+                          style={{ color: item.PrimaryTxtColor }}
                         />
                       </button>
                     </motion.li>

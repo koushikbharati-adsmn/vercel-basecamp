@@ -9,20 +9,6 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 const EASE = [0.16, 1, 0.3, 1] as const
-const TEAM_FALLBACK_COLORS = [
-  "#da291c",
-  "#24298f",
-  "#d6d972",
-  "#7a2b2e",
-  "#f5bac5",
-]
-
-function teamColor(team: ParticipantWorkshopTeam, index: number) {
-  return /^#[0-9a-f]{6}$/i.test(team.TeamColorCode)
-    ? team.TeamColorCode
-    : TEAM_FALLBACK_COLORS[index % TEAM_FALLBACK_COLORS.length]
-}
-
 export function TeamSelectionScreen({
   workshop,
   workshopCode,
@@ -50,9 +36,7 @@ export function TeamSelectionScreen({
   const selectTeam = useSelectTeam()
   const angleStep = 360 / Math.max(workshop.teams.length, 1)
   const activeTeam = workshop.teams[activeIndex] ?? workshop.teams[0]
-  const activeColor = activeTeam
-    ? teamColor(activeTeam, activeIndex)
-    : TEAM_FALLBACK_COLORS[0]
+  const activeColor = activeTeam?.TeamColorCode
 
   const rotateRing = useCallback(
     (direction: number) => {
@@ -226,7 +210,7 @@ export function TeamSelectionScreen({
                     <TeamMedallion
                       name={team.TeamName}
                       description={team.Description}
-                      color={teamColor(team, index)}
+                      color={team.TeamColorCode}
                       image={team.ThumbnailFileName}
                       isActive={isActive}
                       isPending={
@@ -256,7 +240,7 @@ export function TeamSelectionScreen({
                       : "var(--text-body)",
                   background:
                     index === activeIndex
-                      ? teamColor(team, index)
+                      ? team.TeamColorCode
                       : "transparent",
                 }}
               />
@@ -302,7 +286,7 @@ export function TeamSelectionScreen({
               transition={{ duration: 1, ease: EASE }}
               className="absolute size-[300px] rounded-full"
               style={{
-                background: `radial-gradient(circle, ${teamColor(launchingTeam, activeIndex)} 0%, transparent 70%)`,
+                background: `radial-gradient(circle, ${launchingTeam.TeamColorCode} 0%, transparent 70%)`,
               }}
             />
             <motion.div
@@ -310,7 +294,7 @@ export function TeamSelectionScreen({
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.55, delay: 0.2, ease: EASE }}
               className="absolute inset-x-0 top-1/2 h-0.5 origin-left"
-              style={{ background: teamColor(launchingTeam, activeIndex) }}
+              style={{ background: launchingTeam.TeamColorCode }}
             />
             <div className="relative z-10 text-center">
               <motion.p

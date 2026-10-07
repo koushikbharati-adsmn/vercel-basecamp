@@ -54,9 +54,7 @@ export function IdeateScreen({
   const queryClient = useQueryClient()
   const reducedMotion = useReducedMotion()
   const team = workshop.teams.find((item) => item.ID === teamId)!
-  const color = /^#[0-9a-f]{6}$/i.test(team.TeamColorCode)
-    ? team.TeamColorCode
-    : "#da291c"
+  const color = team.TeamColorCode
   const rgb = color
     .slice(1)
     .match(/../g)!

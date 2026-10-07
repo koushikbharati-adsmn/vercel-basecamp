@@ -81,7 +81,7 @@ function ActivityStrip({ activities }: { activities: WorkshopActivity[] }) {
               className="flex shrink-0 items-center"
             >
               {activities.map((activity) => {
-                const teamColor = activity.TeamColorCode || "#b91423"
+                const teamColor = activity.TeamColorCode ?? undefined
 
                 return (
                   <div
@@ -92,7 +92,9 @@ function ActivityStrip({ activities }: { activities: WorkshopActivity[] }) {
                       className="px-2 py-0.5 text-[10px] font-bold tracking-[0.1em] uppercase"
                       style={{
                         backgroundColor: teamColor,
-                        color: getReadableTextColor(teamColor),
+                        color: teamColor
+                          ? getReadableTextColor(teamColor)
+                          : undefined,
                       }}
                     >
                       {activity.TeamName}

@@ -39,8 +39,6 @@ export function getReadableTextColor(background: string) {
           .join("")
       : value
 
-  if (!/^[0-9a-f]{6}$/i.test(hex)) return "#ffffff"
-
   const color = Number.parseInt(hex, 16)
   const brightness =
     (((color >> 16) & 255) * 299 +

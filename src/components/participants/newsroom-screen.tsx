@@ -291,11 +291,7 @@ export function NewsroomScreen({
                   const config = workshop.teams.find(
                     (item) => item.ID === team.TeamID
                   )
-                  const color = /^#[0-9a-f]{6}$/i.test(
-                    config?.TeamColorCode ?? ""
-                  )
-                    ? config!.TeamColorCode
-                    : "#da291c"
+                  const color = config?.TeamColorCode
                   const stats = [
                     { label: "Drafts", value: team.Drafts },
                     { label: "Shortlisted", value: team.Shortlisted },
@@ -404,8 +400,7 @@ export function NewsroomScreen({
                     activity.TeamColorCode ||
                     workshop.teams.find(
                       (team) => team.TeamName === activity.TeamName
-                    )?.TeamColorCode ||
-                    "#da291c"
+                    )?.TeamColorCode
 
                   return (
                     <motion.li
@@ -429,7 +424,9 @@ export function NewsroomScreen({
                         className="shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-[0.1em] uppercase"
                         style={{
                           backgroundColor: teamColor,
-                          color: getReadableTextColor(teamColor),
+                          color: teamColor
+                            ? getReadableTextColor(teamColor)
+                            : undefined,
                         }}
                       >
                         {activity.TeamName || "Unknown team"}

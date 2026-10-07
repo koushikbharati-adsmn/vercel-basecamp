@@ -1,28 +1,16 @@
+import { getReadableTextColor } from "@/lib/utils"
 import { useEffect, useRef, useState } from "react"
 
-function readableTextColor(hex: string) {
+function shade(hex: string, amount: number) {
   const value = hex.replace("#", "")
-  const full =
+  const normalized =
     value.length === 3
       ? value
           .split("")
           .map((character) => character.repeat(2))
           .join("")
       : value
-  if (!/^[0-9a-f]{6}$/i.test(full)) return "#ffffff"
-
-  const number = Number.parseInt(full, 16)
-  const brightness =
-    (((number >> 16) & 255) * 299 +
-      ((number >> 8) & 255) * 587 +
-      (number & 255) * 114) /
-    1000
-  return brightness > 150 ? "#231f20" : "#ffffff"
-}
-
-function shade(hex: string, amount: number) {
-  const normalized = /^#[0-9a-f]{6}$/i.test(hex) ? hex : "#7a2b2e"
-  const number = Number.parseInt(normalized.slice(1), 16)
+  const number = Number.parseInt(normalized, 16)
   const target = amount < 0 ? 0 : 255
   const strength = Math.abs(amount)
   const mix = (value: number) => Math.round(value + (target - value) * strength)
@@ -215,7 +203,7 @@ export function TeamMedallion({
 }) {
   const [imageFailed, setImageFailed] = useState(false)
   const hasImage = Boolean(image) && !imageFailed
-  const textColor = hasImage ? "#ffffff" : readableTextColor(color)
+  const textColor = hasImage ? "#ffffff" : getReadableTextColor(color)
   const inkText = textColor !== "#ffffff"
   const initial = name.trim().charAt(0)
   const backfaceHidden = {
