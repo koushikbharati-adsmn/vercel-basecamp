@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "./styles/brand-colors.css";
 
+@theme {
+  --font-sans: "Ogilvy Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Ogilvy Serif", Georgia, "Times New Roman", serif;
+}
+
 @font-face {
   font-family: "Ogilvy Sans";
   src: url("/fonts/OgilvySansWeb-Light.woff2") format("woff2");
@@ -59,7 +64,7 @@
 
 @layer base {
   :root {
-    font-family: "Ogilvy Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    @apply font-sans;
     color: var(--text-inverse);
     background: var(--app-bg);
     font-synthesis: none;
@@ -82,13 +87,8 @@
   }
 }
 
-.font-display,
 .orbital-display {
-  font-family: "Ogilvy Serif", Georgia, "Times New Roman", serif;
-}
-
-.font-sans {
-  font-family: "Ogilvy Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  @apply font-display;
 }
 
 .ideate-board button:not(:disabled) {
