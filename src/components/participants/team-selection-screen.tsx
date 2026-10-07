@@ -1,3 +1,4 @@
+import { HalftoneBackground } from "@/components/experience/halftone-background"
 import { TeamMedallion } from "@/components/participants/team-medallion"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 import type {
@@ -110,8 +111,9 @@ export function TeamSelectionScreen({
 
   if (workshop.teams.length === 0) {
     return (
-      <main className="grid min-h-dvh place-items-center bg-team-selection px-6 pb-12 text-center text-inverse">
-        <div>
+      <main className="relative grid min-h-dvh place-items-center bg-team-selection px-6 pb-12 text-center text-inverse">
+        <HalftoneBackground />
+        <div className="relative z-10">
           <h1 className="font-display text-5xl">No teams are available yet.</h1>
           <p className="mt-4 text-inverse/55">
             Ask your facilitator to add teams to this workshop.
@@ -133,6 +135,7 @@ export function TeamSelectionScreen({
         }}
       />
 
+      <HalftoneBackground className="z-[1]" />
       <motion.header
         initial={{ y: -56, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

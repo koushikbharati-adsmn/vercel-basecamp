@@ -1,3 +1,4 @@
+import { HalftoneBackground } from "@/components/experience/halftone-background"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
 import { formatActivityTime } from "@/lib/date"
@@ -136,8 +137,9 @@ export function NewsroomScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="min-h-dvh bg-newsroom pb-14 text-inverse"
+      className="relative isolate min-h-dvh bg-newsroom pb-14 text-inverse"
     >
+      <HalftoneBackground />
       <motion.header
         initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
         animate={{ opacity: 1, y: 0 }}
@@ -205,7 +207,7 @@ export function NewsroomScreen({
           </span>
         </nav>
       </motion.header>
-      <main className="mx-auto max-w-[1400px] px-5 pt-8 pb-12 sm:px-10">
+      <main className="relative z-10 mx-auto max-w-[1400px] px-5 pt-8 pb-12 sm:px-10">
         {dashboardQuery.isPending ? (
           <div
             role="status"

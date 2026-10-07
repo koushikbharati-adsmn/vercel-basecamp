@@ -1,3 +1,4 @@
+import { HalftoneBackground } from "@/components/experience/halftone-background"
 import { AmbientField } from "@/components/participants/ambient-field"
 import { motion } from "framer-motion"
 import { useEffect, useId, useRef, useState } from "react"
@@ -73,16 +74,7 @@ export function OrbitalEntry({
     >
       <AmbientField />
       <div className="orbital-vignette pointer-events-none absolute inset-0 z-[1]" />
-      <div
-        className="pointer-events-none absolute inset-0 z-[2] opacity-30"
-        style={{
-          backgroundImage:
-            "linear-gradient(color-mix(in srgb, var(--pattern-inverse-color) 2.5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--pattern-inverse-color) 2.5%, transparent) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-          maskImage:
-            "radial-gradient(circle at 50% 47%, transparent 12%, black 78%)",
-        }}
-      />
+      <HalftoneBackground className="z-[2]" />
 
       <motion.header
         initial={{ opacity: 0 }}
