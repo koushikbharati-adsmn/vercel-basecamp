@@ -161,7 +161,7 @@ export function NewsroomScreen({
             />
           </Link>
           <span className="h-5 w-px bg-white/20" />
-          <h1 className="font-display text-[28px]">{title}</h1>
+          <h1 className="font-display text-[28px] capitalize">{title}</h1>
           <span className="inline-flex items-center gap-2 border border-white/15 bg-white/5 px-2.5 py-1 text-[10px] font-bold tracking-[.16em]">
             <span
               aria-hidden="true"

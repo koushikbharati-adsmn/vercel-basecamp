@@ -230,7 +230,7 @@ export function StageScreen({
             />
           </Link>
           <span className="h-5 w-px bg-[#231f20]/15" />
-          <span className="font-display text-[28px]">{title}</span>
+          <span className="font-display text-[28px] capitalize">{title}</span>
         </div>
         <nav
           aria-label="Workshop views"

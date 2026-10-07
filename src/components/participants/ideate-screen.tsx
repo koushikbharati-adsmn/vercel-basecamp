@@ -418,7 +418,7 @@ export function IdeateScreen({
           >
             {team.TeamName} ▾
           </Link>
-          <span className="font-display hidden text-[28px] md:block">
+          <span className="font-display hidden text-[28px] capitalize md:block">
             {workshop.IdeationPage || "The Board"}
           </span>
         </div>
@@ -617,13 +617,13 @@ export function IdeateScreen({
               </button>
             </div>
           )}
-          {ideasQuery.isSuccess && ideas.length === 0 && (
+          {/* {ideasQuery.isSuccess && ideas.length === 0 && (
             <p className="py-6 text-base leading-relaxed text-[#8a8689]">
               {category
                 ? "No ideas in this pillar yet. Add the first idea."
                 : "The board is empty. Add the first idea and choose its pillar."}
             </p>
-          )}
+          )} */}
           {ideas.map((idea, index) => (
             <IdeateIdeaCard
               key={idea.ID}
