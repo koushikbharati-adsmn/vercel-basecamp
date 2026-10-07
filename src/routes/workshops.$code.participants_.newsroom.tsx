@@ -1,4 +1,5 @@
 import { NewsroomScreen } from "@/components/participants/newsroom-screen"
+import { ParticipantVotingGate } from "@/components/participants/participant-voting-gate"
 import {
   ParticipantEntryError,
   ParticipantEntryLoading,
@@ -34,6 +35,12 @@ function NewsroomRoute() {
     getParticipantWorkshopOptions({ code, visitor_id: visitorId })
   )
   return (
-    <NewsroomScreen key={code} workshop={response.data} workshopCode={code} />
+    <ParticipantVotingGate
+      workshop={response.data}
+      workshopCode={code}
+      visitorId={visitorId}
+    >
+      <NewsroomScreen key={code} workshop={response.data} workshopCode={code} />
+    </ParticipantVotingGate>
   )
 }

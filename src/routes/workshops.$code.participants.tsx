@@ -1,6 +1,7 @@
 import { IntroVideoScreen } from "@/components/participants/intro-video-screen"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { OrbitalEntry } from "@/components/participants/orbital-entry"
+import { ParticipantVotingGate } from "@/components/participants/participant-voting-gate"
 import {
   ParticipantEntryError,
   ParticipantEntryLoading,
@@ -81,76 +82,83 @@ function ParticipantEntryRoute() {
   }
 
   return (
-    <div className="min-h-dvh bg-[#0d0c0d]">
-      <AnimatePresence mode="wait">
-        {screen === "entry" && (
-          <motion.div key="entry" exit={{ opacity: 0 }}>
-            <OrbitalEntry
-              workshopName={workshop.Name}
-              onComplete={handleEntryComplete}
-            />
-          </motion.div>
-        )}
-        {screen === "video" && introVideo && (
-          <motion.div
-            key="video"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.1 } }}
-          >
-            <IntroVideoScreen
-              src={introVideo}
-              title={
-                workshop.videoTitle ??
-                "“Unless your advertising has a big idea, it will pass like a ship in the night.”"
-              }
-              subtitle={
-                workshop.videoSubTitle ??
-                "DAVID OGILVY · THE VIEW FROM TOUFFOU · 1981"
-              }
-              onComplete={() => setScreen("walkthrough")}
-            />
-          </motion.div>
-        )}
-        {screen === "walkthrough" && (
-          <motion.div
-            key="walkthrough"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <WalkthroughScreen
-              steps={walkthroughSteps}
-              onComplete={() => setScreen("teams")}
-            />
-          </motion.div>
-        )}
-        {screen === "teams" && (
-          <motion.div
-            key="teams"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <TeamSelectionScreen
-              workshop={workshop}
-              workshopCode={code}
-              visitorId={visitorId}
-              onComplete={(team) => {
-                void navigate({
-                  to: "/workshops/$code/participants/$teamId",
-                  params: { code, teamId: String(team.ID) },
-                })
-              }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <LiveActivityTicker
-        activities={activities}
-        isPending={isPending}
-        isError={isError}
-      />
-    </div>
+    <ParticipantVotingGate
+      workshop={workshop}
+      workshopCode={code}
+      visitorId={visitorId}
+      enabled={screen === "teams"}
+    >
+      <div className="min-h-dvh bg-[#0d0c0d]">
+        <AnimatePresence mode="wait">
+          {screen === "entry" && (
+            <motion.div key="entry" exit={{ opacity: 0 }}>
+              <OrbitalEntry
+                workshopName={workshop.Name}
+                onComplete={handleEntryComplete}
+              />
+            </motion.div>
+          )}
+          {screen === "video" && introVideo && (
+            <motion.div
+              key="video"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.1 } }}
+            >
+              <IntroVideoScreen
+                src={introVideo}
+                title={
+                  workshop.videoTitle ??
+                  "“Unless your advertising has a big idea, it will pass like a ship in the night.”"
+                }
+                subtitle={
+                  workshop.videoSubTitle ??
+                  "DAVID OGILVY · THE VIEW FROM TOUFFOU · 1981"
+                }
+                onComplete={() => setScreen("walkthrough")}
+              />
+            </motion.div>
+          )}
+          {screen === "walkthrough" && (
+            <motion.div
+              key="walkthrough"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <WalkthroughScreen
+                steps={walkthroughSteps}
+                onComplete={() => setScreen("teams")}
+              />
+            </motion.div>
+          )}
+          {screen === "teams" && (
+            <motion.div
+              key="teams"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <TeamSelectionScreen
+                workshop={workshop}
+                workshopCode={code}
+                visitorId={visitorId}
+                onComplete={(team) => {
+                  void navigate({
+                    to: "/workshops/$code/participants/$teamId",
+                    params: { code, teamId: String(team.ID) },
+                  })
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <LiveActivityTicker
+          activities={activities}
+          isPending={isPending}
+          isError={isError}
+        />
+      </div>
+    </ParticipantVotingGate>
   )
 }

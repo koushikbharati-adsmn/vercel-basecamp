@@ -1,4 +1,5 @@
 import { IdeateScreen } from "@/components/participants/ideate-screen"
+import { ParticipantVotingGate } from "@/components/participants/participant-voting-gate"
 import {
   ParticipantEntryError,
   ParticipantEntryLoading,
@@ -43,12 +44,18 @@ function TeamRoute() {
     getParticipantWorkshopOptions({ code, visitor_id: visitorId })
   )
   return (
-    <IdeateScreen
-      key={`${code}:${teamId}`}
+    <ParticipantVotingGate
       workshop={response.data}
       workshopCode={code}
       visitorId={visitorId}
-      teamId={Number(teamId)}
-    />
+    >
+      <IdeateScreen
+        key={`${code}:${teamId}`}
+        workshop={response.data}
+        workshopCode={code}
+        visitorId={visitorId}
+        teamId={Number(teamId)}
+      />
+    </ParticipantVotingGate>
   )
 }

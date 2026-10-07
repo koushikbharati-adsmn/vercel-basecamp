@@ -431,7 +431,7 @@ export const useScoutIdea = () => {
 }
 
 /** Voting rows plus usage counters; here idea.flgSelf records this visitor's vote. */
-interface GetParticipantVoteIdeasResponse {
+export interface GetParticipantVoteIdeasResponse {
   success: boolean
   data: ParticipantIdea[]
   usage: {
@@ -516,7 +516,11 @@ export const useVoteIdea = () => {
   return useMutation({
     mutationFn: (payload: VoteIdeaPayload) => voteIdea(payload),
 
-    onSuccess: (_response, payload) => {
+    onSuccess: (response, payload) => {
+      if (!response.success) {
+        toast(response.message)
+        return
+      }
       socket.emit("update_idea_vote", {
         roomId: payload.workshop_code,
         visitorId: payload.visitor_id,

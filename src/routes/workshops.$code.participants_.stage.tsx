@@ -1,4 +1,5 @@
 import { StageScreen } from "@/components/participants/stage-screen"
+import { ParticipantVotingGate } from "@/components/participants/participant-voting-gate"
 import {
   ParticipantEntryError,
   ParticipantEntryLoading,
@@ -32,11 +33,17 @@ function StageRoute() {
     getParticipantWorkshopOptions({ code, visitor_id: visitorId })
   )
   return (
-    <StageScreen
-      key={code}
+    <ParticipantVotingGate
       workshop={response.data}
       workshopCode={code}
       visitorId={visitorId}
-    />
+    >
+      <StageScreen
+        key={code}
+        workshop={response.data}
+        workshopCode={code}
+        visitorId={visitorId}
+      />
+    </ParticipantVotingGate>
   )
 }
