@@ -145,7 +145,7 @@ export function OrbitalEntry({
               Basecamp
             </h1>
             <div className="my-[3%] h-px w-[clamp(52px,7cqw,92px)] bg-entry-action" />
-            <p className="font-display max-w-[440px] text-[clamp(17px,4.1cqw,30px)] leading-[1.1] tracking-[-0.015em] text-inverse/96">
+            <p className="max-w-[440px] font-display text-[clamp(17px,4.1cqw,30px)] leading-[1.1] tracking-[-0.015em] text-inverse/96">
               {workshopName}
             </p>
             <p className="mt-[3%] max-w-[380px] text-[clamp(12px,2.2cqw,15px)] leading-[1.5] font-medium text-inverse/72">
@@ -163,7 +163,7 @@ export function OrbitalEntry({
             ? { duration: 0.25 }
             : { duration: 0.65, delay: 0.75, ease: EASE }
         }
-        className="absolute bottom-[62px] left-1/2 z-20 w-[calc(100%-40px)] max-w-[620px] -translate-x-1/2 sm:bottom-[70px]"
+        className="absolute bottom-[62px] left-1/2 z-20 w-[calc(100%-40px)] max-w-xl -translate-x-1/2 sm:bottom-[70px]"
       >
         <div className="mb-2.5 text-center text-[11px] font-medium tracking-[0.03em] text-inverse/62 sm:text-[12px]">
           Enter the workshop when you’re ready
@@ -172,9 +172,9 @@ export function OrbitalEntry({
           type="button"
           onClick={handleEnter}
           disabled={unlocking}
-          className="w-full cursor-pointer border border-line-inverse/30 bg-overlay/35 p-1.5 backdrop-blur-xl disabled:pointer-events-none"
+          className="w-full cursor-pointer disabled:pointer-events-none"
         >
-          <span className="block bg-entry-action px-5 py-3 text-[11px] font-bold tracking-[0.22em] text-on-entry-action uppercase transition-[background,transform] duration-200 hover:-translate-y-px hover:bg-entry-action-hover sm:text-[12px]">
+          <span className="block bg-entry-action px-5 py-3 text-[11px] font-bold tracking-[0.22em] text-on-entry-action uppercase transition-[background,transform] duration-200 hover:bg-entry-action-hover sm:text-[12px]">
             Enter workshop
           </span>
         </button>
