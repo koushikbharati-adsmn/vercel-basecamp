@@ -62,118 +62,131 @@
 /* Brand-inspired test palettes, not official brand specifications.
  * Each preset defines every role so tests do not inherit Ogilvy accents.
  */
+
 :root[data-brand="sprite"] {
-  --app-bg: #061b12;
+  /* Backgrounds & Surfaces */
+  --app-bg: #006b38;
   --workspace-bg: #ffffff;
-  --surface-muted: #f0f8ed;
-  --avatar-bg: #e1efd9;
-  --entry-panel-bg: #103524;
-  --team-selection-bg: #071f15;
-  --newsroom-bg: #0a291b;
-  --ticker-bg: #082217;
-  --media-bg: #020d08;
-  --media-placeholder-bg: #163c2a;
+  --surface-muted: #f1fff5;
+  --avatar-bg: #ddf8e5;
+  --entry-panel-bg: #00783d;
+  --team-selection-bg: #06452a;
+  --newsroom-bg: #05351f;
+  --ticker-bg: #042b1a;
+  --media-bg: #011a0f;
+  --media-placeholder-bg: #12643e;
 
-  --text-primary: #123524;
-  --text-body: #2f4e3b;
-  --text-secondary: #496351;
-  --text-muted: #596f60;
+  /* Typography */
+  --text-primary: #082b19;
+  --text-body: #234633;
+  --text-secondary: #3e5f4a;
+  --text-muted: #59705f;
   --text-inverse: #ffffff;
-  --newsroom-text-muted: #b6d2bf;
-  --action-primary-bg: #007a3d;
+  --newsroom-text-muted: #bddec9;
+
+  /* Actions & Interactive States */
+  --action-primary-bg: #007a3e;
   --action-primary-text: #ffffff;
-  --action-neutral-bg: #123524;
+  --action-neutral-bg: #082b19;
   --action-neutral-text: #ffffff;
-  --entry-action-bg: #bde52b;
-  --entry-action-text: #123524;
-  --entry-action-hover-bg: #d2f05a;
+  --entry-action-bg: #fee123;
+  --entry-action-text: #082b19;
+  --entry-action-hover-bg: #fff06b;
   --error-text: #b42318;
-  --error-inverse-text: #ffb4a8;
-  --feedback-accent: #bde52b;
-  --focus-ring: #00a651;
-  --link-text: #bde52b;
-  --link-hover-text: #d2f05a;
+  --error-inverse-text: #ffc3b8;
+  --feedback-accent: #35d630;
+  --focus-ring: #008d44;
+  --link-text: #fee123;
+  --link-hover-text: #fff06b;
 
-  --border-color: #123524;
+  /* Borders, Patterns & Overlays */
+  --border-color: #0a5231;
   --border-inverse-color: #ffffff;
-  --surface-tint: #123524;
+  --surface-tint: #18a94b;
   --surface-inverse-tint: #ffffff;
-  --pattern-color: #123524;
+  --pattern-color: #18a94b;
   --pattern-inverse-color: #ffffff;
-  --overlay-color: #020d08;
-  --dialog-backdrop-color: #061b12;
-  --shadow-color: #020d08;
-  --dialog-shadow-color: #123524;
+  --overlay-color: #011a0f;
+  --dialog-backdrop-color: #032719;
+  --shadow-color: #021a10;
+  --dialog-shadow-color: #073923;
   --image-sweep-color: #ffffff;
-  --ticker-live-bg: #bde52b;
-  --ticker-live-text: #123524;
+  --ticker-live-bg: #fee123;
+  --ticker-live-text: #082b19;
 
-  --ambient-ink: #04190e;
-  --ambient-deep: #075e31;
-  --ambient-accent: #00a651;
-  --ambient-secondary: #146b37;
-  --ambient-highlight: #d2f05a;
-  --orbital-active-center: #0b2c1b;
-  --orbital-active-edge: #031009;
-  --orbital-idle-center: #173b27;
-  --orbital-idle-edge: #061b12;
+  /* Ambient & Orbital Visuals */
+  --ambient-ink: #022c1b;
+  --ambient-deep: #087b3e;
+  --ambient-accent: #18a94b;
+  --ambient-secondary: #35d630;
+  --ambient-highlight: #fee123;
+  --orbital-active-center: #18a94b;
+  --orbital-active-edge: #005c30;
+  --orbital-idle-center: #116839;
+  --orbital-idle-edge: #03321d;
 }
 
-:root[data-brand="nestle"] {
-  --app-bg: #17120e;
-  --workspace-bg: #fffdf9;
-  --surface-muted: #f4eee5;
-  --avatar-bg: #e9dfd1;
-  --entry-panel-bg: #30251d;
-  --team-selection-bg: #1d1610;
-  --newsroom-bg: #261d16;
-  --ticker-bg: #211912;
-  --media-bg: #0d0906;
-  --media-placeholder-bg: #3a2d23;
+:root[data-brand="cadbury"] {
+  /* Backgrounds & Surfaces */
+  --app-bg: #330072;
+  --workspace-bg: #fffcf6;
+  --surface-muted: #f8f3fc;
+  --avatar-bg: #efe4f6;
+  --entry-panel-bg: #4b2286;
+  --team-selection-bg: #2b075b;
+  --newsroom-bg: #210547;
+  --ticker-bg: #1b033c;
+  --media-bg: #140326;
+  --media-placeholder-bg: #4e2883;
 
-  --text-primary: #35251a;
-  --text-body: #554437;
-  --text-secondary: #6b5949;
-  --text-muted: #796757;
-  --text-inverse: #fff8ee;
-  --newsroom-text-muted: #d1beaa;
-  --action-primary-bg: #63513d;
+  /* Typography */
+  --text-primary: #28143f;
+  --text-body: #453354;
+  --text-secondary: #60516f;
+  --text-muted: #71647b;
+  --text-inverse: #ffffff;
+  --newsroom-text-muted: #d4c8e8;
+
+  /* Actions & Interactive States */
+  --action-primary-bg: #482081;
   --action-primary-text: #ffffff;
-  --action-neutral-bg: #35251a;
-  --action-neutral-text: #fff8ee;
-  --entry-action-bg: #dbc3a2;
-  --entry-action-text: #35251a;
-  --entry-action-hover-bg: #ead6b9;
+  --action-neutral-bg: #28143f;
+  --action-neutral-text: #ffffff;
+  --entry-action-bg: #e8c56f;
+  --entry-action-text: #28143f;
+  --entry-action-hover-bg: #f7d990;
   --error-text: #b42318;
-  --error-inverse-text: #ffb4a8;
-  --feedback-accent: #dbc3a2;
-  --focus-ring: #a88a64;
-  --link-text: #dbc3a2;
-  --link-hover-text: #ead6b9;
+  --error-inverse-text: #ffc9c9;
+  --feedback-accent: #e8c56f;
+  --focus-ring: #7c3ec1;
+  --link-text: #f3d27a;
+  --link-hover-text: #ffe7b3;
 
-  --border-color: #63513d;
-  --border-inverse-color: #fff8ee;
-  --surface-tint: #63513d;
-  --surface-inverse-tint: #fff8ee;
-  --pattern-color: #63513d;
-  --pattern-inverse-color: #fff8ee;
-  --overlay-color: #0d0906;
-  --dialog-backdrop-color: #17120e;
-  --shadow-color: #0d0906;
-  --dialog-shadow-color: #35251a;
-  --image-sweep-color: #fffdf9;
-  --ticker-live-bg: #dbc3a2;
-  --ticker-live-text: #35251a;
+  /* Borders, Patterns & Overlays */
+  --border-color: #4e2a84;
+  --border-inverse-color: #ffffff;
+  --surface-tint: #482081;
+  --surface-inverse-tint: #ffffff;
+  --pattern-color: #6c42a4;
+  --pattern-inverse-color: #f9e6bf;
+  --overlay-color: #120322;
+  --dialog-backdrop-color: #1e093d;
+  --shadow-color: #12031f;
+  --dialog-shadow-color: #251048;
+  --image-sweep-color: #ffffff;
+  --ticker-live-bg: #e8c56f;
+  --ticker-live-text: #28143f;
 
-  --ambient-ink: #1b1008;
-  --ambient-deep: #63513d;
-  --ambient-accent: #a88a64;
-  --ambient-secondary: #756048;
-  --ambient-highlight: #ead6b9;
-  --orbital-active-center: #302115;
-  --orbital-active-edge: #100b06;
-  --orbital-idle-center: #3a2b1e;
-  --orbital-idle-edge: #17120e;
+  /* Ambient & Orbital Visuals */
+  --ambient-ink: #17052f;
+  --ambient-deep: #330072;
+  --ambient-accent: #6f40b5;
+  --ambient-secondary: #9a62ca;
+  --ambient-highlight: #e8c56f;
+  --orbital-active-center: #6f40b5;
+  --orbital-active-edge: #26064a;
+  --orbital-idle-center: #452078;
+  --orbital-idle-edge: #1a0436;
 }
 
 /* Inline aliases keep utilities tied to the active document's color roles,

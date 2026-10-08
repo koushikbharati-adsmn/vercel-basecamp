@@ -240,11 +240,9 @@ export function TeamSelectionScreen({
                   borderColor:
                     index === activeIndex
                       ? "color-mix(in srgb, var(--surface-inverse-tint) 85%, transparent)"
-                      : "var(--text-body)",
+                      : "color-mix(in srgb, var(--border-inverse-color) 30%, transparent)",
                   background:
-                    index === activeIndex
-                      ? team.TeamColorCode
-                      : "transparent",
+                    index === activeIndex ? team.TeamColorCode : "transparent",
                 }}
               />
             ))}
@@ -369,7 +367,7 @@ function TeamCodeDialog({
         <p className="text-[11px] font-bold tracking-[.2em] text-entry-action uppercase">
           Protected team
         </p>
-        <h2 className="font-display mt-3 text-3xl">
+        <h2 className="mt-3 font-display text-3xl">
           Enter {team.TeamName}’s PIN
         </h2>
         <p className="mt-2 text-sm text-inverse/55">
