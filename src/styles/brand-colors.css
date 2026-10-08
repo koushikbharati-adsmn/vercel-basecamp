@@ -189,6 +189,69 @@
   --orbital-idle-edge: #1a0436;
 }
 
+:root[data-brand="axis-bank"] {
+  /* Backgrounds & Surfaces */
+  --app-bg: #97144d;
+  --workspace-bg: #ffffff;
+  --surface-muted: #fbf6f8;
+  --avatar-bg: #f6e2ea;
+  --entry-panel-bg: #78103d;
+  --team-selection-bg: #510b2c;
+  --newsroom-bg: #390920;
+  --ticker-bg: #30071a;
+  --media-bg: #1b0612;
+  --media-placeholder-bg: #6d1a40;
+
+  /* Typography */
+  --text-primary: #231f20;
+  --text-body: #44323b;
+  --text-secondary: #6d6e71;
+  --text-muted: #6d6e71;
+  --text-inverse: #ffffff;
+  --newsroom-text-muted: #d1d3d4;
+
+  /* Actions & Interactive States */
+  --action-primary-bg: #97144d;
+  --action-primary-text: #ffffff;
+  --action-neutral-bg: #231f20;
+  --action-neutral-text: #ffffff;
+  --entry-action-bg: #ffffff;
+  --entry-action-text: #97144d;
+  --entry-action-hover-bg: #f9e3ed;
+  --error-text: #b42318;
+  --error-inverse-text: #ffccd5;
+  --feedback-accent: #ed1164;
+  --focus-ring: #97144d;
+  --link-text: #ffd0e3;
+  --link-hover-text: #ffffff;
+
+  /* Borders, Patterns & Overlays */
+  --border-color: #d1d3d4;
+  --border-inverse-color: #ffffff;
+  --surface-tint: #97144d;
+  --surface-inverse-tint: #ffffff;
+  --pattern-color: #ed1164;
+  --pattern-inverse-color: #ffffff;
+  --overlay-color: #16040e;
+  --dialog-backdrop-color: #260716;
+  --shadow-color: #210512;
+  --dialog-shadow-color: #430e29;
+  --image-sweep-color: #ffffff;
+  --ticker-live-bg: #ffffff;
+  --ticker-live-text: #97144d;
+
+  /* Ambient & Orbital Visuals */
+  --ambient-ink: #200715;
+  --ambient-deep: #6f0f3a;
+  --ambient-accent: #ed1164;
+  --ambient-secondary: #b41c58;
+  --ambient-highlight: #ffa6c8;
+  --orbital-active-center: #b81957;
+  --orbital-active-edge: #430b26;
+  --orbital-idle-center: #732444;
+  --orbital-idle-edge: #2e091e;
+}
+
 /* Inline aliases keep utilities tied to the active document's color roles,
  * including Tailwind opacity modifiers (e.g. border-line/20).
  */
