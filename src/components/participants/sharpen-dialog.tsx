@@ -1,4 +1,5 @@
 import { AnimatedDialog } from "@/components/experience/animated-dialog"
+import { AiMarkdown } from "@/components/participants/ai-markdown"
 import { DUR, EASE, STAGGER } from "@/lib/motion"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import {
@@ -33,8 +34,6 @@ import {
   useState,
   type ReactNode,
 } from "react"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
 
 const ACTION =
   "inline-flex min-h-10 items-center justify-center gap-2 border border-line/20 px-3 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-40"
@@ -589,7 +588,7 @@ function ChatMessage({
           )}
         >
           {isCoach ? (
-            <CoachMarkdown>{message.text}</CoachMarkdown>
+            <AiMarkdown>{message.text}</AiMarkdown>
           ) : (
             message.text
           )}
@@ -624,36 +623,6 @@ function ChatMessage({
           )}
         </div>
       </div>
-    </div>
-  )
-}
-
-function CoachMarkdown({ children }: { children: string }) {
-  return (
-    <div className="coach-markdown">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-          a: ({ children, href }) => (
-            <a
-              href={href}
-              target={
-                /^(https?:)?\/\//i.test(href ?? "") ? "_blank" : undefined
-              }
-              rel="noopener noreferrer"
-            >
-              {children}
-            </a>
-          ),
-          table: ({ children }) => (
-            <div className="overflow-x-auto">
-              <table>{children}</table>
-            </div>
-          ),
-        }}
-      >
-        {children}
-      </ReactMarkdown>
     </div>
   )
 }

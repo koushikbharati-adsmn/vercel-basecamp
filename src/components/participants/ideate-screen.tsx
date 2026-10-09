@@ -1,4 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { AiMarkdown } from "@/components/participants/ai-markdown"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { IdeaEditor } from "@/components/participants/idea-editor"
 import { IdeaMasonry } from "@/components/participants/idea-masonry"
@@ -7,7 +8,7 @@ import { StageIdeaPreviewDialog } from "@/components/participants/stage-idea-pre
 import { IMAGE_GENERATION_LIMIT } from "@/components/participants/participant-idea-constants"
 import { SharpenDialog } from "@/components/participants/sharpen-dialog"
 import { AnimatedDialog } from "@/components/experience/animated-dialog"
-import { BEAT, DUR, EASE, STAGGER_DENSE } from "@/lib/motion"
+import { BEAT, DUR, EASE } from "@/lib/motion"
 import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
 import { useWorkshopTimer } from "@/hooks/use-workshop-timer"
 import { socket } from "@/lib/socket"
@@ -602,7 +603,7 @@ export function IdeateScreen({
               <span className="px-2 text-center text-xs leading-4 text-muted">
                 {scoutDisabledReason ??
                   (scout.data
-                    ? `${scout.data.data.text.length} pitches ready`
+                    ? "View Scout response"
                     : "Ask for a pitch")}
               </span>
             </button>
@@ -724,7 +725,7 @@ export function IdeateScreen({
               Fresh directions for {category?.Name}.
             </p>
             <div className="mt-6 space-y-4">
-              {scout.data?.data.text.length === 0 && (
+              {scout.data && !scout.data.data.text.trim() && (
                 <p>
                   No pitches came back.{" "}
                   <button
@@ -739,23 +740,19 @@ export function IdeateScreen({
                   </button>
                 </p>
               )}
-              {scout.data?.data.text.map((pitch, index) => (
+              {scout.data?.data.text.trim() && (
                 <motion.div
-                  key={index}
                   initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
                     duration: reducedMotion ? 0 : DUR.beat,
-                    delay: reducedMotion
-                      ? 0
-                      : Math.min(index, 6) * STAGGER_DENSE,
                     ease: EASE,
                   }}
                   className="border border-line/20 p-5"
                 >
-                  <p className="text-lg leading-relaxed">{pitch}</p>
+                  <AiMarkdown>{scout.data.data.text}</AiMarkdown>
                 </motion.div>
-              ))}
+              )}
             </div>
           </AnimatedDialog>
         )}

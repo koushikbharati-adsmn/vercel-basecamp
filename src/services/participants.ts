@@ -408,7 +408,7 @@ interface ScoutIdeaResponse {
   success: boolean
   data: {
     status: string
-    text: string[]
+    text: string
   }
 }
 
