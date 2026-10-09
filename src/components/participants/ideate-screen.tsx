@@ -579,22 +579,13 @@ export function IdeateScreen({
               title={scoutDisabledReason}
               onClick={() => {
                 if (!category || scoutDisabledReason) return
-                if (scout.data) {
-                  setScoutOpen(true)
-                  return
-                }
-                scout.mutate(
-                  {
-                    workshop_code: workshopCode,
-                    pillar_title: category.Name,
-                    user_ideas: ideas.map((idea) => idea.Desc),
-                  },
-                  {
-                    onSuccess: (response) => {
-                      if (response.success) setScoutOpen(true)
-                    },
-                  }
-                )
+                setScoutOpen(true)
+                if (scout.data?.success) return
+                scout.mutate({
+                  workshop_code: workshopCode,
+                  pillar_title: category.Name,
+                  user_ideas: ideas.map((idea) => idea.Desc),
+                })
               }}
               className={`${POCKET_CLASS_NAME} flex flex-col items-center justify-center gap-1.5`}
             >
@@ -602,9 +593,7 @@ export function IdeateScreen({
               <span className="text-[15px] font-bold">The Scout</span>
               <span className="px-2 text-center text-xs leading-4 text-muted">
                 {scoutDisabledReason ??
-                  (scout.data
-                    ? "View Scout response"
-                    : "Ask for a pitch")}
+                  (scout.data ? "View Scout response" : "Ask for a pitch")}
               </span>
             </button>
           </div>
@@ -725,34 +714,95 @@ export function IdeateScreen({
               Fresh directions for {category?.Name}.
             </p>
             <div className="mt-6 space-y-4">
-              {scout.data && !scout.data.data.text.trim() && (
-                <p>
-                  No pitches came back.{" "}
-                  <button
-                    type="button"
-                    className="underline"
-                    onClick={() => {
-                      scout.reset()
-                      setScoutOpen(false)
-                    }}
-                  >
-                    Try again
-                  </button>
-                </p>
-              )}
-              {scout.data?.data.text.trim() && (
-                <motion.div
-                  initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: reducedMotion ? 0 : DUR.beat,
-                    ease: EASE,
-                  }}
-                  className="border border-line/20 p-5"
+              {scout.isPending && (
+                <div
+                  className="flex min-h-64 flex-col items-center justify-center gap-5 border border-line/20 bg-tint/2 p-8 text-center"
+                  role="status"
+                  aria-live="polite"
                 >
-                  <AiMarkdown>{scout.data.data.text}</AiMarkdown>
-                </motion.div>
+                  <div
+                    className="relative flex size-20 items-center justify-center"
+                    aria-hidden="true"
+                  >
+                    <div className="absolute inset-0 rounded-full border border-action/20 motion-safe:animate-ping" />
+                    <motion.div
+                      animate={
+                        reducedMotion ? undefined : { rotate: [-12, 12, -12] }
+                      }
+                      transition={{
+                        duration: 2.4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="relative flex size-20 items-center justify-center rounded-full border border-action/20 bg-action/5 text-action"
+                    >
+                      <Binoculars size={36} strokeWidth={1.5} />
+                    </motion.div>
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold">
+                      Scouting fresh directions…
+                    </p>
+                    <p className="mt-2 text-sm text-muted">
+                      Reviewing your ideas and looking for new possibilities.
+                    </p>
+                  </div>
+                  <div className="flex gap-2" aria-hidden="true">
+                    {[0, 1, 2].map((index) => (
+                      <motion.span
+                        key={index}
+                        className="size-1.5 rounded-full bg-action/60"
+                        animate={
+                          reducedMotion
+                            ? undefined
+                            : { opacity: [0.3, 1, 0.3], y: [0, -4, 0] }
+                        }
+                        transition={{
+                          duration: 1.2,
+                          repeat: Infinity,
+                          delay: index * 0.15,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
               )}
+              {!scout.isPending &&
+                (scout.isError ||
+                  (scout.data &&
+                    (!scout.data.success || !scout.data.data.text.trim()))) && (
+                  <p role="alert">
+                    {scout.isError || !scout.data?.success
+                      ? "Scout couldn’t fetch fresh directions."
+                      : "No pitches came back."}{" "}
+                    <button
+                      type="button"
+                      className="underline"
+                      onClick={() => {
+                        scout.reset()
+                        setScoutOpen(false)
+                      }}
+                    >
+                      Try again
+                    </button>
+                  </p>
+                )}
+              {!scout.isPending &&
+                scout.data?.success &&
+                scout.data.data.text.trim() && (
+                  <motion.div
+                    initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: reducedMotion ? 0 : DUR.beat,
+                      ease: EASE,
+                    }}
+                    className="border border-line/20 p-5"
+                  >
+                    <AiMarkdown>{scout.data.data.text}</AiMarkdown>
+                  </motion.div>
+                )}
             </div>
           </AnimatedDialog>
         )}
