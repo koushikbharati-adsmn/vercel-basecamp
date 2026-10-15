@@ -43,7 +43,7 @@ export function WalkthroughScreen({
         initial={{ opacity: 0, y: 12, scale: 0.99 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="flex min-h-[28rem] w-full max-w-5xl flex-col overflow-hidden border border-line-inverse/14 bg-entry-panel shadow-[0_24px_80px_color-mix(in_srgb,var(--shadow-color)_40%,transparent)] sm:min-h-[32rem]"
+        className="flex min-h-112 w-full max-w-5xl flex-col overflow-hidden border border-line-inverse/14 bg-entry-panel shadow-[0_24px_80px_color-mix(in_srgb,var(--shadow-color)_40%,transparent)] sm:min-h-128"
       >
         <div
           className="relative border-b border-line-inverse/10"
@@ -82,7 +82,7 @@ export function WalkthroughScreen({
                     className={`mt-3 block truncate text-center text-xs font-semibold tracking-wide uppercase ${isActive ? "text-inverse" : "text-inverse/45"}`}
                   >
                     <span className="sm:hidden">
-                      {String(index + 1).padStart(2, "0")}
+                      {String(index + 1).padStart(2, "#")}
                     </span>
                     <span className="hidden sm:inline">
                       {step.tabName ?? `Step ${index + 1}`}
@@ -116,7 +116,7 @@ export function WalkthroughScreen({
                   {currentStep.tabName ?? `Step ${currentStepIndex + 1}`}
                 </span>
               </div>
-              <h1 className="font-display max-w-4xl text-4xl leading-[1.08] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
+              <h1 className="max-w-4xl font-display text-4xl leading-[1.08] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
                 {currentStep.Title}
               </h1>
               <p className="mt-2 max-w-2xl text-base leading-[1.65] whitespace-pre-line text-inverse/60 sm:text-lg">

@@ -135,7 +135,7 @@ export function TeamSelectionScreen({
         }}
       />
 
-      <HalftoneBackground className="z-[1]" />
+      <HalftoneBackground className="z-1" />
       <motion.header
         initial={{ y: -56, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -146,7 +146,7 @@ export function TeamSelectionScreen({
           <img
             src="/logos/ogilvy-logo-white.svg"
             alt="Ogilvy"
-            className="h-[28px] w-auto sm:h-[30px]"
+            className="h-7 w-auto sm:h-7.5"
           />
           <div className="h-6 w-px bg-tint-inverse/20" />
           <h1 className="font-display text-xl sm:text-2xl">Team Select</h1>
