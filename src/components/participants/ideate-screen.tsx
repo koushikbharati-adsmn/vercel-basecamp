@@ -41,7 +41,7 @@ import { Binoculars, X } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const POCKET_CLASS_NAME =
-  "border-[1.5px] border-dashed border-line/22 bg-tint/2 text-body transition-[background,border-color] duration-150 enabled:hover:border-line/50 enabled:hover:bg-tint/5 disabled:opacity-45"
+  "min-w-0 border-2 border-dashed border-line/35 bg-tint/2 text-body transition-[background,border-color] duration-150 enabled:hover:border-line/50 enabled:hover:bg-tint/5 disabled:opacity-45 sm:border-line/22"
 
 export function IdeateScreen({
   workshop,
