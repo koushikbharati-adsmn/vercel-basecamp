@@ -1,125 +1,140 @@
-/* Ogilvy is the default. Override these roles on :root[data-brand="…"]
- * for another brand; never populate them from legacy workshop theme fields.
- * Team and coach identity colors intentionally do not belong here.
+/* Brand contract: 16 palette colors, shared role defaults, optional overrides.
+ * Ogilvy is the default. Add presets on :root[data-brand="…"].
+ * Team/coach identity and legacy workshop theme fields stay independent.
  */
 :root {
-  --app-bg: #0d0c0d;
-  --workspace-bg: #ffffff;
-  --surface-muted: #f6f5f3;
-  --avatar-bg: #eeedeb;
-  --entry-panel-bg: #1b1a1d;
-  --team-selection-bg: #0a0a0c;
-  --newsroom-bg: #151315;
-  --ticker-bg: #171416;
-  --media-bg: #000000;
-  --media-placeholder-bg: oklch(21% 0.006 285.885);
+  --brand-primary: #da291c;
+  --brand-on-primary: #ffffff;
+  --brand-accent: #eb3f43;
+  --brand-accent-hover: #f26b6e;
+  --brand-on-accent: #ffffff;
+  --brand-ink: #231f20;
+  --brand-paper: #ffffff;
+  --brand-night: #0d0c0d;
+  --brand-panel: #1b1a1d;
+  --brand-muted: #8a8689;
+  --brand-on-dark-muted: #aaa6a9;
+  --brand-link: oklch(78.9% 0.154 211.53);
+  --brand-link-hover: oklch(86.5% 0.127 207.078);
+  --brand-highlight: #f5bac5;
+  --brand-error: #da291c;
+  --brand-error-inverse: #f26b6e;
 
-  --text-primary: #231f20;
-  --text-body: #4a4749;
-  --text-secondary: #6e6a6c;
-  --text-muted: #8a8689;
+  /* Semantic API. Components and Tailwind use roles, not palette colors.
+   * Override any role in a preset when its shared recipe is unsuitable.
+   * Keep foreground pairs explicit; a lighter accent need not use white text.
+   */
+  --app-bg: var(--brand-night);
+  --workspace-bg: var(--brand-paper);
+  --surface-muted: color-mix(in srgb, var(--brand-ink) 4%, var(--brand-paper));
+  --avatar-bg: color-mix(in srgb, var(--brand-ink) 8%, var(--brand-paper));
+  --entry-panel-bg: var(--brand-panel);
+  --team-selection-bg: color-mix(in srgb, var(--brand-night) 65%, black);
+  --newsroom-bg: color-mix(in srgb, var(--brand-panel) 75%, black);
+  --ticker-bg: color-mix(in srgb, var(--brand-panel) 65%, black);
+  --media-bg: color-mix(in srgb, var(--brand-night) 15%, black);
+  --media-placeholder-bg: color-mix(
+    in srgb,
+    var(--brand-panel) 90%,
+    var(--brand-paper)
+  );
+
+  --text-primary: var(--brand-ink);
+  --text-body: color-mix(in srgb, var(--brand-ink) 82%, var(--brand-paper));
+  --text-secondary: color-mix(
+    in srgb,
+    var(--brand-ink) 65%,
+    var(--brand-paper)
+  );
+  --text-muted: var(--brand-muted);
   --text-inverse: #ffffff;
-  --newsroom-text-muted: #aaa6a9;
-  --action-primary-bg: #da291c;
-  --action-primary-text: #ffffff;
-  --action-neutral-bg: #231f20;
-  --action-neutral-text: #ffffff;
-  --entry-action-bg: #eb3f43;
-  --entry-action-text: #ffffff;
-  --entry-action-hover-bg: #f26b6e;
-  --error-text: #da291c;
-  --error-inverse-text: #f26b6e;
-  --feedback-accent: #e74246;
-  --focus-ring: #e74246;
-  --link-text: oklch(78.9% 0.154 211.53);
-  --link-hover-text: oklch(86.5% 0.127 207.078);
+  --newsroom-text-muted: var(--brand-on-dark-muted);
+  --action-primary-bg: var(--brand-primary);
+  --action-primary-text: var(--brand-on-primary);
+  --action-neutral-bg: var(--brand-ink);
+  --action-neutral-text: var(--brand-paper);
+  --entry-action-bg: var(--brand-accent);
+  --entry-action-text: var(--brand-on-accent);
+  --entry-action-hover-bg: var(--brand-accent-hover);
+  --error-text: var(--brand-error);
+  --error-inverse-text: var(--brand-error-inverse);
+  --feedback-accent: var(--brand-accent);
+  --focus-ring: var(--brand-primary);
+  --link-text: var(--brand-link);
+  --link-hover-text: var(--brand-link-hover);
 
-  --border-color: #231f20;
-  --border-inverse-color: #ffffff;
-  --surface-tint: #231f20;
-  --surface-inverse-tint: #ffffff;
-  --pattern-color: #231f20;
-  --pattern-inverse-color: #ffffff;
+  --border-color: var(--brand-ink);
+  --border-inverse-color: var(--text-inverse);
+  --surface-tint: var(--brand-primary);
+  --surface-inverse-tint: var(--text-inverse);
+  --pattern-color: var(--surface-tint);
+  --pattern-inverse-color: var(--text-inverse);
   --overlay-color: #000000;
-  --dialog-backdrop-color: #141316;
+  --dialog-backdrop-color: var(--brand-night);
   --shadow-color: #000000;
-  --dialog-shadow-color: #231f20;
-  --image-sweep-color: #ffffff;
-  --ticker-live-bg: #b91423;
-  --ticker-live-text: #ffffff;
+  --dialog-shadow-color: var(--brand-ink);
+  --image-sweep-color: var(--text-inverse);
+  --ticker-live-bg: var(--brand-accent);
+  --ticker-live-text: var(--brand-on-accent);
 
-  --ambient-ink: #17090a;
-  --ambient-deep: #8c2226;
-  --ambient-accent: #eb3f43;
-  --ambient-secondary: #7a2b2e;
-  --ambient-highlight: #f5bac5;
-  --orbital-active-center: #1d1114;
-  --orbital-active-edge: #0a0809;
-  --orbital-idle-center: #26181b;
-  --orbital-idle-edge: #0d0c0d;
+  /* Ambient defaults are aliases to literal palette colors, not color-mix().
+   * Three.js reads four of these roles directly as color strings.
+   * Art-directed effects can override these independently of UI colors.
+   */
+  --ambient-ink: var(--brand-night);
+  --ambient-deep: var(--brand-primary);
+  --ambient-accent: var(--brand-accent);
+  --ambient-secondary: var(--brand-primary);
+  --ambient-highlight: var(--brand-highlight);
+  --orbital-active-center: var(--brand-panel);
+  --orbital-active-edge: var(--brand-night);
+  --orbital-idle-center: var(--brand-panel);
+  --orbital-idle-edge: var(--brand-night);
+
+  /* Ogilvy-specific exceptions, not defaults inherited by other brands. */
+  &:not([data-brand]),
+  &[data-brand="ogilvy"] {
+    --surface-tint: #231f20;
+    --feedback-accent: #e74246;
+    --focus-ring: #e74246;
+    --ticker-live-bg: #b91423;
+    --ambient-ink: #17090a;
+    --ambient-deep: #8c2226;
+    --ambient-secondary: #7a2b2e;
+    --orbital-active-center: #1d1114;
+    --orbital-active-edge: #0a0809;
+    --orbital-idle-center: #26181b;
+  }
 }
 
 /* Brand-inspired test palettes, not official brand specifications.
- * Each preset defines every role so tests do not inherit Ogilvy accents.
+ * Each supplies the complete palette; role recipes cannot leak Ogilvy accents.
  */
-
 :root[data-brand="sprite"] {
-  /* Backgrounds & Surfaces */
-  --app-bg: #006b38;
-  --workspace-bg: #ffffff;
-  --surface-muted: #f1fff5;
-  --avatar-bg: #ddf8e5;
-  --entry-panel-bg: #00783d;
-  --team-selection-bg: #06452a;
-  --newsroom-bg: #05351f;
-  --ticker-bg: #042b1a;
-  --media-bg: #011a0f;
-  --media-placeholder-bg: #12643e;
+  --brand-primary: #007a3e;
+  --brand-on-primary: #ffffff;
+  --brand-accent: #fee123;
+  --brand-accent-hover: #fff06b;
+  --brand-on-accent: #082b19;
+  --brand-ink: #082b19;
+  --brand-paper: #ffffff;
+  --brand-night: #006b38;
+  --brand-panel: #00783d;
+  --brand-muted: #59705f;
+  --brand-on-dark-muted: #bddec9;
+  --brand-link: #fee123;
+  --brand-link-hover: #fff06b;
+  --brand-highlight: #fee123;
+  --brand-error: #b42318;
+  --brand-error-inverse: #ffc3b8;
 
-  /* Typography */
-  --text-primary: #082b19;
-  --text-body: #234633;
-  --text-secondary: #3e5f4a;
-  --text-muted: #59705f;
-  --text-inverse: #ffffff;
-  --newsroom-text-muted: #bddec9;
-
-  /* Actions & Interactive States */
-  --action-primary-bg: #007a3e;
-  --action-primary-text: #ffffff;
-  --action-neutral-bg: #082b19;
-  --action-neutral-text: #ffffff;
-  --entry-action-bg: #fee123;
-  --entry-action-text: #082b19;
-  --entry-action-hover-bg: #fff06b;
-  --error-text: #b42318;
-  --error-inverse-text: #ffc3b8;
   --feedback-accent: #35d630;
   --focus-ring: #008d44;
-  --link-text: #fee123;
-  --link-hover-text: #fff06b;
-
-  /* Borders, Patterns & Overlays */
-  --border-color: #0a5231;
-  --border-inverse-color: #ffffff;
   --surface-tint: #18a94b;
-  --surface-inverse-tint: #ffffff;
-  --pattern-color: #18a94b;
-  --pattern-inverse-color: #ffffff;
-  --overlay-color: #011a0f;
-  --dialog-backdrop-color: #032719;
-  --shadow-color: #021a10;
-  --dialog-shadow-color: #073923;
-  --image-sweep-color: #ffffff;
-  --ticker-live-bg: #fee123;
-  --ticker-live-text: #082b19;
-
-  /* Ambient & Orbital Visuals */
   --ambient-ink: #022c1b;
   --ambient-deep: #087b3e;
   --ambient-accent: #18a94b;
   --ambient-secondary: #35d630;
-  --ambient-highlight: #fee123;
   --orbital-active-center: #18a94b;
   --orbital-active-edge: #005c30;
   --orbital-idle-center: #116839;
@@ -127,62 +142,31 @@
 }
 
 :root[data-brand="cadbury"] {
-  /* Backgrounds & Surfaces */
-  --app-bg: #330072;
-  --workspace-bg: #fffcf6;
-  --surface-muted: #f8f3fc;
-  --avatar-bg: #efe4f6;
-  --entry-panel-bg: #4b2286;
-  --team-selection-bg: #2b075b;
-  --newsroom-bg: #210547;
-  --ticker-bg: #1b033c;
-  --media-bg: #140326;
-  --media-placeholder-bg: #4e2883;
+  --brand-primary: #482081;
+  --brand-on-primary: #ffffff;
+  --brand-accent: #e8c56f;
+  --brand-accent-hover: #f7d990;
+  --brand-on-accent: #28143f;
+  --brand-ink: #28143f;
+  --brand-paper: #fffcf6;
+  --brand-night: #330072;
+  --brand-panel: #4b2286;
+  --brand-muted: #71647b;
+  --brand-on-dark-muted: #d4c8e8;
+  --brand-link: #f3d27a;
+  --brand-link-hover: #ffe7b3;
+  --brand-highlight: #e8c56f;
+  --brand-error: #b42318;
+  --brand-error-inverse: #ffc9c9;
 
-  /* Typography */
-  --text-primary: #28143f;
-  --text-body: #453354;
-  --text-secondary: #60516f;
-  --text-muted: #71647b;
-  --text-inverse: #ffffff;
-  --newsroom-text-muted: #d4c8e8;
-
-  /* Actions & Interactive States */
-  --action-primary-bg: #482081;
-  --action-primary-text: #ffffff;
-  --action-neutral-bg: #28143f;
   --action-neutral-text: #ffffff;
-  --entry-action-bg: #e8c56f;
-  --entry-action-text: #28143f;
-  --entry-action-hover-bg: #f7d990;
-  --error-text: #b42318;
-  --error-inverse-text: #ffc9c9;
-  --feedback-accent: #e8c56f;
   --focus-ring: #7c3ec1;
-  --link-text: #f3d27a;
-  --link-hover-text: #ffe7b3;
-
-  /* Borders, Patterns & Overlays */
-  --border-color: #4e2a84;
-  --border-inverse-color: #ffffff;
-  --surface-tint: #482081;
-  --surface-inverse-tint: #ffffff;
   --pattern-color: #6c42a4;
   --pattern-inverse-color: #f9e6bf;
-  --overlay-color: #120322;
-  --dialog-backdrop-color: #1e093d;
-  --shadow-color: #12031f;
-  --dialog-shadow-color: #251048;
-  --image-sweep-color: #ffffff;
-  --ticker-live-bg: #e8c56f;
-  --ticker-live-text: #28143f;
-
-  /* Ambient & Orbital Visuals */
   --ambient-ink: #17052f;
   --ambient-deep: #330072;
   --ambient-accent: #6f40b5;
   --ambient-secondary: #9a62ca;
-  --ambient-highlight: #e8c56f;
   --orbital-active-center: #6f40b5;
   --orbital-active-edge: #26064a;
   --orbital-idle-center: #452078;
@@ -190,71 +174,38 @@
 }
 
 :root[data-brand="axis-bank"] {
-  /* Backgrounds & Surfaces */
-  --app-bg: #97144d;
-  --workspace-bg: #ffffff;
-  --surface-muted: #fbf6f8;
-  --avatar-bg: #f6e2ea;
-  --entry-panel-bg: #78103d;
-  --team-selection-bg: #510b2c;
-  --newsroom-bg: #390920;
-  --ticker-bg: #30071a;
-  --media-bg: #1b0612;
-  --media-placeholder-bg: #6d1a40;
+  --brand-primary: #97144d;
+  --brand-on-primary: #ffffff;
+  --brand-accent: #ffffff;
+  --brand-accent-hover: #f9e3ed;
+  --brand-on-accent: #97144d;
+  --brand-ink: #231f20;
+  --brand-paper: #ffffff;
+  --brand-night: #97144d;
+  --brand-panel: #78103d;
+  --brand-muted: #6d6e71;
+  --brand-on-dark-muted: #d1d3d4;
+  --brand-link: #ffd0e3;
+  --brand-link-hover: #ffffff;
+  --brand-highlight: #ffa6c8;
+  --brand-error: #b42318;
+  --brand-error-inverse: #ffccd5;
 
-  /* Typography */
-  --text-primary: #231f20;
-  --text-body: #44323b;
-  --text-secondary: #6d6e71;
-  --text-muted: #6d6e71;
-  --text-inverse: #ffffff;
-  --newsroom-text-muted: #d1d3d4;
-
-  /* Actions & Interactive States */
-  --action-primary-bg: #97144d;
-  --action-primary-text: #ffffff;
-  --action-neutral-bg: #231f20;
-  --action-neutral-text: #ffffff;
-  --entry-action-bg: #ffffff;
-  --entry-action-text: #97144d;
-  --entry-action-hover-bg: #f9e3ed;
-  --error-text: #b42318;
-  --error-inverse-text: #ffccd5;
+  --text-secondary: var(--brand-muted);
   --feedback-accent: #ed1164;
-  --focus-ring: #97144d;
-  --link-text: #ffd0e3;
-  --link-hover-text: #ffffff;
-
-  /* Borders, Patterns & Overlays */
   --border-color: #d1d3d4;
-  --border-inverse-color: #ffffff;
-  --surface-tint: #97144d;
-  --surface-inverse-tint: #ffffff;
   --pattern-color: #ed1164;
-  --pattern-inverse-color: #ffffff;
-  --overlay-color: #16040e;
-  --dialog-backdrop-color: #260716;
-  --shadow-color: #210512;
-  --dialog-shadow-color: #430e29;
-  --image-sweep-color: #ffffff;
-  --ticker-live-bg: #ffffff;
-  --ticker-live-text: #97144d;
-
-  /* Ambient & Orbital Visuals */
   --ambient-ink: #200715;
   --ambient-deep: #6f0f3a;
   --ambient-accent: #ed1164;
   --ambient-secondary: #b41c58;
-  --ambient-highlight: #ffa6c8;
   --orbital-active-center: #b81957;
   --orbital-active-edge: #430b26;
   --orbital-idle-center: #732444;
   --orbital-idle-edge: #2e091e;
 }
 
-/* Inline aliases keep utilities tied to the active document's color roles,
- * including Tailwind opacity modifiers (e.g. border-line/20).
- */
+/* Inline aliases preserve existing utilities and opacity modifiers. */
 @theme inline {
   --color-app: var(--app-bg);
   --color-workspace: var(--workspace-bg);
