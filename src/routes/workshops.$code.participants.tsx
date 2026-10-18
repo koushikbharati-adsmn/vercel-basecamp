@@ -29,17 +29,12 @@ export const Route = createFileRoute("/workshops/$code/participants")({
     const visitorId =
       await context.queryClient.ensureQueryData(visitorIdOptions)
 
-    await Promise.all([
-      context.queryClient.ensureQueryData(
-        getParticipantWorkshopOptions({
-          code: params.code,
-          visitor_id: visitorId,
-        })
-      ),
-      context.queryClient.ensureQueryData(
-        getActivitiesOptions({ code: params.code, type: null })
-      ),
-    ])
+    await context.queryClient.ensureQueryData(
+      getParticipantWorkshopOptions({
+        code: params.code,
+        visitor_id: visitorId,
+      })
+    )
   },
   pendingComponent: ParticipantEntryLoading,
   errorComponent: ParticipantEntryError,
