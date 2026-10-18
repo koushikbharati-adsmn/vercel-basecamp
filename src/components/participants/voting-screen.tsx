@@ -148,7 +148,7 @@ export function VotingScreen({
         <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-line/15 px-4 py-3 sm:px-6">
           <h1
             id="participant-voting-heading"
-            className="text-sm font-bold tracking-[.16em] text-action uppercase"
+            className="line-clamp-2 min-w-0 flex-1 text-sm font-bold tracking-[.16em] break-words text-action uppercase"
           >
             {workshop.VotingPage}
           </h1>
@@ -173,217 +173,223 @@ export function VotingScreen({
             />
           </div>
         </header>
-        <AnimatePresence mode="wait">
-          {query.isPending ? (
-            <motion.div
-              key="loading"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              aria-label="Loading ideas available for voting"
-              aria-busy="true"
-              className="grid min-h-0 flex-1 animate-pulse overflow-y-auto lg:grid-cols-[minmax(0,1fr)_minmax(20rem,30rem)]"
-            >
-              <div className="min-h-[48dvh] bg-surface-muted lg:min-h-0" />
-              <div className="space-y-5 border-t border-line/15 p-8 lg:border-t-0 lg:border-l">
-                {["h-10", "h-10", "h-5 w-24", "h-10 w-3/4", "h-24"].map(
-                  (size, row) => (
-                    <div key={row} className={cn("bg-tint/10", size)} />
-                  )
-                )}
-              </div>
-            </motion.div>
-          ) : query.isError ? (
-            <div
-              key="error"
-              role="alert"
-              className="grid min-h-0 flex-1 place-content-center gap-4 p-6 text-center"
-            >
-              <h2 className="font-display text-3xl">
-                Unable to load voting ideas
-              </h2>
-              <p className="text-sm text-secondary">
-                Check your connection and try again.
-              </p>
-              <button
-                type="button"
-                onClick={() => void query.refetch()}
-                className="mx-auto bg-action px-5 py-3 text-sm font-bold text-on-action"
+        <div className="flex min-h-0 flex-1 flex-col lg:[container-type:size]">
+          <AnimatePresence mode="wait">
+            {query.isPending ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                aria-label="Loading ideas available for voting"
+                aria-busy="true"
+                className="flex min-h-0 flex-1 animate-pulse flex-col overflow-y-auto lg:grid lg:grid-cols-[minmax(0,calc(100cqh*4/3))_minmax(18rem,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:overflow-hidden"
               >
-                Try again
-              </button>
-            </div>
-          ) : idea ? (
-            <div
-              key="idea"
-              className="grid min-h-0 flex-1 overflow-y-auto overscroll-contain lg:grid-cols-[minmax(0,1fr)_minmax(20rem,30rem)] lg:overflow-hidden"
-            >
-              <div className="relative flex min-h-[48dvh] items-center justify-center overflow-hidden bg-surface-muted px-14 py-12 sm:px-20 lg:min-h-0">
-                <AnimatePresence mode="wait" initial={false} custom={direction}>
-                  <motion.div
-                    key={idea.ID}
-                    custom={direction}
-                    variants={imageVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={transition}
-                    className="flex w-full min-w-0 items-center justify-center"
-                  >
-                    {image ? (
-                      <img
-                        src={image}
-                        alt={idea.title || "Idea visualization"}
-                        className="max-h-[50dvh] max-w-full object-contain lg:max-h-[calc(100dvh-10rem)]"
-                      />
-                    ) : (
-                      <div className="flex flex-col items-center gap-2 text-sm text-secondary">
-                        <ImageIcon size={32} aria-hidden="true" />
-                        No image available
-                      </div>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-                <button
-                  type="button"
-                  aria-label="View previous idea"
-                  disabled={boundedIndex <= 0}
-                  onClick={() => navigate(-1)}
-                  className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
-                >
-                  <ChevronLeft
-                    size={22}
-                    aria-hidden="true"
-                    className="text-action"
-                  />
-                </button>
-                <button
-                  type="button"
-                  aria-label="View next idea"
-                  disabled={boundedIndex >= ideas.length - 1}
-                  onClick={() => navigate(1)}
-                  className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
-                >
-                  <ChevronRight
-                    size={22}
-                    aria-hidden="true"
-                    className="text-action"
-                  />
-                </button>
-                <p
-                  aria-live="polite"
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-secondary tabular-nums"
-                >
-                  {boundedIndex + 1} / {ideas.length}
+                <div className="aspect-4/3 w-full shrink-0 bg-surface-muted lg:aspect-auto lg:h-full lg:min-h-0" />
+                <div className="shrink-0 space-y-5 border-t border-line/15 p-8 lg:overflow-y-auto lg:border-t-0 lg:border-l">
+                  {["h-10", "h-10", "h-5 w-24", "h-10 w-3/4", "h-24"].map(
+                    (size, row) => (
+                      <div key={row} className={cn("bg-tint/10", size)} />
+                    )
+                  )}
+                </div>
+              </motion.div>
+            ) : query.isError ? (
+              <div
+                key="error"
+                role="alert"
+                className="grid min-h-0 flex-1 place-content-center gap-4 p-6 text-center"
+              >
+                <h2 className="font-display text-3xl">
+                  Unable to load voting ideas
+                </h2>
+                <p className="text-sm text-secondary">
+                  Check your connection and try again.
                 </p>
+                <button
+                  type="button"
+                  onClick={() => void query.refetch()}
+                  className="mx-auto bg-action px-5 py-3 text-sm font-bold text-on-action"
+                >
+                  Try again
+                </button>
               </div>
-              <aside className="min-w-0 border-t border-line/15 lg:overflow-y-auto lg:border-t-0 lg:border-l">
-                <div className="flex min-h-full flex-col p-6 sm:p-8 lg:p-10">
-                  <AnimatePresence mode="wait" initial={false}>
+            ) : idea ? (
+              <div
+                key="idea"
+                className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain lg:grid lg:grid-cols-[minmax(0,calc(100cqh*4/3))_minmax(18rem,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:overflow-hidden"
+              >
+                <div className="relative flex aspect-4/3 w-full min-w-0 shrink-0 items-center justify-center overflow-hidden bg-surface-muted lg:aspect-auto lg:h-full lg:min-h-0">
+                  <AnimatePresence
+                    mode="wait"
+                    initial={false}
+                    custom={direction}
+                  >
                     <motion.div
                       key={idea.ID}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
+                      custom={direction}
+                      variants={imageVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
                       transition={transition}
+                      className="flex size-full min-w-0 items-center justify-center"
                     >
-                      <div>
-                        <p className="mb-3 text-sm text-secondary">
-                          {formatRelativeDate(idea.CreatedDttm)}
-                        </p>
-                        <h2 className="font-display text-4xl leading-tight break-words">
-                          {idea.title || "Untitled"}
-                        </h2>
-                      </div>
-                      <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                        <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                          <Users
-                            size={13}
-                            aria-hidden="true"
-                            className="text-action"
-                          />
-                          {idea.TeamName || "Unknown team"}
-                        </span>
-                        <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                          <Shapes
-                            size={13}
-                            aria-hidden="true"
-                            className="text-action"
-                          />
-                          {idea.CategoryName || "Unknown pillar"}
-                        </span>
-                        {idea.flgCoach && (
+                      {image ? (
+                        <img
+                          src={image}
+                          alt={idea.title || "Idea visualization"}
+                          className="block size-full object-contain"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center gap-2 text-sm text-secondary">
+                          <ImageIcon size={32} aria-hidden="true" />
+                          No image available
+                        </div>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                  <button
+                    type="button"
+                    aria-label="View previous idea"
+                    disabled={boundedIndex <= 0}
+                    onClick={() => navigate(-1)}
+                    className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
+                  >
+                    <ChevronLeft
+                      size={22}
+                      aria-hidden="true"
+                      className="text-action"
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="View next idea"
+                    disabled={boundedIndex >= ideas.length - 1}
+                    onClick={() => navigate(1)}
+                    className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
+                  >
+                    <ChevronRight
+                      size={22}
+                      aria-hidden="true"
+                      className="text-action"
+                    />
+                  </button>
+                  <p
+                    aria-live="polite"
+                    className="absolute bottom-3 left-1/2 -translate-x-1/2 border border-line/20 bg-workspace/90 px-3 py-1 text-sm text-secondary tabular-nums"
+                  >
+                    {boundedIndex + 1} / {ideas.length}
+                  </p>
+                </div>
+                <aside className="min-w-0 shrink-0 border-t border-line/15 [overflow-wrap:anywhere] lg:min-h-0 lg:overflow-y-auto lg:border-t-0 lg:border-l">
+                  <div className="flex min-h-full flex-col p-6 sm:p-8 lg:p-10">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.div
+                        key={idea.ID}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={transition}
+                      >
+                        <div>
+                          <p className="mb-3 text-sm text-secondary">
+                            {formatRelativeDate(idea.CreatedDttm)}
+                          </p>
+                          <h2 className="font-display text-4xl leading-tight break-words">
+                            {idea.title || "Untitled"}
+                          </h2>
+                        </div>
+                        <div className="mt-4 flex flex-wrap gap-2 text-xs [&_svg]:shrink-0 [&>span]:max-w-full">
                           <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                            <Sparkles
+                            <Users
                               size={13}
                               aria-hidden="true"
                               className="text-action"
                             />
-                            Sharpened
+                            {idea.TeamName || "Unknown team"}
                           </span>
-                        )}
-                      </div>
-                      <p className="my-8 border-t border-line/15 pt-8 text-base leading-7 break-words whitespace-pre-line text-body">
-                        {idea.Desc}
-                      </p>
-                    </motion.div>
-                  </AnimatePresence>
-                  <div className="mt-auto pt-2">
-                    <VoteButton
-                      key={idea.ID}
-                      voted={idea.flgSelf}
-                      isSaving={isSaving}
-                      describedBy={
-                        workshop.votingLimit !== null
-                          ? "participant-voting-usage"
-                          : undefined
-                      }
-                      disabled={cannotAddVote || workshop.status !== "Vote"}
-                      onVote={toggleVote}
-                    />
-                    {vote.isError && (
-                      <p
-                        role="alert"
-                        className="mt-3 text-center text-sm text-error"
-                      >
-                        Unable to save your vote. Please try again.
-                      </p>
-                    )}
-                    {workshop.votingLimit !== null && (
-                      <div
-                        id="participant-voting-usage"
-                        aria-live="polite"
-                        className="mt-4 text-center text-sm text-secondary"
-                      >
-                        <p className="tabular-nums">
-                          {votesUsed} of {workshop.votingLimit}{" "}
-                          {workshop.votingScope === "workshop"
-                            ? "votes used"
-                            : `votes used in ${idea.CategoryName}`}
+                          <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                            <Shapes
+                              size={13}
+                              aria-hidden="true"
+                              className="text-action"
+                            />
+                            {idea.CategoryName || "Unknown pillar"}
+                          </span>
+                          {idea.flgCoach && (
+                            <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                              <Sparkles
+                                size={13}
+                                aria-hidden="true"
+                                className="text-action"
+                              />
+                              Sharpened
+                            </span>
+                          )}
+                        </div>
+                        <p className="my-8 border-t border-line/15 pt-8 text-base leading-7 break-words whitespace-pre-line text-body">
+                          {idea.Desc}
                         </p>
-                        {cannotAddVote && (
-                          <p className="mt-1">
-                            Remove an existing vote to vote for this idea.
+                      </motion.div>
+                    </AnimatePresence>
+                    <div className="mt-auto pt-2">
+                      <VoteButton
+                        key={idea.ID}
+                        voted={idea.flgSelf}
+                        isSaving={isSaving}
+                        describedBy={
+                          workshop.votingLimit !== null
+                            ? "participant-voting-usage"
+                            : undefined
+                        }
+                        disabled={cannotAddVote || workshop.status !== "Vote"}
+                        onVote={toggleVote}
+                      />
+                      {vote.isError && (
+                        <p
+                          role="alert"
+                          className="mt-3 text-center text-sm text-error"
+                        >
+                          Unable to save your vote. Please try again.
+                        </p>
+                      )}
+                      {workshop.votingLimit !== null && (
+                        <div
+                          id="participant-voting-usage"
+                          aria-live="polite"
+                          className="mt-4 text-center text-sm text-secondary"
+                        >
+                          <p className="tabular-nums">
+                            {votesUsed} of {workshop.votingLimit}{" "}
+                            {workshop.votingScope === "workshop"
+                              ? "votes used"
+                              : `votes used in ${idea.CategoryName}`}
                           </p>
-                        )}
-                      </div>
-                    )}
+                          {cannotAddVote && (
+                            <p className="mt-1">
+                              Remove an existing vote to vote for this idea.
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </aside>
-            </div>
-          ) : (
-            <div
-              key="empty"
-              className="grid min-h-0 flex-1 place-content-center gap-2 p-6 text-center"
-            >
-              <h2 className="font-display text-3xl">No ideas available</h2>
-              <p className="text-sm text-secondary">
-                No voting ideas match the selected team and pillar.
-              </p>
-            </div>
-          )}
-        </AnimatePresence>
+                </aside>
+              </div>
+            ) : (
+              <div
+                key="empty"
+                className="grid min-h-0 flex-1 place-content-center gap-2 p-6 text-center"
+              >
+                <h2 className="font-display text-3xl">No ideas available</h2>
+                <p className="text-sm text-secondary">
+                  No voting ideas match the selected team and pillar.
+                </p>
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </AnimatedDialog>
   )

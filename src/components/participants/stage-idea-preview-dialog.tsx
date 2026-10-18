@@ -75,7 +75,7 @@ export function StageIdeaPreviewDialog({
     >
       <div className="flex h-full min-h-0 flex-col">
         <header className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-line/15 px-5 sm:px-8">
-          <span className="text-sm font-bold tracking-[.16em] text-action uppercase">
+          <span className="line-clamp-2 min-w-0 text-sm font-bold tracking-[.16em] break-words text-action uppercase">
             {title}
           </span>
           <button
@@ -87,133 +87,135 @@ export function StageIdeaPreviewDialog({
             <X size={20} />
           </button>
         </header>
-        <div className="grid min-h-0 flex-1 overflow-y-auto overscroll-contain lg:grid-cols-[minmax(0,1fr)_minmax(20rem,30rem)] lg:overflow-hidden">
-          <div className="relative flex min-h-[48dvh] items-center justify-center overflow-hidden bg-surface-muted px-14 py-12 sm:px-20 lg:min-h-0">
-            <AnimatePresence mode="wait" initial={false} custom={direction}>
-              <motion.div
-                key={idea.ID}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={transition}
-                className="flex w-full min-w-0 items-center justify-center"
-              >
-                {image ? (
-                  <img
-                    key={image}
-                    src={image}
-                    alt={idea.title || "Idea visualization"}
-                    className="max-h-[50dvh] max-w-full object-contain lg:max-h-[calc(100dvh-10rem)]"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center gap-2 text-sm text-secondary">
-                    <ImageIcon size={32} aria-hidden="true" />
-                    No image available
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-            <button
-              type="button"
-              aria-label="View previous idea"
-              disabled={position <= 1}
-              onClick={handlePrevious}
-              className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
-            >
-              <ChevronLeft size={22} className="text-action" />
-            </button>
-            <button
-              type="button"
-              aria-label="View next idea"
-              disabled={position >= total}
-              onClick={handleNext}
-              className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
-            >
-              <ChevronRight size={22} className="text-action" />
-            </button>
-            <p
-              aria-live="polite"
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-secondary tabular-nums"
-            >
-              {position} / {total}
-            </p>
-          </div>
-          <aside className="min-w-0 overflow-x-hidden border-t border-line/15 p-6 sm:p-8 lg:overflow-y-auto lg:border-t-0 lg:border-l">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={idea.ID}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={transition}
-              >
-                <p className="mb-3 text-xs text-secondary">
-                  Submitted {formatRelativeDate(idea.CreatedDttm)}
-                </p>
-                <h2
-                  id="stage-preview-title"
-                  className="font-display text-4xl leading-tight break-words"
+        <div className="min-h-0 flex-1 lg:[container-type:size]">
+          <div className="flex h-full min-h-0 flex-col overflow-y-auto overscroll-contain lg:grid lg:grid-cols-[minmax(0,calc(100cqh*4/3))_minmax(18rem,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:overflow-hidden">
+            <div className="relative flex aspect-4/3 w-full min-w-0 shrink-0 items-center justify-center overflow-hidden bg-surface-muted lg:aspect-auto lg:h-full lg:min-h-0">
+              <AnimatePresence mode="wait" initial={false} custom={direction}>
+                <motion.div
+                  key={idea.ID}
+                  custom={direction}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={transition}
+                  className="flex size-full min-w-0 items-center justify-center"
                 >
-                  {idea.title || "Untitled"}
-                </h2>
-                <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                  <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                    <Users
-                      size={13}
-                      aria-hidden="true"
-                      className="text-action"
+                  {image ? (
+                    <img
+                      key={image}
+                      src={image}
+                      alt={idea.title || "Idea visualization"}
+                      className="block size-full object-contain"
                     />
-                    {idea.TeamName || "Unknown team"}
-                  </span>
-                  <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                    <Shapes
-                      size={13}
-                      aria-hidden="true"
-                      className="text-action"
-                    />
-                    {idea.CategoryName || "Unknown pillar"}
-                  </span>
-                  {idea.flgCoach && (
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-sm text-secondary">
+                      <ImageIcon size={32} aria-hidden="true" />
+                      No image available
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              <button
+                type="button"
+                aria-label="View previous idea"
+                disabled={position <= 1}
+                onClick={handlePrevious}
+                className="absolute top-1/2 left-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:left-6"
+              >
+                <ChevronLeft size={22} className="text-action" />
+              </button>
+              <button
+                type="button"
+                aria-label="View next idea"
+                disabled={position >= total}
+                onClick={handleNext}
+                className="absolute top-1/2 right-3 grid size-10 -translate-y-1/2 place-items-center border border-line/20 bg-workspace/90 disabled:cursor-not-allowed disabled:opacity-25 sm:right-6"
+              >
+                <ChevronRight size={22} className="text-action" />
+              </button>
+              <p
+                aria-live="polite"
+                className="absolute bottom-3 left-1/2 -translate-x-1/2 border border-line/20 bg-workspace/90 px-3 py-1 text-sm text-secondary tabular-nums"
+              >
+                {position} / {total}
+              </p>
+            </div>
+            <aside className="min-w-0 shrink-0 border-t border-line/15 p-6 [overflow-wrap:anywhere] sm:p-8 lg:min-h-0 lg:overflow-y-auto lg:border-t-0 lg:border-l">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={idea.ID}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={transition}
+                >
+                  <p className="mb-3 text-xs text-secondary">
+                    Submitted {formatRelativeDate(idea.CreatedDttm)}
+                  </p>
+                  <h2
+                    id="stage-preview-title"
+                    className="font-display text-4xl leading-tight break-words"
+                  >
+                    {idea.title || "Untitled"}
+                  </h2>
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs [&_svg]:shrink-0 [&>span]:max-w-full">
                     <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
-                      <Sparkles
+                      <Users
                         size={13}
                         aria-hidden="true"
                         className="text-action"
                       />
-                      Sharpened
+                      {idea.TeamName || "Unknown team"}
                     </span>
-                  )}
-                </div>
-                {showVotes && idea.TotalVote > 0 && (
-                  <div className="mt-5 inline-flex items-center gap-3.5 self-start py-3.5">
-                    <span
-                      className="grid size-11 shrink-0 place-items-center rounded-full bg-action text-on-action"
-                      aria-hidden="true"
-                    >
-                      <ThumbsUp
-                        className="size-5.5"
-                        fill="currentColor"
+                    <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                      <Shapes
+                        size={13}
                         aria-hidden="true"
+                        className="text-action"
                       />
+                      {idea.CategoryName || "Unknown pillar"}
                     </span>
-                    <div>
-                      <p className="m-0 text-3xl leading-none font-bold tabular-nums">
-                        {idea.TotalVote.toString().padStart(1, "0")}
-                      </p>
-                      <p className="m-0 text-xs font-medium tracking-wide text-secondary uppercase">
-                        {idea.TotalVote === 1 ? "Total vote" : "Total votes"}
-                      </p>
-                    </div>
+                    {idea.flgCoach && (
+                      <span className="inline-flex items-center gap-1 border border-line/20 px-2 py-1">
+                        <Sparkles
+                          size={13}
+                          aria-hidden="true"
+                          className="text-action"
+                        />
+                        Sharpened
+                      </span>
+                    )}
                   </div>
-                )}
-                <p className="mt-7 border-t border-line/15 pt-6 text-base leading-7 break-words whitespace-pre-line text-body">
-                  {idea.Desc}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </aside>
+                  {showVotes && idea.TotalVote > 0 && (
+                    <div className="mt-5 inline-flex items-center gap-3.5 self-start py-3.5">
+                      <span
+                        className="grid size-11 shrink-0 place-items-center rounded-full bg-action text-on-action"
+                        aria-hidden="true"
+                      >
+                        <ThumbsUp
+                          className="size-5.5"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <div>
+                        <p className="m-0 text-3xl leading-none font-bold tabular-nums">
+                          {idea.TotalVote.toString().padStart(1, "0")}
+                        </p>
+                        <p className="m-0 text-xs font-medium tracking-wide text-secondary uppercase">
+                          {idea.TotalVote === 1 ? "Total vote" : "Total votes"}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <p className="mt-7 border-t border-line/15 pt-6 text-base leading-7 break-words whitespace-pre-line text-body">
+                    {idea.Desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </aside>
+          </div>
         </div>
       </div>
     </AnimatedDialog>
