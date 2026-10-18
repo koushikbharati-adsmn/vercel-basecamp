@@ -1,6 +1,6 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { AnimatedDialog } from "@/components/experience/animated-dialog"
 import { TeamMedallion } from "@/components/participants/team-medallion"
-import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 import type {
   ParticipantWorkshop,
   ParticipantWorkshopTeam,
@@ -370,22 +370,21 @@ function TeamCodeDialog({
   onSubmit: (code: string) => void
 }) {
   const [code, setCode] = useState("")
-  useBodyScrollLock(true)
   const [validationError, setValidationError] = useState<string>()
   const message = validationError ?? error
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9000] grid place-items-center bg-overlay/70 px-4"
-      onClick={onClose}
+    <AnimatedDialog
+      mobileSheet
+      onClose={onClose}
+      dismissDisabled={isPending}
+      aria-labelledby="team-pin-title"
+      className="max-w-md border-line-inverse/15 bg-entry-panel p-7 text-inverse shadow-2xl shadow-shadow/25 backdrop:bg-overlay/70"
+      onClick={(event) => {
+        if (event.target === event.currentTarget && !isPending) onClose()
+      }}
     >
-      <motion.form
-        initial={{ opacity: 0, y: 12, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 8 }}
+      <form
         onClick={(event) => event.stopPropagation()}
         onSubmit={(event) => {
           event.preventDefault()
@@ -396,12 +395,12 @@ function TeamCodeDialog({
           setValidationError(undefined)
           onSubmit(code)
         }}
-        className="w-full max-w-md border border-line-inverse/15 bg-entry-panel p-7 text-inverse shadow-2xl shadow-shadow/25"
+        className="w-full"
       >
         <p className="text-[11px] font-bold tracking-[.2em] text-entry-action uppercase">
           Protected team
         </p>
-        <h2 className="mt-3 font-display text-3xl">
+        <h2 id="team-pin-title" className="mt-3 font-display text-3xl">
           Enter {team.TeamName}’s PIN
         </h2>
         <p className="mt-2 text-sm text-inverse/55">
@@ -442,7 +441,7 @@ function TeamCodeDialog({
             {isPending ? "Checking…" : "Join team"}
           </button>
         </div>
-      </motion.form>
-    </motion.div>
+      </form>
+    </AnimatedDialog>
   )
 }

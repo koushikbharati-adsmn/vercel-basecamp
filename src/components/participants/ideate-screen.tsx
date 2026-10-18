@@ -695,10 +695,12 @@ export function IdeateScreen({
         {scoutOpen && (
           <AnimatedDialog
             key="scout"
+            mobileSheet
+            className={`max-sm:flex max-sm:flex-col max-sm:overflow-hidden ${!scout.isPending && scout.data?.success && scout.data.data.text.trim() ? "max-sm:h-dvh" : ""}`}
             onClose={() => setScoutOpen(false)}
             aria-labelledby="scout-title"
           >
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex shrink-0 items-center justify-between gap-4">
               <h2
                 id="scout-title"
                 className="font-display text-3xl text-action"
@@ -713,10 +715,10 @@ export function IdeateScreen({
                 <X size={22} />
               </button>
             </div>
-            <p className="mt-2 text-sm text-muted">
+            <p className="mt-2 shrink-0 text-sm text-muted">
               Fresh directions for {category?.Name}.
             </p>
-            <div className="mt-6 space-y-4">
+            <div className="mt-6 space-y-4 max-sm:min-h-0 max-sm:flex-1 max-sm:overflow-y-auto max-sm:overscroll-contain">
               {scout.isPending && (
                 <div
                   className="flex min-h-64 flex-col items-center justify-center gap-5 border border-line/20 bg-tint/2 p-8 text-center"

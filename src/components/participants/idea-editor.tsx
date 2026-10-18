@@ -147,6 +147,7 @@ export function IdeaEditor({
 
   return (
     <AnimatedDialog
+      mobileSheet
       className="group/idea-editor w-[min(560px,calc(100vw-32px))] p-6"
       aria-labelledby="idea-editor-title"
       dismissDisabled={save.isPending}
@@ -195,7 +196,9 @@ export function IdeaEditor({
             required
             disabled={!canEdit || save.isPending}
             error={pillarError}
-            triggerClassName={!keyboardFocus ? "focus-visible:outline-none" : undefined}
+            triggerClassName={
+              !keyboardFocus ? "focus-visible:outline-none" : undefined
+            }
           />
           <label className="block text-sm font-bold">
             Idea
