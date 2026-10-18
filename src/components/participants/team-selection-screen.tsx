@@ -7,7 +7,8 @@ import type {
 } from "@/services/participants"
 import { useSelectTeam } from "@/services/participants"
 import { AnimatePresence, motion } from "framer-motion"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 const EASE = [0.16, 1, 0.3, 1] as const
 export function TeamSelectionScreen({
@@ -38,6 +39,8 @@ export function TeamSelectionScreen({
   const angleStep = 360 / Math.max(workshop.teams.length, 1)
   const activeTeam = workshop.teams[activeIndex] ?? workshop.teams[0]
   const activeColor = activeTeam?.TeamColorCode
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const didSwipe = useRef(false)
 
   const rotateRing = useCallback(
     (direction: number) => {
@@ -124,7 +127,7 @@ export function TeamSelectionScreen({
   }
 
   return (
-    <main className="relative flex h-dvh flex-col overflow-hidden bg-team-selection pb-12 text-inverse">
+    <main className="relative flex h-dvh flex-col overflow-x-hidden overflow-y-auto bg-team-selection text-inverse">
       <motion.div
         key={activeIndex}
         initial={{ opacity: 0.25 }}
@@ -140,7 +143,7 @@ export function TeamSelectionScreen({
         initial={{ y: -56, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.1, ease: EASE }}
-        className="relative z-20 flex shrink-0 items-center justify-between border-b border-line-inverse/14 bg-team-selection px-5 py-4 sm:px-10 sm:py-5"
+        className="sticky top-0 z-30 flex shrink-0 items-center justify-between border-b border-line-inverse/14 bg-team-selection/95 px-5 py-4 backdrop-blur-lg sm:px-10 sm:py-5"
       >
         <div className="flex items-center gap-4">
           <img
@@ -153,17 +156,17 @@ export function TeamSelectionScreen({
         </div>
       </motion.header>
 
-      <div className="relative z-10 flex flex-1 origin-center scale-[clamp(1,calc(100vh/810px),2.6)] flex-col justify-center">
+      <div className="relative z-10 flex flex-1 shrink-0 flex-col justify-center py-8 [--ring-scale:0.6] sm:py-12 sm:[--ring-scale:0.8] lg:[--ring-scale:1]">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.28, ease: EASE }}
-          className="relative z-0 -mb-4 px-10 text-center"
+          className="relative z-0 mb-4 px-5 text-center sm:mb-0 sm:px-10 lg:-mb-4"
         >
-          <div className="mb-4 text-[12px] font-bold tracking-[4px] text-inverse/55 uppercase">
+          <div className="mb-3 text-[10px] font-bold tracking-[2px] break-words text-inverse/55 uppercase sm:mb-4 sm:text-[12px] sm:tracking-[4px]">
             {workshop.Name}
           </div>
-          <h2 className="font-display text-[clamp(64px,8.5vw,128px)] leading-[.98] tracking-[-.02em] text-inverse/95">
+          <h2 className="font-display text-[clamp(36px,8.5vw,56px)] leading-[.98] tracking-[-.02em] text-inverse/95 sm:text-[clamp(56px,8.5vw,128px)]">
             Choose your team.
           </h2>
         </motion.div>
@@ -178,34 +181,65 @@ export function TeamSelectionScreen({
             type="button"
             onClick={() => rotateRing(-1)}
             aria-label="Previous team"
-            className="absolute top-1/2 left-3 z-[100] flex size-[46px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-line-inverse/30 bg-transparent text-[22px] text-inverse transition hover:border-line-inverse/70 hover:bg-tint-inverse/6 sm:left-5"
+            className="absolute bottom-0 left-5 z-[100] flex size-[46px] cursor-pointer items-center justify-center rounded-full border-2 border-line-inverse/30 bg-transparent text-[22px] text-inverse transition hover:border-line-inverse/70 hover:bg-tint-inverse/6 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2"
           >
-            ‹
+            <ChevronLeftIcon className="size-5 sm:size-6" aria-hidden="true" />
           </button>
           <button
             type="button"
             onClick={() => rotateRing(1)}
             aria-label="Next team"
-            className="absolute top-1/2 right-3 z-[100] flex size-[46px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-line-inverse/30 bg-transparent text-[22px] text-inverse transition hover:border-line-inverse/70 hover:bg-tint-inverse/6 sm:right-5"
+            className="absolute right-5 bottom-0 z-[100] flex size-[46px] cursor-pointer items-center justify-center rounded-full border-2 border-line-inverse/30 bg-transparent text-[22px] text-inverse transition hover:border-line-inverse/70 hover:bg-tint-inverse/6 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2"
           >
-            ›
+            <ChevronRightIcon className="size-5 sm:size-6" aria-hidden="true" />
           </button>
 
-          <div className="relative flex h-[400px] items-center justify-center overflow-visible [perspective:1200px]">
+          <div
+            className="relative flex h-[300px] touch-pan-y items-center justify-center overflow-visible [perspective:1200px] sm:h-[340px] lg:h-[400px]"
+            onTouchStart={(event) => {
+              didSwipe.current = false
+              const touch = event.touches[0]
+              touchStart.current =
+                event.touches.length === 1
+                  ? { x: touch.clientX, y: touch.clientY }
+                  : null
+            }}
+            onTouchEnd={(event) => {
+              const start = touchStart.current
+              touchStart.current = null
+              if (!start) return
+              const touch = event.changedTouches[0]
+              const deltaX = touch.clientX - start.x
+              const deltaY = touch.clientY - start.y
+              if (Math.abs(deltaX) < 40 || Math.abs(deltaX) <= Math.abs(deltaY))
+                return
+              didSwipe.current = true
+              rotateRing(deltaX < 0 ? 1 : -1)
+            }}
+            onTouchCancel={() => {
+              touchStart.current = null
+            }}
+            onClickCapture={(event) => {
+              if (!didSwipe.current) return
+              event.preventDefault()
+              event.stopPropagation()
+              didSwipe.current = false
+            }}
+          >
             <div className="pointer-events-none absolute bottom-[-52px] left-1/2 h-[90px] w-[560px] -translate-x-1/2 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,color-mix(in_srgb,var(--shadow-color)_55%,transparent),transparent_70%)]" />
             <motion.div
               animate={{ rotateY: rotationAngle }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="relative h-[320px] w-[320px] [transform-style:preserve-3d]"
+              className="relative size-64 transform-3d sm:size-70 lg:size-80"
             >
               {workshop.teams.map((team, index) => {
                 const isActive = index === activeIndex
                 return (
                   <div
                     key={team.ID}
-                    className="absolute h-[320px] w-[320px] [transform-style:preserve-3d]"
+                    className="absolute size-full [transform-style:preserve-3d]"
                     style={{
-                      transform: `rotateY(${index * angleStep}deg) translateZ(${medallionRadius}px)`,
+                      transform: `rotateY(${index * angleStep}deg) translateZ(calc(${medallionRadius}px * var(--ring-scale)))`,
                       cursor: isActive ? "default" : "pointer",
                     }}
                     onClick={() => !isActive && focusTeam(index)}
@@ -228,7 +262,7 @@ export function TeamSelectionScreen({
             </motion.div>
           </div>
 
-          <div className="relative z-10 mt-12 flex justify-center gap-3">
+          <div className="relative z-10 mx-20 mt-6 flex min-h-[46px] flex-wrap items-center justify-center gap-3 sm:mx-0 sm:mt-12">
             {workshop.teams.map((team, index) => (
               <button
                 type="button"
