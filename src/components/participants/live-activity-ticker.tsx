@@ -131,7 +131,7 @@ export function LiveActivityTicker({
   isError: boolean
 }) {
   return (
-    <footer className="fixed inset-x-0 bottom-0 z-50 flex h-12 overflow-hidden border-t border-line-inverse/10 bg-ticker text-inverse">
+    <footer className="fixed inset-x-0 bottom-0 z-50 flex h-[var(--activity-ticker-height,3rem)] overflow-hidden border-t border-line-inverse/10 bg-ticker pb-[env(safe-area-inset-bottom)] text-inverse">
       <div className="relative z-10 flex shrink-0 items-center bg-ticker-live px-5 text-on-ticker-live">
         <span className="live-pulse mr-2 size-1.5 rounded-full bg-on-ticker-live" />
         <span className="text-[11px] font-bold tracking-[0.2em] uppercase">

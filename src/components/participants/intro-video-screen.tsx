@@ -24,7 +24,7 @@ export function IntroVideoScreen({
   }
 
   return (
-    <main className="relative h-dvh overflow-hidden bg-media text-inverse">
+    <main className="relative h-[calc(100dvh-var(--activity-ticker-height,3rem))] overflow-hidden bg-media text-inverse">
       <AnimatePresence onExitComplete={onComplete}>
         {isVisible && (
           <motion.section
@@ -91,7 +91,7 @@ export function IntroVideoScreen({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -3, transition: { duration: 0.1 } }}
                 transition={{ delay: 0.5, duration: 0.8, ease: EASE }}
-                className="font-display mt-7 max-w-2xl text-xl italic sm:text-2xl"
+                className="mt-7 max-w-2xl font-display text-xl italic sm:text-2xl"
               >
                 {title}
               </motion.blockquote>

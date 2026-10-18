@@ -15,7 +15,7 @@ export function WalkthroughScreen({
 
   if (!currentStep) {
     return (
-      <main className="grid min-h-dvh place-items-center bg-app px-6 pb-12 text-center text-inverse">
+      <main className="grid min-h-[calc(100dvh-var(--activity-ticker-height,3rem))] place-items-center bg-app px-6 pb-12 text-center text-inverse">
         <div>
           <h1 className="font-display text-4xl">You’re ready.</h1>
           <button
@@ -38,7 +38,7 @@ export function WalkthroughScreen({
   }
 
   return (
-    <main className="grid min-h-dvh place-items-center bg-app px-4 py-8 pb-20 text-inverse sm:px-6">
+    <main className="grid min-h-[calc(100dvh-var(--activity-ticker-height,3rem))] place-items-center bg-app px-4 py-8 pb-20 text-inverse sm:px-6">
       <motion.section
         initial={{ opacity: 0, y: 12, scale: 0.99 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -1,8 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
-import { WorkshopLogo } from "@/components/experience/workshop-logo"
-import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { AiMarkdown } from "@/components/participants/ai-markdown"
-import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { IdeaEditor } from "@/components/participants/idea-editor"
 import { IdeaMasonry } from "@/components/participants/idea-masonry"
 import { IdeateIdeaCard } from "@/components/participants/ideate-idea-card"
@@ -11,8 +8,6 @@ import { IMAGE_GENERATION_LIMIT } from "@/components/participants/participant-id
 import { SharpenDialog } from "@/components/participants/sharpen-dialog"
 import { AnimatedDialog } from "@/components/experience/animated-dialog"
 import { BEAT, DUR, EASE } from "@/lib/motion"
-import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
-import { useWorkshopTimer } from "@/hooks/use-workshop-timer"
 import { socket } from "@/lib/socket"
 import {
   getParticipantIdeasOptions,
@@ -36,7 +31,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
-import { Link } from "@tanstack/react-router"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { Binoculars, X } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -92,12 +86,6 @@ export function IdeateScreen({
     select: (mutation) =>
       (mutation.state.variables as ShortlistIdeaPayload).idea_id,
   })
-  const {
-    activities,
-    isPending: activityPending,
-    isError: activityError,
-  } = useWorkshopActivities(workshopCode)
-  const { timer } = useWorkshopTimer(workshopCode)
   const ideasQueryOptions = getParticipantIdeasOptions({
     visitor_id: visitorId,
     workshop_code: workshopCode,
@@ -386,79 +374,8 @@ export function IdeateScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="min-h-dvh bg-workspace pb-14 text-content [&_button:enabled]:cursor-pointer"
+      className="bg-workspace text-content [&_button:enabled]:cursor-pointer"
     >
-      <motion.header
-        initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: reducedMotion ? 0 : DUR.beat,
-          delay: reducedMotion ? 0 : BEAT.structure,
-          ease: EASE,
-        }}
-        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line/15 bg-workspace/95 px-5 py-4 backdrop-blur-lg sm:px-12"
-      >
-        <div className="flex min-w-0 flex-1 items-center gap-4">
-          <Link
-            to="/workshops/$code/participants"
-            params={{ code: workshopCode }}
-            search={{
-              selectTeam: true,
-            }}
-            aria-label="Basecamp home"
-            className="shrink-0"
-          >
-            <WorkshopLogo
-              src={workshop.logoFileName}
-              workshopName={workshop.Name}
-            />
-          </Link>
-          <span className="h-5 w-px bg-tint/15" />
-          <Link
-            to="/workshops/$code/participants"
-            params={{ code: workshopCode }}
-            search={{ selectTeam: true }}
-            className="truncate rounded border-2 px-3 py-1.5 text-xs font-bold tracking-[.12em] uppercase"
-            style={{ borderColor: color }}
-            aria-label="Change team"
-          >
-            {team.TeamName} ▾
-          </Link>
-          <span className="hidden font-display text-[28px] capitalize lg:block">
-            {workshop.IdeationPage || "The Board"}
-          </span>
-        </div>
-        <div className="flex shrink-0 items-center gap-3 text-xs font-bold tracking-[.15em] text-secondary uppercase sm:gap-8 sm:text-sm">
-          <WorkshopNavigation>
-            <span aria-current="page" className="text-action">
-              The Board
-            </span>
-            <Link
-              to="/workshops/$code/participants/stage"
-              params={{ code: workshopCode }}
-              className="hover:text-content"
-            >
-              The Stage
-            </Link>
-            <Link
-              to="/workshops/$code/participants/newsroom"
-              params={{ code: workshopCode }}
-              className="hover:text-content"
-            >
-              The Newsroom
-            </Link>
-          </WorkshopNavigation>
-          {timer.durationSeconds > 0 && (
-            <span className="tabular-nums" role="timer">
-              {Math.floor(timer.remainingSeconds / 60)
-                .toString()
-                .padStart(2, "0")}
-              :{(timer.remainingSeconds % 60).toString().padStart(2, "0")}
-            </span>
-          )}
-        </div>
-      </motion.header>
-
       <section
         className="relative overflow-hidden px-5 py-6 sm:px-12"
         style={{
@@ -813,11 +730,6 @@ export function IdeateScreen({
           </AnimatedDialog>
         )}
       </AnimatePresence>
-      <LiveActivityTicker
-        activities={activities}
-        isPending={activityPending}
-        isError={activityError}
-      />
     </motion.div>
   )
 }

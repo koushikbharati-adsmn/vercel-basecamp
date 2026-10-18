@@ -73,7 +73,7 @@ export function OrbitalEntry({
     <motion.section
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="relative min-h-dvh overflow-hidden bg-app text-inverse"
+      className="relative min-h-[calc(100dvh-var(--activity-ticker-height,3rem))] overflow-hidden bg-app text-inverse"
     >
       <AmbientField />
       <div className="orbital-vignette pointer-events-none absolute inset-0 z-[1]" />

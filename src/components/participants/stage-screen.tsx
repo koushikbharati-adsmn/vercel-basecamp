@@ -1,13 +1,9 @@
 import { ExperienceSelect } from "@/components/experience/experience-select"
-import { WorkshopLogo } from "@/components/experience/workshop-logo"
-import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { IdeaMasonry } from "@/components/participants/idea-masonry"
-import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { IMAGE_GENERATION_LIMIT } from "@/components/participants/participant-idea-constants"
 import { StageIdeaCard } from "@/components/participants/stage-idea-card"
 import { StageIdeaPreviewDialog } from "@/components/participants/stage-idea-preview-dialog"
-import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
-import { BEAT, DUR, EASE } from "@/lib/motion"
+import { DUR, EASE } from "@/lib/motion"
 import { socket } from "@/lib/socket"
 import {
   getParticipantIdeasOptions,
@@ -19,7 +15,6 @@ import {
   type ParticipantWorkshop,
 } from "@/services/participants"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Link } from "@tanstack/react-router"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -37,11 +32,6 @@ export function StageScreen({
   const [previewId, setPreviewId] = useState<number | null>(null)
   const queryClient = useQueryClient()
   const reducedMotion = useReducedMotion()
-  const {
-    activities,
-    isPending: activityPending,
-    isError: activityError,
-  } = useWorkshopActivities(workshopCode)
   const ideasQueryOptions = getParticipantIdeasOptions({
     visitor_id: visitorId,
     workshop_code: workshopCode,
@@ -54,22 +44,13 @@ export function StageScreen({
   const ideas = ideasQuery.data?.data ?? []
   const previewIndex = ideas.findIndex((idea) => idea.ID === previewId)
   const previewIdea = previewIndex < 0 ? null : ideas[previewIndex]
-  const title = workshop.ShortlistedIdeaPage
+  const title = workshop.ShortlistedIdeaPage || "The Stage"
   const getImage = (idea: ParticipantIdea) =>
     idea.imageFileName?.trim() ||
     workshop.placeholderImages[
       Math.abs(idea.ID) % workshop.placeholderImages.length
     ]?.fileName?.trim() ||
     ""
-
-  useEffect(() => {
-    const joinRoom = () => socket.emit("join_room", { roomId: workshopCode })
-    socket.on("connect", joinRoom)
-    if (socket.connected) joinRoom()
-    return () => {
-      socket.off("connect", joinRoom)
-    }
-  }, [workshopCode])
 
   useEffect(() => {
     const handleIdeaUpserted = ({
@@ -206,67 +187,8 @@ export function StageScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="min-h-dvh bg-workspace pb-14 text-content [&_button:enabled]:cursor-pointer"
+      className="bg-workspace text-content [&_button:enabled]:cursor-pointer"
     >
-      <motion.header
-        initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: reducedMotion ? 0 : DUR.beat,
-          delay: reducedMotion ? 0 : BEAT.structure,
-          ease: EASE,
-        }}
-        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line/15 bg-workspace/95 px-5 py-4 backdrop-blur-lg sm:px-12"
-      >
-        <div className="flex min-w-0 flex-1 items-center gap-4">
-          <Link
-            to="/workshops/$code/participants"
-            params={{ code: workshopCode }}
-            search={{ selectTeam: true }}
-            aria-label="Basecamp home"
-            className="shrink-0"
-          >
-            <WorkshopLogo
-              src={workshop.logoFileName}
-              workshopName={workshop.Name}
-            />
-          </Link>
-          <span className="h-5 w-px bg-tint/15" />
-          <span className="truncate font-display text-[28px] capitalize">
-            {title}
-          </span>
-        </div>
-        <WorkshopNavigation>
-          {workshop.teamID !== null ? (
-            <Link
-              to="/workshops/$code/participants/$teamId"
-              params={{ code: workshopCode, teamId: String(workshop.teamID) }}
-              className="text-secondary"
-            >
-              The Board
-            </Link>
-          ) : (
-            <Link
-              to="/workshops/$code/participants"
-              params={{ code: workshopCode }}
-              search={{ selectTeam: true }}
-              className="text-secondary"
-            >
-              Choose team
-            </Link>
-          )}
-          <span aria-current="page" className="text-action">
-            The Stage
-          </span>
-          <Link
-            to="/workshops/$code/participants/newsroom"
-            params={{ code: workshopCode }}
-            className="text-secondary hover:text-content"
-          >
-            The Newsroom
-          </Link>
-        </WorkshopNavigation>
-      </motion.header>
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -371,11 +293,6 @@ export function StageScreen({
           />
         )}
       </AnimatePresence>
-      <LiveActivityTicker
-        activities={activities}
-        isPending={activityPending}
-        isError={activityError}
-      />
     </motion.div>
   )
 }

@@ -1,8 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
-import { WorkshopLogo } from "@/components/experience/workshop-logo"
-import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
-import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
-import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
+import { useParticipantActivities } from "@/hooks/use-participant-activities"
 import { formatActivityTime } from "@/lib/date"
 import { BEAT, DUR, EASE, STAGGER_DENSE } from "@/lib/motion"
 import { socket } from "@/lib/socket"
@@ -15,7 +12,6 @@ import {
   type ParticipantWorkshop,
 } from "@/services/participants"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Link } from "@tanstack/react-router"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect } from "react"
 
@@ -36,17 +32,7 @@ export function NewsroomScreen({
     isPending: activityPending,
     isError: activityError,
     refetch: refetchActivities,
-  } = useWorkshopActivities(workshopCode)
-  const title = workshop.StatsBoard || "The Newsroom"
-
-  useEffect(() => {
-    const joinRoom = () => socket.emit("join_room", { roomId: workshopCode })
-    socket.on("connect", joinRoom)
-    if (socket.connected) joinRoom()
-    return () => {
-      socket.off("connect", joinRoom)
-    }
-  }, [workshopCode])
+  } = useParticipantActivities()
 
   useEffect(() => {
     const updateDashboard = (
@@ -139,75 +125,9 @@ export function NewsroomScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reducedMotion ? 0 : DUR.cut }}
-      className="relative isolate min-h-dvh bg-newsroom pb-14 text-inverse"
+      className="relative isolate bg-newsroom text-inverse"
     >
       <HalftoneBackground />
-      <motion.header
-        initial={{ opacity: 0, y: reducedMotion ? 0 : -56 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: reducedMotion ? 0 : DUR.beat,
-          delay: reducedMotion ? 0 : BEAT.structure,
-          ease: EASE,
-        }}
-        className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line-inverse/15 bg-newsroom/95 px-5 py-4 backdrop-blur-lg sm:px-12"
-      >
-        <div className="flex min-w-0 flex-1 items-center gap-4">
-          <Link
-            to="/workshops/$code/participants"
-            params={{ code: workshopCode }}
-            search={{ selectTeam: true }}
-            aria-label="Basecamp home"
-            className="shrink-0"
-          >
-            <WorkshopLogo
-              src={workshop.logoFileName}
-              workshopName={workshop.Name}
-            />
-          </Link>
-          <span className="h-5 w-px bg-tint-inverse/20" />
-          <h1 className="truncate font-display text-[28px] capitalize">
-            {title}
-          </h1>
-          <span className="hidden shrink-0 items-center gap-2 border border-line-inverse/15 bg-tint-inverse/5 px-2.5 py-1 text-[10px] font-bold tracking-[.16em] sm:inline-flex">
-            <span
-              aria-hidden="true"
-              className="size-1.5 rounded-full bg-action"
-            />
-            LIVE
-          </span>
-        </div>
-        <WorkshopNavigation inverse>
-          {workshop.teamID !== null ? (
-            <Link
-              to="/workshops/$code/participants/$teamId"
-              params={{ code: workshopCode, teamId: String(workshop.teamID) }}
-              className="text-newsroom-muted hover:text-inverse"
-            >
-              The Board
-            </Link>
-          ) : (
-            <Link
-              to="/workshops/$code/participants"
-              params={{ code: workshopCode }}
-              search={{ selectTeam: true }}
-              className="text-newsroom-muted hover:text-inverse"
-            >
-              Choose team
-            </Link>
-          )}
-          <Link
-            to="/workshops/$code/participants/stage"
-            params={{ code: workshopCode }}
-            className="text-newsroom-muted hover:text-inverse"
-          >
-            The Stage
-          </Link>
-          <span aria-current="page" className="text-action">
-            The Newsroom
-          </span>
-        </WorkshopNavigation>
-      </motion.header>
       <main className="relative z-10 mx-auto max-w-[1400px] px-5 pt-8 pb-12 sm:px-10">
         {dashboardQuery.isPending ? (
           <div
@@ -448,11 +368,6 @@ export function NewsroomScreen({
           )}
         </motion.section>
       </main>
-      <LiveActivityTicker
-        activities={activities}
-        isPending={activityPending}
-        isError={activityError}
-      />
     </motion.div>
   )
 }

@@ -115,7 +115,7 @@ export function TeamSelectionScreen({
 
   if (workshop.teams.length === 0) {
     return (
-      <main className="relative grid min-h-dvh place-items-center bg-team-selection px-6 pb-12 text-center text-inverse">
+      <main className="relative grid min-h-[calc(100dvh-var(--activity-ticker-height,3rem))] place-items-center bg-team-selection px-6 pb-12 text-center text-inverse">
         <HalftoneBackground />
         <div className="relative z-10">
           <h1 className="font-display text-5xl">No teams are available yet.</h1>
@@ -128,7 +128,7 @@ export function TeamSelectionScreen({
   }
 
   return (
-    <main className="relative flex h-dvh flex-col overflow-x-hidden overflow-y-auto bg-team-selection text-inverse">
+    <main className="relative flex min-h-[calc(100dvh-var(--activity-ticker-height,3rem))] flex-col overflow-x-clip bg-team-selection text-inverse">
       <motion.div
         key={activeIndex}
         initial={{ opacity: 0.25 }}

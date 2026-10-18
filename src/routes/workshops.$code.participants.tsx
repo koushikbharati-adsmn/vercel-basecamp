@@ -1,5 +1,4 @@
 import { IntroVideoScreen } from "@/components/participants/intro-video-screen"
-import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { OrbitalEntry } from "@/components/participants/orbital-entry"
 import { ParticipantVotingGate } from "@/components/participants/participant-voting-gate"
 import {
@@ -8,15 +7,12 @@ import {
 } from "@/components/participants/participant-route-feedback"
 import { TeamSelectionScreen } from "@/components/participants/team-selection-screen"
 import { WalkthroughScreen } from "@/components/participants/walkthrough-screen"
-import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
 import { visitorIdOptions } from "@/lib/participant-identity"
-import { socket } from "@/lib/socket"
-import { getActivitiesOptions } from "@/services/big-screen"
 import { getParticipantWorkshopOptions } from "@/services/participants"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { AnimatePresence, motion } from "framer-motion"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 export const Route = createFileRoute("/workshops/$code/participants")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -49,7 +45,6 @@ function ParticipantEntryRoute() {
   const { data: workshopResponse } = useSuspenseQuery(
     getParticipantWorkshopOptions({ code, visitor_id: visitorId })
   )
-  const { activities, isPending, isError } = useWorkshopActivities(code)
   const workshop = workshopResponse.data
   const introVideo = workshop.videoFileName?.trim() || null
   const [screen, setScreen] = useState<
@@ -63,15 +58,6 @@ function ParticipantEntryRoute() {
     [workshop.walkThrough]
   )
 
-  useEffect(() => {
-    const joinRoom = () => socket.emit("join_room", { roomId: code })
-    socket.on("connect", joinRoom)
-    if (socket.connected) joinRoom()
-    return () => {
-      socket.off("connect", joinRoom)
-    }
-  }, [code])
-
   const handleEntryComplete = () => {
     setScreen(introVideo ? "video" : "walkthrough")
   }
@@ -83,7 +69,7 @@ function ParticipantEntryRoute() {
       visitorId={visitorId}
       enabled={screen === "teams"}
     >
-      <div className="min-h-dvh bg-app">
+      <div className="bg-app">
         <AnimatePresence mode="wait">
           {screen === "entry" && (
             <motion.div key="entry" exit={{ opacity: 0 }}>
@@ -149,11 +135,6 @@ function ParticipantEntryRoute() {
             </motion.div>
           )}
         </AnimatePresence>
-        <LiveActivityTicker
-          activities={activities}
-          isPending={isPending}
-          isError={isError}
-        />
       </div>
     </ParticipantVotingGate>
   )

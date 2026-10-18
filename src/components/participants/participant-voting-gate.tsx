@@ -24,7 +24,6 @@ export function ParticipantVotingGate({
 }) {
   const queryClient = useQueryClient()
   useEffect(() => {
-    const joinRoom = () => socket.emit("join_room", { roomId: workshopCode })
     const updateStatus = ({
       roomId,
       status,
@@ -42,11 +41,8 @@ export function ParticipantVotingGate({
           current ? { ...current, data: { ...current.data, status } } : current
       )
     }
-    socket.on("connect", joinRoom)
     socket.on("workshop_status", updateStatus)
-    if (socket.connected) joinRoom()
     return () => {
-      socket.off("connect", joinRoom)
       socket.off("workshop_status", updateStatus)
     }
   }, [queryClient, visitorId, workshopCode])
