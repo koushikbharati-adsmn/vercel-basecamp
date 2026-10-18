@@ -1,4 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { WorkshopLogo } from "@/components/experience/workshop-logo"
 import { AnimatedDialog } from "@/components/experience/animated-dialog"
 import { TeamMedallion } from "@/components/participants/team-medallion"
 import type {
@@ -146,10 +147,9 @@ export function TeamSelectionScreen({
         className="sticky top-0 z-30 flex shrink-0 items-center justify-between border-b border-line-inverse/14 bg-team-selection/95 px-5 py-4 backdrop-blur-lg sm:px-10 sm:py-5"
       >
         <div className="flex items-center gap-4">
-          <img
-            src="/logos/ogilvy-logo-white.svg"
-            alt="Ogilvy"
-            className="h-7 w-auto sm:h-7.5"
+          <WorkshopLogo
+            src={workshop.logoFileName}
+            workshopName={workshop.Name}
           />
           <div className="h-6 w-px bg-tint-inverse/20" />
           <h1 className="font-display text-xl sm:text-2xl">Team Select</h1>

@@ -94,6 +94,7 @@ function ParticipantEntryRoute() {
             <motion.div key="entry" exit={{ opacity: 0 }}>
               <OrbitalEntry
                 workshopName={workshop.Name}
+                logo={workshop.logoFileName}
                 onComplete={handleEntryComplete}
               />
             </motion.div>

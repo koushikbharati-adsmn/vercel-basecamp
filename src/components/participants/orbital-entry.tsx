@@ -1,4 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { WorkshopLogo } from "@/components/experience/workshop-logo"
 import { AmbientField } from "@/components/participants/ambient-field"
 import { motion } from "framer-motion"
 import { useEffect, useId, useRef, useState } from "react"
@@ -44,9 +45,11 @@ function OrbitType({ pathId }: { pathId: string }) {
 
 export function OrbitalEntry({
   workshopName,
+  logo,
   onComplete,
 }: {
   workshopName: string
+  logo?: string | null
   onComplete: () => void
 }) {
   const outerPathId = `orbital-outer-${useId().replace(/:/g, "")}`
@@ -133,10 +136,10 @@ export function OrbitalEntry({
             transition={{ duration: 0.4 }}
             className="flex flex-col items-center justify-center"
           >
-            <img
-              src="/logos/ogilvy-logo-white.svg"
-              alt="Ogilvy"
-              className="mb-[3%] h-auto w-[clamp(62px,15cqw,108px)]"
+            <WorkshopLogo
+              src={logo}
+              workshopName={workshopName}
+              className="mb-[3%] h-[clamp(32px,8cqw,52px)] max-w-[clamp(80px,24cqw,160px)] sm:max-w-[clamp(80px,24cqw,160px)]"
             />
             <div className="mb-[1.5%] text-[clamp(11px,2cqw,14px)] font-medium tracking-[0.05em] text-inverse/68">
               Welcome to

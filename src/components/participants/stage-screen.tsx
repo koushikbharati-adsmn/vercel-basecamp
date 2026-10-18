@@ -1,4 +1,5 @@
 import { ExperienceSelect } from "@/components/experience/experience-select"
+import { WorkshopLogo } from "@/components/experience/workshop-logo"
 import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { IdeaMasonry } from "@/components/participants/idea-masonry"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
@@ -223,11 +224,11 @@ export function StageScreen({
             params={{ code: workshopCode }}
             search={{ selectTeam: true }}
             aria-label="Basecamp home"
+            className="shrink-0"
           >
-            <img
-              src="/logos/ogilvy-logo-white.svg"
-              alt="Ogilvy"
-              className="h-[26px] brightness-0"
+            <WorkshopLogo
+              src={workshop.logoFileName}
+              workshopName={workshop.Name}
             />
           </Link>
           <span className="h-5 w-px bg-tint/15" />

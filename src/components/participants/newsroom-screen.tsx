@@ -1,4 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { WorkshopLogo } from "@/components/experience/workshop-logo"
 import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
@@ -157,11 +158,11 @@ export function NewsroomScreen({
             params={{ code: workshopCode }}
             search={{ selectTeam: true }}
             aria-label="Basecamp home"
+            className="shrink-0"
           >
-            <img
-              src="/logos/ogilvy-logo-white.svg"
-              alt="Ogilvy"
-              className="h-[26px]"
+            <WorkshopLogo
+              src={workshop.logoFileName}
+              workshopName={workshop.Name}
             />
           </Link>
           <span className="h-5 w-px bg-tint-inverse/20" />

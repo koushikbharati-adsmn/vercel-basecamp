@@ -1,4 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { WorkshopLogo } from "@/components/experience/workshop-logo"
 import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { AiMarkdown } from "@/components/participants/ai-markdown"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
@@ -405,11 +406,11 @@ export function IdeateScreen({
               selectTeam: true,
             }}
             aria-label="Basecamp home"
+            className="shrink-0"
           >
-            <img
-              src="/logos/ogilvy-logo-white.svg"
-              alt="Ogilvy"
-              className="h-[26px] brightness-0"
+            <WorkshopLogo
+              src={workshop.logoFileName}
+              workshopName={workshop.Name}
             />
           </Link>
           <span className="h-5 w-px bg-tint/15" />
