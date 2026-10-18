@@ -278,11 +278,11 @@ export function TeamMedallion({
           <div className="mb-1 text-[9px] font-bold tracking-[.32em] uppercase opacity-80 lg:mb-1.5 lg:text-[11px]">
             Team
           </div>
-          <div className="max-w-full font-display text-[28px] leading-[1.05] break-words sm:text-[34px] lg:text-[44px]">
+          <div className="max-w-full font-display text-[clamp(24px,4dvh,36px)] leading-[1.05] break-words lg:text-[clamp(28px,4dvh,44px)]">
             {name}
           </div>
           <div
-            className="mt-2 min-h-[36px] font-display text-[13px] leading-[1.35] break-words italic sm:text-[15px] lg:mt-3 lg:min-h-[46px] lg:text-[18px]"
+            className="mt-2 line-clamp-2 font-display text-[clamp(12px,1.8dvh,15px)] leading-[1.35] break-words italic"
             style={{
               opacity: isActive ? 1 : 0,
               transition: "opacity .4s ease",
@@ -298,7 +298,7 @@ export function TeamMedallion({
               if (isActive) onSelect()
               else onFocus()
             }}
-            className="mt-3 min-h-11 shrink-0 cursor-pointer rounded-full border-2 bg-transparent px-4 py-2 text-[11px] font-bold tracking-[1px] transition-all hover:bg-white/10 disabled:cursor-wait lg:mt-6 lg:px-6 lg:py-2.5 lg:text-[13px]"
+            className="mt-3 min-h-11 shrink-0 cursor-pointer rounded-full border-2 bg-transparent px-4 py-2 text-[11px] font-bold tracking-[1px] transition-all hover:bg-white/10 disabled:cursor-wait"
             style={{ borderColor: textColor, color: textColor }}
           >
             {isPending ? "Entering…" : "Enter Team →"}

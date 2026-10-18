@@ -128,7 +128,7 @@ export function TeamSelectionScreen({
   }
 
   return (
-    <main className="relative flex min-h-[calc(100dvh-var(--activity-ticker-height,3rem))] flex-col overflow-x-clip bg-team-selection text-inverse">
+    <main className="relative flex h-[calc(100dvh-var(--activity-ticker-height,3rem))] min-h-[480px] flex-col overflow-x-clip bg-team-selection text-inverse">
       <motion.div
         key={activeIndex}
         initial={{ opacity: 0.25 }}
@@ -156,17 +156,20 @@ export function TeamSelectionScreen({
         </div>
       </motion.header>
 
-      <div className="relative z-10 flex flex-1 shrink-0 flex-col justify-center py-8 [--ring-scale:0.6] sm:py-12 sm:[--ring-scale:0.8] lg:[--ring-scale:1]">
+      <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1000px] flex-1 flex-col py-4 [--ring-scale:0.6] sm:py-6 sm:[--ring-scale:0.8] lg:[--ring-scale:1]">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.28, ease: EASE }}
-          className="relative z-0 mb-4 px-5 text-center sm:mb-0 sm:px-10 lg:-mb-4"
+          className="relative z-0 shrink-0 px-5 text-center sm:px-10"
         >
-          <div className="mb-3 text-[10px] font-bold tracking-[2px] break-words text-inverse/55 uppercase sm:mb-4 sm:text-[12px] sm:tracking-[4px]">
+          <div
+            className="mb-2 truncate text-[10px] font-bold tracking-[2px] text-inverse/55 uppercase sm:text-[12px] sm:tracking-[4px]"
+            title={workshop.Name}
+          >
             {workshop.Name}
           </div>
-          <h2 className="font-display text-[clamp(36px,8.5vw,56px)] leading-[.98] tracking-[-.02em] text-inverse/95 sm:text-[clamp(56px,8.5vw,128px)]">
+          <h2 className="font-display text-[clamp(32px,min(7vw,9dvh),80px)] leading-[.98] tracking-[-.02em] text-inverse/95">
             Choose your team.
           </h2>
         </motion.div>
@@ -175,7 +178,7 @@ export function TeamSelectionScreen({
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-          className="relative z-10 mx-auto w-full max-w-[1200px]"
+          className="relative z-10 mx-auto flex min-h-0 w-full flex-1 flex-col"
         >
           <button
             type="button"
@@ -195,7 +198,7 @@ export function TeamSelectionScreen({
           </button>
 
           <div
-            className="relative flex h-[300px] touch-pan-y items-center justify-center overflow-visible [perspective:1200px] sm:h-[340px] lg:h-[400px]"
+            className="[container-type:size] relative flex min-h-0 flex-1 touch-pan-y items-center justify-center overflow-visible [perspective:1200px]"
             onTouchStart={(event) => {
               didSwipe.current = false
               const touch = event.touches[0]
@@ -230,7 +233,7 @@ export function TeamSelectionScreen({
             <motion.div
               animate={{ rotateY: rotationAngle }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="relative size-64 transform-3d sm:size-70 lg:size-80"
+              className="relative aspect-square w-[min(256px,65cqh,62vw)] shrink-0 transform-3d sm:w-[min(280px,65cqh,48vw)] lg:w-[min(360px,65cqh,36vw)] xl:w-[min(400px,65cqh,32vw)]"
             >
               {workshop.teams.map((team, index) => {
                 const isActive = index === activeIndex
@@ -239,7 +242,7 @@ export function TeamSelectionScreen({
                     key={team.ID}
                     className="absolute size-full [transform-style:preserve-3d]"
                     style={{
-                      transform: `rotateY(${index * angleStep}deg) translateZ(calc(${medallionRadius}px * var(--ring-scale)))`,
+                      transform: `rotateY(${index * angleStep}deg) translateZ(min(calc(${medallionRadius}px * var(--ring-scale)), 45cqh))`,
                       cursor: isActive ? "default" : "pointer",
                     }}
                     onClick={() => !isActive && focusTeam(index)}
@@ -262,7 +265,7 @@ export function TeamSelectionScreen({
             </motion.div>
           </div>
 
-          <div className="relative z-10 mx-20 mt-6 flex min-h-[46px] flex-wrap items-center justify-center gap-3 sm:mx-0 sm:mt-12">
+          <div className="relative z-10 mx-20 flex min-h-[46px] shrink-0 flex-wrap items-center justify-center gap-3 sm:mx-0">
             {workshop.teams.map((team, index) => (
               <button
                 type="button"
