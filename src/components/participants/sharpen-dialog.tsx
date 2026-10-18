@@ -456,10 +456,9 @@ function ChatWorkspace({
                 <CoachAvatar coach={coach} className="size-8" />
                 <p
                   role="status"
-                  className="flex items-center gap-2 border border-line/15 bg-surface-muted px-4 py-3 text-sm text-secondary"
+                  className="border border-line/15 bg-surface-muted px-4 py-3 text-sm text-secondary"
                 >
-                  <LoaderCircle size={15} className="animate-spin" />
-                  Coach is thinking…
+                  Thinking…
                 </p>
               </div>
             )}
@@ -587,11 +586,7 @@ function ChatMessage({
               : "bg-action-neutral whitespace-pre-wrap text-on-action-neutral"
           )}
         >
-          {isCoach ? (
-            <AiMarkdown>{message.text}</AiMarkdown>
-          ) : (
-            message.text
-          )}
+          {isCoach ? <AiMarkdown>{message.text}</AiMarkdown> : message.text}
         </div>
         <div
           className={cn(

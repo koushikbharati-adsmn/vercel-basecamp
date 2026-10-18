@@ -1,5 +1,6 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react"
 
+import { generateRandomId } from "@/lib/utils"
 import {
   buildCoachFileKey,
   createParticipantChatSocket,
@@ -163,7 +164,7 @@ export function useParticipantChat({
         messages: [
           ...updateMessageStatus(pending.messages, "sent"),
           {
-            id: crypto.randomUUID(),
+            id: generateRandomId(),
             author: "coach",
             text,
             status: "sent",
@@ -456,7 +457,7 @@ export function useParticipantChat({
         (message) => message.id !== replacingMessageId
       ),
       {
-        id: crypto.randomUUID(),
+        id: generateRandomId(),
         author: "participant",
         text,
         status: "pending",
