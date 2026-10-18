@@ -1,4 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { AiMarkdown } from "@/components/participants/ai-markdown"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { IdeaEditor } from "@/components/participants/idea-editor"
@@ -396,7 +397,7 @@ export function IdeateScreen({
         }}
         className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line/15 bg-workspace/95 px-5 py-4 backdrop-blur-lg sm:px-12"
       >
-        <div className="flex min-w-0 items-center gap-4">
+        <div className="flex min-w-0 flex-1 items-center gap-4">
           <Link
             to="/workshops/$code/participants"
             params={{ code: workshopCode }}
@@ -416,34 +417,36 @@ export function IdeateScreen({
             to="/workshops/$code/participants"
             params={{ code: workshopCode }}
             search={{ selectTeam: true }}
-            className="rounded border-2 px-3 py-1.5 text-xs font-bold tracking-[.12em] uppercase"
+            className="truncate rounded border-2 px-3 py-1.5 text-xs font-bold tracking-[.12em] uppercase"
             style={{ borderColor: color }}
             aria-label="Change team"
           >
             {team.TeamName} ▾
           </Link>
-          <span className="hidden font-display text-[28px] capitalize md:block">
+          <span className="hidden font-display text-[28px] capitalize lg:block">
             {workshop.IdeationPage || "The Board"}
           </span>
         </div>
-        <div className="flex items-center gap-5 text-xs font-bold tracking-[.15em] text-secondary uppercase sm:gap-8 sm:text-sm">
-          <span aria-current="page" className="text-action">
-            The Board
-          </span>
-          <Link
-            to="/workshops/$code/participants/stage"
-            params={{ code: workshopCode }}
-            className="hover:text-content"
-          >
-            The Stage
-          </Link>
-          <Link
-            to="/workshops/$code/participants/newsroom"
-            params={{ code: workshopCode }}
-            className="hover:text-content"
-          >
-            The Newsroom
-          </Link>
+        <div className="flex shrink-0 items-center gap-3 text-xs font-bold tracking-[.15em] text-secondary uppercase sm:gap-8 sm:text-sm">
+          <WorkshopNavigation>
+            <span aria-current="page" className="text-action">
+              The Board
+            </span>
+            <Link
+              to="/workshops/$code/participants/stage"
+              params={{ code: workshopCode }}
+              className="hover:text-content"
+            >
+              The Stage
+            </Link>
+            <Link
+              to="/workshops/$code/participants/newsroom"
+              params={{ code: workshopCode }}
+              className="hover:text-content"
+            >
+              The Newsroom
+            </Link>
+          </WorkshopNavigation>
           {timer.durationSeconds > 0 && (
             <span className="tabular-nums" role="timer">
               {Math.floor(timer.remainingSeconds / 60)

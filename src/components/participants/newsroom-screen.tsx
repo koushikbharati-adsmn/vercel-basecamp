@@ -1,4 +1,5 @@
 import { HalftoneBackground } from "@/components/experience/halftone-background"
+import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { useWorkshopActivities } from "@/hooks/use-workshop-activities"
 import { formatActivityTime } from "@/lib/date"
@@ -150,7 +151,7 @@ export function NewsroomScreen({
         }}
         className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line-inverse/15 bg-newsroom/95 px-5 py-4 backdrop-blur-lg sm:px-12"
       >
-        <div className="flex min-w-0 flex-wrap items-center gap-4">
+        <div className="flex min-w-0 flex-1 items-center gap-4">
           <Link
             to="/workshops/$code/participants"
             params={{ code: workshopCode }}
@@ -164,8 +165,10 @@ export function NewsroomScreen({
             />
           </Link>
           <span className="h-5 w-px bg-tint-inverse/20" />
-          <h1 className="font-display text-[28px] capitalize">{title}</h1>
-          <span className="inline-flex items-center gap-2 border border-line-inverse/15 bg-tint-inverse/5 px-2.5 py-1 text-[10px] font-bold tracking-[.16em]">
+          <h1 className="truncate font-display text-[28px] capitalize">
+            {title}
+          </h1>
+          <span className="hidden shrink-0 items-center gap-2 border border-line-inverse/15 bg-tint-inverse/5 px-2.5 py-1 text-[10px] font-bold tracking-[.16em] sm:inline-flex">
             <span
               aria-hidden="true"
               className="size-1.5 rounded-full bg-action"
@@ -173,10 +176,7 @@ export function NewsroomScreen({
             LIVE
           </span>
         </div>
-        <nav
-          aria-label="Workshop views"
-          className="flex items-center gap-5 text-xs font-bold tracking-[.15em] uppercase sm:gap-8 sm:text-sm"
-        >
+        <WorkshopNavigation inverse>
           {workshop.teamID !== null ? (
             <Link
               to="/workshops/$code/participants/$teamId"
@@ -205,7 +205,7 @@ export function NewsroomScreen({
           <span aria-current="page" className="text-action">
             The Newsroom
           </span>
-        </nav>
+        </WorkshopNavigation>
       </motion.header>
       <main className="relative z-10 mx-auto max-w-[1400px] px-5 pt-8 pb-12 sm:px-10">
         {dashboardQuery.isPending ? (

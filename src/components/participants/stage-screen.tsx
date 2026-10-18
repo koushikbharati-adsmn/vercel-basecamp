@@ -1,4 +1,5 @@
 import { ExperienceSelect } from "@/components/experience/experience-select"
+import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
 import { IdeaMasonry } from "@/components/participants/idea-masonry"
 import { LiveActivityTicker } from "@/components/participants/live-activity-ticker"
 import { IMAGE_GENERATION_LIMIT } from "@/components/participants/participant-idea-constants"
@@ -216,7 +217,7 @@ export function StageScreen({
         }}
         className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-line/15 bg-workspace/95 px-5 py-4 backdrop-blur-lg sm:px-12"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex min-w-0 flex-1 items-center gap-4">
           <Link
             to="/workshops/$code/participants"
             params={{ code: workshopCode }}
@@ -230,12 +231,11 @@ export function StageScreen({
             />
           </Link>
           <span className="h-5 w-px bg-tint/15" />
-          <span className="font-display text-[28px] capitalize">{title}</span>
+          <span className="truncate font-display text-[28px] capitalize">
+            {title}
+          </span>
         </div>
-        <nav
-          aria-label="Workshop views"
-          className="flex items-center gap-5 text-xs font-bold tracking-[.15em] uppercase sm:gap-8 sm:text-sm"
-        >
+        <WorkshopNavigation>
           {workshop.teamID !== null ? (
             <Link
               to="/workshops/$code/participants/$teamId"
@@ -264,7 +264,7 @@ export function StageScreen({
           >
             The Newsroom
           </Link>
-        </nav>
+        </WorkshopNavigation>
       </motion.header>
       <motion.main
         initial={{ opacity: 0 }}
