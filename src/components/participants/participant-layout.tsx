@@ -49,6 +49,7 @@ export function ParticipantLayout({
         )}
         <div className="min-w-0 flex-1">{children}</div>
         <LiveActivityTicker
+          workshopCode={workshopCode}
           activities={activities.activities}
           isPending={activities.isPending}
           isError={activities.isError}

@@ -1,25 +1,11 @@
 import { WorkshopLogo } from "@/components/experience/workshop-logo"
 import { WorkshopNavigation } from "@/components/participants/workshop-navigation"
-import { useWorkshopTimer } from "@/hooks/use-workshop-timer"
 import type { ParticipantWorkshop } from "@/services/participants"
 import { Link } from "@tanstack/react-router"
 import { motion, useReducedMotion } from "framer-motion"
 import { BEAT, DUR, EASE } from "@/lib/motion"
 
 export type WorkspaceView = "board" | "stage" | "newsroom"
-
-function BoardTimer({ workshopCode }: { workshopCode: string }) {
-  const { timer } = useWorkshopTimer(workshopCode)
-  if (timer.durationSeconds <= 0) return null
-  return (
-    <span className="text-xs font-bold tabular-nums sm:text-sm" role="timer">
-      {Math.floor(timer.remainingSeconds / 60)
-        .toString()
-        .padStart(2, "0")}
-      :{(timer.remainingSeconds % 60).toString().padStart(2, "0")}
-    </span>
-  )
-}
 
 export function WorkspaceHeader({
   workshop,
@@ -151,7 +137,6 @@ export function WorkspaceHeader({
             </Link>
           )}
         </WorkshopNavigation>
-        {view === "board" && <BoardTimer workshopCode={workshopCode} />}
       </div>
     </motion.header>
   )

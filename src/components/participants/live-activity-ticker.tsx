@@ -1,5 +1,6 @@
 import { formatActivityTime } from "@/lib/date"
-import { getReadableTextColor } from "@/lib/utils"
+import { getDurationParts, getReadableTextColor } from "@/lib/utils"
+import { useWorkshopTimer } from "@/hooks/use-workshop-timer"
 import type { WorkshopActivity } from "@/services/big-screen"
 import { useLayoutEffect, useRef, useState } from "react"
 
@@ -121,11 +122,31 @@ function ActivityStrip({ activities }: { activities: WorkshopActivity[] }) {
   )
 }
 
+function WorkshopTimer({ workshopCode }: { workshopCode: string }) {
+  const { timer } = useWorkshopTimer(workshopCode)
+  if (timer.durationSeconds < 0) return null
+
+  const { hours, minutes, seconds } = getDurationParts(timer.remainingSeconds)
+
+  return (
+    <span
+      className="font-mono text-xs font-bold tabular-nums sm:text-sm"
+      role="timer"
+      aria-label="Workshop time remaining"
+    >
+      {hours.toString().padStart(2, "0")}:{minutes.toString().padStart(2, "0")}:
+      {seconds.toString().padStart(2, "0")}
+    </span>
+  )
+}
+
 export function LiveActivityTicker({
+  workshopCode,
   activities,
   isPending,
   isError,
 }: {
+  workshopCode: string
   activities: WorkshopActivity[]
   isPending: boolean
   isError: boolean
@@ -133,10 +154,15 @@ export function LiveActivityTicker({
   return (
     <footer className="fixed inset-x-0 bottom-0 z-50 flex h-[var(--activity-ticker-height,3rem)] overflow-hidden border-t border-line-inverse/10 bg-ticker pb-[env(safe-area-inset-bottom)] text-inverse">
       <div className="relative z-10 flex shrink-0 items-center bg-ticker-live px-5 text-on-ticker-live">
-        <span className="live-pulse mr-2 size-1.5 rounded-full bg-on-ticker-live" />
-        <span className="text-[11px] font-bold tracking-[0.2em] uppercase">
-          Live
-        </span>
+        <div className="flex flex-col items-center">
+          <div className="flex items-center">
+            <span className="live-pulse mr-2 size-1.5 rounded-full bg-on-ticker-live" />
+            <span className="text-[11px] font-bold tracking-[0.2em] uppercase">
+              Live
+            </span>
+          </div>
+          <WorkshopTimer key={workshopCode} workshopCode={workshopCode} />
+        </div>
       </div>
       <div className="flex min-w-0 flex-1 items-center overflow-hidden">
         {activities.length > 0 ? (

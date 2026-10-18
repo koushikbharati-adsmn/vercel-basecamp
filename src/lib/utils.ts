@@ -70,24 +70,3 @@ export function getReadableTextColor(background: string) {
 
   return brightness > 150 ? "#231f20" : "#ffffff"
 }
-
-/** Selects an item randomly, returning undefined for an empty collection. */
-export function getRandomItem<T>(items: readonly T[]) {
-  if (items.length === 0) return undefined
-
-  return items[Math.floor(Math.random() * items.length)]
-}
-
-// Resolves an idea's image, falling back to a placeholder chosen by idea ID so
-// the same idea shows the same placeholder in every view (no useState needed).
-export function getIdeaPlaceholderImage(
-  idea: { ID: number; imageFileName?: string | null },
-  placeholderImages?: readonly { fileName: string }[] | null
-) {
-  const own = idea.imageFileName?.trim()
-  if (own) return own
-  if (!placeholderImages?.length) return undefined
-
-  const index = Math.abs(Number(idea.ID) || 0) % placeholderImages.length
-  return placeholderImages[index].fileName.trim() || undefined
-}
