@@ -492,8 +492,8 @@ export function IdeateScreen({
           <p className="mb-2 text-xs font-bold tracking-[.22em] uppercase">
             Team {team.TeamName}
           </p>
-          <h1 className="font-display text-[clamp(38px,4.6vw,66px)] leading-[1.05]">
-            {team.Description || workshop.Name}
+          <h1 className="line-clamp-1 font-display text-[clamp(38px,4.6vw,66px)] leading-[1.05]">
+            {team.Description || "Team Description"}
           </h1>
         </motion.div>
       </section>
